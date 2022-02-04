@@ -4,7 +4,7 @@
   "description": "App to delete emails",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/*.js --exit",
+    "test": "NODE_ENV='test' mocha tests/*.js --require @babel/polyfill --require @babel/register --exit",
     "build-client": "webpack",
     "build-client-watch": "webpack -w",
     "start": "node server",
@@ -47,7 +47,9 @@
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-loader": "^8.0.5",
+    "enzyme": "^3.11.0",
     "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0"
   }
