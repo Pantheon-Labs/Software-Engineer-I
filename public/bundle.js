@@ -106,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var styles = {
   position: "relative",
-  minHeight: "100%"
+  minHeight: "100vh"
 };
 
 var App = function App() {
@@ -339,7 +339,6 @@ var Home = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Actor Search"), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Stars"), this.props.popularPeople.slice(0, 4).map(function (star) {
-        console.log("hello");
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
           key: star.id
         }, " ", star.name);

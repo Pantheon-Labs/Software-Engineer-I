@@ -2,6 +2,11 @@
 
 body {
   font-family: "Source Sans 3", sans-serif;
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
 }
 
 h1 {

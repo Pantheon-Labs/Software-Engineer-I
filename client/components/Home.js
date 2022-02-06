@@ -23,7 +23,6 @@ class Home extends React.Component {
           <Container>
             <h3>Trending Stars</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
-              console.log("hello");
               return <p key={star.id}> {star.name}</p>;
             })}
           </Container>

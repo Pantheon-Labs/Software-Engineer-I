@@ -5,7 +5,7 @@ import Footer from "./components/Footer.js";
 
 const styles = {
   position: "relative",
-  minHeight: "100%",
+  minHeight: "100vh",
 };
 
 const App = () => {
