@@ -224,7 +224,7 @@ var styles = {
     height: "2.5rem",
     backgroundColor: "#e9ecef",
     width: "100%",
-    position: "absolute",
+    position: "sticky",
     bottom: "0",
     fontWeight: "lighter"
   },
@@ -335,7 +335,12 @@ var Home = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Actor Search"));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Actor Search"), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Stars"), this.props.popularPeople.map(function (star) {
+        console.log("hello");
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+          key: star.id
+        }, " ", star.name);
+      })));
     }
   }]);
 
@@ -344,7 +349,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
 var mapState = function mapState(state) {
   return {
-    data: state.data
+    popularPeople: state.data.popularPeople
   };
 };
 

@@ -20,6 +20,15 @@ class Home extends React.Component {
       <Container style={styles.mainContainer}>
         <h1>Home</h1>
         <h2>Actor Search</h2>
+        {this.props.popularPeople && (
+          <Container>
+            <h3>Trending Stars</h3>
+            {this.props.popularPeople.map((star) => {
+              console.log("hello");
+              return <p key={star.id}> {star.name}</p>;
+            })}
+          </Container>
+        )}
       </Container>
     );
   }
@@ -27,7 +36,7 @@ class Home extends React.Component {
 
 const mapState = (state) => {
   return {
-    data: state.data,
+    popularPeople: state.data.popularPeople,
   };
 };
 

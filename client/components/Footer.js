@@ -6,7 +6,7 @@ const styles = {
     height: "2.5rem",
     backgroundColor: "#e9ecef",
     width: "100%",
-    position: "absolute",
+    position: "sticky",
     bottom: "0",
     fontWeight: "lighter",
   },
