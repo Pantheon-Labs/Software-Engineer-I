@@ -3,9 +3,14 @@ import Routes from "./routes.js";
 import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
 
+const styles = {
+  position: "relative",
+  minHeight: "100%",
+};
+
 const App = () => {
   return (
-    <div>
+    <div style={styles}>
       <Navbar />
       <Routes />
       <Footer />
