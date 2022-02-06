@@ -283,10 +283,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -330,38 +326,16 @@ var Home = /*#__PURE__*/function (_React$Component) {
   }
 
   _createClass(Home, [{
-    key: "request",
-    value: function () {
-      var _request = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-        var res;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                res = axios.get("https://api.themoviedb.org/3/movie/76341?api_key=".concat(_secrets__WEBPACK_IMPORTED_MODULE_2__["TMDBKey"]));
-                console.log(res);
-
-              case 2:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function request() {
-        return _request.apply(this, arguments);
-      }
-
-      return request;
-    }()
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.props.connectTmdb();
+    }
   }, {
     key: "render",
     value: function render() {
-      this.props.connectTmdb();
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Welcome to Elijah Meshnick's Boilerplate code!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "This is for a quick set up of a project that uses React, Bootstrap, Redux, and Express"));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Actor Search"));
     }
   }]);
 
@@ -585,6 +559,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../secrets */ "./secrets.js");
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_secrets__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -593,9 +573,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var CONNECT_TMDB = "CONNECT_TMDB";
 
-var connectedTmdb = function connectedTmdb() {
+var connectedTmdb = function connectedTmdb(api) {
   return {
-    type: CONNECT_TMDB
+    type: CONNECT_TMDB,
+    api: api
   };
 };
 
@@ -615,7 +596,7 @@ var connectTmdb = function connectTmdb() {
             case 2:
               api = _context.sent;
               _context.next = 5;
-              return api.get("movie/upcoming", {
+              return api.get("person/popular", {
                 params: {
                   api_key: _secrets__WEBPACK_IMPORTED_MODULE_1__["TMDBKey"]
                 }
@@ -624,8 +605,10 @@ var connectTmdb = function connectTmdb() {
             case 5:
               res = _context.sent;
               console.log(res.data);
+              console.log("called");
+              dispatch(connectedTmdb(api));
 
-            case 7:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -639,10 +622,15 @@ var connectTmdb = function connectTmdb() {
   }();
 };
 /* harmony default export */ __webpack_exports__["default"] = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
+    case CONNECT_TMDB:
+      return _objectSpread({
+        api: action.api
+      }, state);
+
     default:
       return state;
   }

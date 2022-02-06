@@ -11,23 +11,15 @@ const styles = {
 };
 
 class Home extends React.Component {
-  async request() {
-    const res = axios.get(
-      `https://api.themoviedb.org/3/movie/76341?api_key=${TMDBKey}`
-    );
-    console.log(res);
+  componentDidMount() {
+    this.props.connectTmdb();
   }
 
   render() {
-    this.props.connectTmdb();
     return (
       <Container style={styles.mainContainer}>
         <h1>Home</h1>
-        <h2>Welcome to Elijah Meshnick's Boilerplate code!</h2>
-        <p>
-          This is for a quick set up of a project that uses React, Bootstrap,
-          Redux, and Express
-        </p>
+        <h2>Actor Search</h2>
       </Container>
     );
   }
