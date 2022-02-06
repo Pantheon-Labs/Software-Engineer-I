@@ -3,9 +3,10 @@ import { TMDBKey } from "../../secrets";
 
 const CONNECT_TMDB = "CONNECT_TMDB";
 
-const connectedTmdb = (api) => {
+const connectedTmdb = (api, apiResults) => {
   return {
     type: CONNECT_TMDB,
+    popularPeople: apiResults,
     api,
   };
 };
@@ -16,16 +17,14 @@ export const connectTmdb = () => {
     const res = await api.get("person/popular", {
       params: { api_key: TMDBKey },
     });
-    console.log(res.data);
-    console.log("called");
-    dispatch(connectedTmdb(api));
+    dispatch(connectedTmdb(api, res.data.results));
   };
 };
 
 export default function (state = {}, action) {
   switch (action.type) {
     case CONNECT_TMDB:
-      return { api: action.api, ...state };
+      return { api: action.api, popularPeople: action.popularPeople, ...state };
     default:
       return state;
   }

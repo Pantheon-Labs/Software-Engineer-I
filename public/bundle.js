@@ -573,9 +573,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var CONNECT_TMDB = "CONNECT_TMDB";
 
-var connectedTmdb = function connectedTmdb(api) {
+var connectedTmdb = function connectedTmdb(api, apiResults) {
   return {
     type: CONNECT_TMDB,
+    popularPeople: apiResults,
     api: api
   };
 };
@@ -604,11 +605,9 @@ var connectTmdb = function connectTmdb() {
 
             case 5:
               res = _context.sent;
-              console.log(res.data);
-              console.log("called");
-              dispatch(connectedTmdb(api));
+              dispatch(connectedTmdb(api, res.data.results));
 
-            case 9:
+            case 7:
             case "end":
               return _context.stop();
           }
@@ -628,7 +627,8 @@ var connectTmdb = function connectTmdb() {
   switch (action.type) {
     case CONNECT_TMDB:
       return _objectSpread({
-        api: action.api
+        api: action.api,
+        popularPeople: action.popularPeople
       }, state);
 
     default:
