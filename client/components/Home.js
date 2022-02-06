@@ -1,7 +1,8 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { TMDBKey } from "../../secrets";
-import axios from "axios";
+import { connect } from "react-redux";
+import { connectTmdb } from "../store/data";
 
 const styles = {
   mainContainer: {
@@ -18,7 +19,7 @@ class Home extends React.Component {
   }
 
   render() {
-    this.request();
+    this.props.connectTmdb();
     return (
       <Container style={styles.mainContainer}>
         <h1>Home</h1>
@@ -32,4 +33,16 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+const mapState = (state) => {
+  return {
+    data: state.data,
+  };
+};
+
+const mapDispatch = (dispatch) => {
+  return {
+    connectTmdb: () => dispatch(connectTmdb()),
+  };
+};
+
+export default connect(mapState, mapDispatch)(Home);
