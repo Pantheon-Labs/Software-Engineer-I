@@ -1,6 +1,5 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import { TMDBKey } from "../../secrets";
 import { connect } from "react-redux";
 import { connectTmdb } from "../store/data";
 
