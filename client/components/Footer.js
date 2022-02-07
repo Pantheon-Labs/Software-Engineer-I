@@ -21,7 +21,7 @@ export default class Footer extends React.Component {
       <div style={styles.footer}>
         <Container>
           <div className="text-center" style={styles.text}>
-            Find this project's repository on{" "}
+            Find this project's code on{" "}
             <a href="https://github.com/emeshnick/actor-search">Github</a>
           </div>
         </Container>
