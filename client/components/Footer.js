@@ -22,7 +22,7 @@ export default class Footer extends React.Component {
         <Container>
           <div className="text-center" style={styles.text}>
             Find this project's repository on{" "}
-            <a href="https://github.com/emeshnick/boilerplate">Github</a>
+            <a href="https://github.com/emeshnick/actor-search">Github</a>
           </div>
         </Container>
       </div>

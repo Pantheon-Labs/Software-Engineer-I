@@ -259,7 +259,7 @@ var Footer = /*#__PURE__*/function (_React$Component) {
         className: "text-center",
         style: styles.text
       }, "Find this project's repository on", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
-        href: "https://github.com/emeshnick/boilerplate"
+        href: "https://github.com/emeshnick/actor-search"
       }, "Github"))));
     }
   }]);
@@ -627,6 +627,38 @@ var connectTmdb = function connectTmdb() {
     };
   }();
 };
+
+var getImagePath = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(api, id) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return api.get("person/".concat(id, "/images"), {
+              params: {
+                api_key: _secrets__WEBPACK_IMPORTED_MODULE_1__["TMDBKey"]
+              }
+            });
+
+          case 2:
+            res = _context2.sent;
+            return _context2.abrupt("return", res.data.profiles[0].file_path);
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+
+  return function getImagePath(_x2, _x3) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;

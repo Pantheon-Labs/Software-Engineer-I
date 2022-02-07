@@ -14,11 +14,20 @@ const connectedTmdb = (api, apiResults) => {
 export const connectTmdb = () => {
   return async (dispatch) => {
     const api = await axios.create({ baseURL: "https://api.themoviedb.org/3" });
+
     const res = await api.get("person/popular", {
       params: { api_key: TMDBKey },
     });
+
     dispatch(connectedTmdb(api, res.data.results));
   };
+};
+
+const getImagePath = async (api, id) => {
+  const res = await api.get(`person/${id}/images`, {
+    params: { api_key: TMDBKey },
+  });
+  return res.data.profiles[0].file_path;
 };
 
 export default function (state = {}, action) {
