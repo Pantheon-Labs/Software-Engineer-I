@@ -23,7 +23,15 @@ class Home extends React.Component {
           <Container>
             <h3>Trending Stars</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
-              return <p key={star.id}> {star.name}</p>;
+              console.log(star.profile_path);
+              return (
+                <div key={star.id}>
+                  <img
+                    src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                  />
+                  <p>{star.name}</p>
+                </div>
+              );
             })}
           </Container>
         )}
