@@ -355,7 +355,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.props.connectTmdb();
+      this.props.getPopular();
     }
   }, {
     key: "render",
@@ -403,8 +403,8 @@ var mapState = function mapState(state) {
 
 var mapDispatch = function mapDispatch(dispatch) {
   return {
-    connectTmdb: function connectTmdb() {
-      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_3__["connectTmdb"])());
+    getPopular: function getPopular() {
+      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_3__["getPopular"])());
     }
   };
 };
@@ -602,12 +602,12 @@ var Routes = /*#__PURE__*/function (_React$Component) {
 /*!******************************!*\
   !*** ./client/store/data.js ***!
   \******************************/
-/*! exports provided: connectTmdb, default */
+/*! exports provided: getPopular, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "connectTmdb", function() { return connectTmdb; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopular", function() { return getPopular; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../secrets */ "./secrets.js");
@@ -624,48 +624,48 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var CONNECT_TMDB = "CONNECT_TMDB";
+var GET_POPULAR = "GET_POPULAR";
 
-var connectedTmdb = function connectedTmdb(api, apiResults) {
+var gotPopular = function gotPopular(apiResults) {
   return {
-    type: CONNECT_TMDB,
-    popularPeople: apiResults,
-    api: api
+    type: GET_POPULAR,
+    popularPeople: apiResults
   };
 };
 
-var connectTmdb = function connectTmdb() {
+var getPopular = function getPopular() {
   return /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
-      var api, res;
+      var res;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              _context.next = 2;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.create({
-                baseURL: "https://api.themoviedb.org/3"
-              });
-
-            case 2:
-              api = _context.sent;
-              _context.next = 5;
-              return api.get("person/popular", {
+              _context.prev = 0;
+              _context.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.themoviedb.org/3/person/popular", {
                 params: {
                   api_key: _secrets__WEBPACK_IMPORTED_MODULE_1__["TMDBKey"]
                 }
               });
 
-            case 5:
+            case 3:
               res = _context.sent;
-              dispatch(connectedTmdb(api, res.data.results));
+              dispatch(gotPopular(res.data.results));
+              _context.next = 10;
+              break;
 
             case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](0);
+              throw _context.t0;
+
+            case 10:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee);
+      }, _callee, null, [[0, 7]]);
     }));
 
     return function (_x) {
@@ -682,7 +682,7 @@ var getImagePath = /*#__PURE__*/function () {
         switch (_context2.prev = _context2.next) {
           case 0:
             _context2.next = 2;
-            return api.get("person/".concat(id, "/images"), {
+            return api.get("https://api.themoviedb.org/3/person/".concat(id, "/images"), {
               params: {
                 api_key: _secrets__WEBPACK_IMPORTED_MODULE_1__["TMDBKey"]
               }
@@ -710,9 +710,8 @@ var getImagePath = /*#__PURE__*/function () {
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {
-    case CONNECT_TMDB:
+    case GET_POPULAR:
       return _objectSpread({
-        api: action.api,
         popularPeople: action.popularPeople
       }, state);
 

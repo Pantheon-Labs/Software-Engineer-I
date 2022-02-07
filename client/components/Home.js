@@ -7,7 +7,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 import { connect } from "react-redux";
-import { connectTmdb } from "../store/data";
+import { getPopular } from "../store/data";
 
 const styles = {
   mainContainer: {
@@ -41,7 +41,7 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    this.props.connectTmdb();
+    this.props.getPopular();
   }
 
   render() {
@@ -98,7 +98,7 @@ const mapState = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    connectTmdb: () => dispatch(connectTmdb()),
+    getPopular: () => dispatch(getPopular()),
   };
 };
 

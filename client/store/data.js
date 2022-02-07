@@ -1,39 +1,46 @@
 import axios from "axios";
 import { TMDBKey } from "../../secrets";
 
-const CONNECT_TMDB = "CONNECT_TMDB";
+const GET_POPULAR = "GET_POPULAR";
 
-const connectedTmdb = (api, apiResults) => {
+const gotPopular = (apiResults) => {
   return {
-    type: CONNECT_TMDB,
+    type: GET_POPULAR,
     popularPeople: apiResults,
-    api,
   };
 };
 
-export const connectTmdb = () => {
+export const getPopular = () => {
   return async (dispatch) => {
-    const api = await axios.create({ baseURL: "https://api.themoviedb.org/3" });
+    try {
+      const res = await axios.get(
+        "https://api.themoviedb.org/3/person/popular",
+        {
+          params: { api_key: TMDBKey },
+        }
+      );
 
-    const res = await api.get("person/popular", {
-      params: { api_key: TMDBKey },
-    });
-
-    dispatch(connectedTmdb(api, res.data.results));
+      dispatch(gotPopular(res.data.results));
+    } catch (err) {
+      throw err;
+    }
   };
 };
 
 const getImagePath = async (api, id) => {
-  const res = await api.get(`person/${id}/images`, {
-    params: { api_key: TMDBKey },
-  });
+  const res = await api.get(
+    `https://api.themoviedb.org/3/person/${id}/images`,
+    {
+      params: { api_key: TMDBKey },
+    }
+  );
   return res.data.profiles[0].file_path;
 };
 
 export default function (state = {}, action) {
   switch (action.type) {
-    case CONNECT_TMDB:
-      return { api: action.api, popularPeople: action.popularPeople, ...state };
+    case GET_POPULAR:
+      return { popularPeople: action.popularPeople, ...state };
     default:
       return state;
   }
