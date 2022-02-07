@@ -1,11 +1,15 @@
 import React from "react";
-import { Container } from "react-bootstrap";
+import { Container, Figure } from "react-bootstrap";
 import { connect } from "react-redux";
 import { connectTmdb } from "../store/data";
 
 const styles = {
   mainContainer: {
     padding: "5rem",
+  },
+  starImage: {
+    height: "10rem",
+    padding: "1rem",
   },
 };
 
@@ -16,21 +20,24 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Container style={styles.mainContainer}>
+      <Container style={styles.mainContainer} className="text-center">
         <h1>Home</h1>
-        <h2>Actor Search</h2>
         {this.props.popularPeople && (
           <Container>
-            <h3>Trending Stars</h3>
+            <h3>Trending Searches</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
               console.log(star.profile_path);
               return (
-                <div key={star.id}>
-                  <img
+                <Figure key={star.id}>
+                  <Figure.Image
+                    style={styles.starImage}
+                    alt={`Profile image of ${star.name}`}
                     src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
                   />
-                  <p>{star.name}</p>
-                </div>
+                  <Figure.Caption className="text-center">
+                    {star.name}
+                  </Figure.Caption>
+                </Figure>
               );
             })}
           </Container>
