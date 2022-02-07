@@ -287,6 +287,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -313,11 +315,17 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var styles = {
   mainContainer: {
-    padding: "5rem"
+    paddingTop: "5rem"
   },
   starImage: {
-    height: "10rem",
-    padding: "1rem"
+    height: "5rem",
+    width: "4rem",
+    borderRadius: "10%",
+    objectFit: "cover",
+    objectPosition: "0 0"
+  },
+  starFigure: {
+    padding: "0 0.25rem 0.25rem"
   }
 };
 
@@ -326,13 +334,25 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
   var _super = _createSuper(Home);
 
-  function Home() {
+  function Home(props) {
+    var _this;
+
     _classCallCheck(this, Home);
 
-    return _super.apply(this, arguments);
-  }
+    _this = _super.call(this, props);
+    _this.state = {
+      inputUrl: ""
+    };
+    return _this;
+  } // Changes state as input changes
+
 
   _createClass(Home, [{
+    key: "handleChange",
+    value: function handleChange(evt) {
+      this.setState(_defineProperty({}, evt.target.name, evt.target.value));
+    }
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.connectTmdb();
@@ -343,10 +363,24 @@ var Home = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer,
         className: "text-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
+        className: "mb-3"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
+        name: "inputUrl",
+        value: this.state.inputName,
+        onChange: this.handleChange,
+        placeholder: "Enter Name",
+        "aria-label": "Recipient's username",
+        "aria-describedby": "basic-addon2"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        onClick: this.onInput,
+        variant: "outline-secondary",
+        id: "button-addon2"
+      }, "Search")), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
         console.log(star.profile_path);
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
-          key: star.id
+          key: star.id,
+          style: styles.starFigure
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
           style: styles.starImage,
           alt: "Profile image of ".concat(star.name),
