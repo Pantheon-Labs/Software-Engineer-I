@@ -1,8 +1,14 @@
 import axios from "axios";
 import { TMDBKey } from "../../secrets";
 
+/*
+ * Action creators, thunks, and reducer
+ * Get actor information from API
+ */
+
 const GET_POPULAR = "GET_POPULAR";
 
+// Action creator for dispatch
 const gotPopular = (apiResults) => {
   return {
     type: GET_POPULAR,
@@ -10,6 +16,7 @@ const gotPopular = (apiResults) => {
   };
 };
 
+//Gets list of current popular actors
 export const getPopular = () => {
   return async (dispatch) => {
     try {
@@ -37,6 +44,7 @@ const getImagePath = async (api, id) => {
   return res.data.profiles[0].file_path;
 };
 
+// State contains list of popular people
 export default function (state = {}, action) {
   switch (action.type) {
     case GET_POPULAR:
