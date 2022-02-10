@@ -9,6 +9,7 @@ import {
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
 
+// Styles for homepage
 const styles = {
   mainContainer: {
     paddingTop: "5rem",
@@ -25,6 +26,10 @@ const styles = {
   },
 };
 
+/*
+ * Home component with search input
+ * Displays current popular searches
+ */
 class Home extends React.Component {
   constructor(props) {
     super(props);
@@ -40,6 +45,7 @@ class Home extends React.Component {
     });
   }
 
+  // Get popular searches after the component mounts
   componentDidMount() {
     this.props.getPopular();
   }
@@ -65,6 +71,7 @@ class Home extends React.Component {
             Search
           </Button>
         </InputGroup>
+
         {this.props.popularPeople && (
           <Container>
             <h3>Trending Searches</h3>

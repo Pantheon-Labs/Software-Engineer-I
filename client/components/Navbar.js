@@ -1,6 +1,9 @@
 import React from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 
+/*
+ * Nav Bar component using react-bootstrap components
+ */
 export default class Navigation extends React.Component {
   render() {
     return (

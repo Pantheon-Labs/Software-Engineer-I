@@ -1,6 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 
+// Footer styles
 const styles = {
   footer: {
     height: "2.5rem",
@@ -15,6 +16,9 @@ const styles = {
   },
 };
 
+/*
+ * Footer component includes link to repository
+ */
 export default class Footer extends React.Component {
   render() {
     return (
