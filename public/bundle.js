@@ -758,6 +758,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! redux-devtools-extension */ "./node_modules/redux-devtools-extension/index.js");
 /* harmony import */ var redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _data_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./data.js */ "./client/store/data.js");
+/* harmony import */ var _singleStar_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./singleStar.js */ "./client/store/singleStar.js");
+
 
 
 
@@ -768,7 +770,8 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 var reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
-  data: _data_js__WEBPACK_IMPORTED_MODULE_4__["default"]
+  data: _data_js__WEBPACK_IMPORTED_MODULE_4__["default"],
+  singleStar: _singleStar_js__WEBPACK_IMPORTED_MODULE_5__["default"]
 });
 var middleware = Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux_logger__WEBPACK_IMPORTED_MODULE_1__["createLogger"])({
   collapsed: true
@@ -776,6 +779,109 @@ var middleware = Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__["c
 var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, middleware); // Export store for use in React components
 
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./client/store/singleStar.js":
+/*!************************************!*\
+  !*** ./client/store/singleStar.js ***!
+  \************************************/
+/*! exports provided: searchStar, getStar, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStar", function() { return getStar; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../secrets */ "./secrets.js");
+/* harmony import */ var _secrets__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_secrets__WEBPACK_IMPORTED_MODULE_1__);
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+
+/*
+ * Action creators, thunks, and reducer for individual celebrities
+ */
+
+var GET_STAR = "GET_STAR";
+var SEARCH_STAR = "SEARCH_STAR"; // Search for actor by name
+
+var searchedStar = function searchedStar(searchResults) {
+  return {
+    type: SEARCH_STAR,
+    searchResults: searchResults
+  };
+}; // Action creator for dispatch
+
+
+var gotStar = function gotStar(star) {
+  return {
+    type: GET_STAR,
+    star: star
+  };
+}; // Thunk to search star by name
+
+
+var searchStar = function searchStar(starName) {
+  return /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _context.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.themoviedb.org/3/person/popular", {
+                params: {
+                  api_key: _secrets__WEBPACK_IMPORTED_MODULE_1__["TMDBKey"],
+                  query: "".concat(starName)
+                }
+              });
+
+            case 3:
+              res = _context.sent;
+              dispatch(searchedStar(res.data));
+              _context.next = 10;
+              break;
+
+            case 7:
+              _context.prev = 7;
+              _context.t0 = _context["catch"](0);
+              throw _context.t0;
+
+            case 10:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 7]]);
+    }));
+
+    return function (_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
+}; // Call to api and then dispatch
+
+var getStar = function getStar(starId) {}; // Reducer contains all information from star API call
+
+/* harmony default export */ __webpack_exports__["default"] = (function () {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case GET_STAR:
+      return action.star;
+
+    default:
+      return state;
+  }
+});
 
 /***/ }),
 
