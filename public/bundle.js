@@ -289,6 +289,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
+/* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -312,6 +313,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 
@@ -350,22 +352,34 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      inputUrl: ""
+      searchInput: ""
     };
+    _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.search = _this.search.bind(_assertThisInitialized(_this));
     return _this;
-  } // Changes state as input changes
+  } // Get popular searches after the component mounts
 
 
   _createClass(Home, [{
-    key: "handleChange",
-    value: function handleChange(evt) {
-      this.setState(_defineProperty({}, evt.target.name, evt.target.value));
-    } // Get popular searches after the component mounts
-
-  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.props.getPopular();
+    } // Changes state as input changes
+
+  }, {
+    key: "handleChange",
+    value: function handleChange(evt) {
+      this.setState(_defineProperty({}, evt.target.name, evt.target.value));
+    } // Search function on input
+
+  }, {
+    key: "search",
+    value: function search(evt) {
+      evt.preventDefault();
+      this.props.searchStar(this.state.searchInput);
+      this.setState({
+        searchInput: ""
+      });
     }
   }, {
     key: "render",
@@ -376,14 +390,14 @@ var Home = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
-        name: "inputUrl",
+        name: "searchInput",
         value: this.state.inputName,
         onChange: this.handleChange,
         placeholder: "Enter Name",
-        "aria-label": "Recipient's username",
+        "aria-label": "Star to search",
         "aria-describedby": "basic-addon2"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        onClick: this.onInput,
+        onClick: this.search,
         variant: "outline-secondary",
         id: "button-addon2"
       }, "Search")), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
@@ -415,6 +429,9 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     getPopular: function getPopular() {
       return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_3__["getPopular"])());
+    },
+    searchStar: function searchStar(starName) {
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_4__["searchStar"])(starName));
     }
   };
 };

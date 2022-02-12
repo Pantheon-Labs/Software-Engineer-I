@@ -8,6 +8,7 @@ import {
 } from "react-bootstrap";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
+import { searchStar } from "../store/singleStar";
 
 // Styles for homepage
 const styles = {
@@ -34,8 +35,16 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputUrl: "",
+      searchInput: "",
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.search = this.search.bind(this);
+  }
+
+  // Get popular searches after the component mounts
+  componentDidMount() {
+    this.props.getPopular();
   }
 
   // Changes state as input changes
@@ -45,9 +54,13 @@ class Home extends React.Component {
     });
   }
 
-  // Get popular searches after the component mounts
-  componentDidMount() {
-    this.props.getPopular();
+  // Search function on input
+  search(evt) {
+    evt.preventDefault();
+
+    this.props.searchStar(this.state.searchInput);
+
+    this.setState({ searchInput: "" });
   }
 
   render() {
@@ -56,15 +69,15 @@ class Home extends React.Component {
         <h1>Home</h1>
         <InputGroup className="mb-3">
           <FormControl
-            name="inputUrl"
+            name="searchInput"
             value={this.state.inputName}
             onChange={this.handleChange}
             placeholder="Enter Name"
-            aria-label="Recipient's username"
+            aria-label="Star to search"
             aria-describedby="basic-addon2"
           />
           <Button
-            onClick={this.onInput}
+            onClick={this.search}
             variant="outline-secondary"
             id="button-addon2"
           >
@@ -106,6 +119,7 @@ const mapState = (state) => {
 const mapDispatch = (dispatch) => {
   return {
     getPopular: () => dispatch(getPopular()),
+    searchStar: (starName) => dispatch(searchStar(starName)),
   };
 };
 
