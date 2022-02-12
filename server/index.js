@@ -5,6 +5,10 @@ const { builtinModules } = require("module");
 const PORT = process.env.PORT || 8080;
 const app = express();
 
+// Use .env variables if not in production mode
+require("../secrets");
+console.log(process.env.TMDB_KEY);
+
 // logging middleware
 app.use(morgan("dev"));
 

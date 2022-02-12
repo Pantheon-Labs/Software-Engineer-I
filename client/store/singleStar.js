@@ -1,5 +1,4 @@
 import axios from "axios";
-import { TMDBKey } from "../../secrets";
 
 /*
  * Action creators, thunks, and reducer for individual celebrities
@@ -31,7 +30,7 @@ export const searchStar = (starName) => {
       const res = await axios.get(
         "https://api.themoviedb.org/3/search/person",
         {
-          params: { api_key: TMDBKey, query: starName },
+          params: { api_key: process.env.TMDB_KEY, query: starName },
         }
       );
 

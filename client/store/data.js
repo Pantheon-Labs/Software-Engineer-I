@@ -1,6 +1,4 @@
 import axios from "axios";
-import { TMDBKey } from "../../secrets";
-
 /*
  * Action creators, thunks, and reducer
  * Get actor information from API
@@ -20,10 +18,11 @@ const gotPopular = (apiResults) => {
 export const getPopular = () => {
   return async (dispatch) => {
     try {
+      console.log(process.env);
       const res = await axios.get(
         "https://api.themoviedb.org/3/person/popular",
         {
-          params: { api_key: TMDBKey },
+          params: { api_key: process.env.TMDB_KEY },
         }
       );
 
@@ -38,7 +37,7 @@ const getImagePath = async (api, id) => {
   const res = await api.get(
     `https://api.themoviedb.org/3/person/${id}/images`,
     {
-      params: { api_key: TMDBKey },
+      params: { api_key: process.env.TMDB_KEY },
     }
   );
   return res.data.profiles[0].file_path;
