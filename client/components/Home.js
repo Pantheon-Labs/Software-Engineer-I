@@ -58,6 +58,7 @@ class Home extends React.Component {
   search(evt) {
     evt.preventDefault();
 
+    console.log(this.state.searchInput);
     this.props.searchStar(this.state.searchInput);
 
     this.setState({ searchInput: "" });
@@ -89,7 +90,6 @@ class Home extends React.Component {
           <Container>
             <h3>Trending Searches</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
-              console.log(star.profile_path);
               return (
                 <Figure key={star.id} style={styles.starFigure}>
                   <Figure.Image

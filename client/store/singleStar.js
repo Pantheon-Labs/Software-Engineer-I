@@ -26,12 +26,13 @@ const gotStar = (star) => {
 
 // Thunk to search star by name
 export const searchStar = (starName) => {
+  console.log(starName);
   return async (dispatch) => {
     try {
       const res = await axios.get(
-        "https://api.themoviedb.org/3/person/popular",
+        "https://api.themoviedb.org/3/search/person",
         {
-          params: { api_key: TMDBKey, query: `${starName}` },
+          params: { api_key: TMDBKey, query: starName },
         }
       );
 
