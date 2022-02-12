@@ -70,7 +70,7 @@ class Home extends React.Component {
         <InputGroup className="mb-3">
           <FormControl
             name="searchInput"
-            value={this.state.inputName}
+            value={this.state.searchInput}
             onChange={this.handleChange}
             placeholder="Enter Name"
             aria-label="Star to search"

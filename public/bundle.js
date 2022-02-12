@@ -391,7 +391,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
         name: "searchInput",
-        value: this.state.inputName,
+        value: this.state.searchInput,
         onChange: this.handleChange,
         placeholder: "Enter Name",
         "aria-label": "Star to search",
