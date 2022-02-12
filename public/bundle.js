@@ -224,6 +224,7 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 
+ // Footer styles
 
 var styles = {
   footer: {
@@ -238,6 +239,9 @@ var styles = {
     paddingTop: "0.5rem"
   }
 };
+/*
+ * Footer component includes link to repository
+ */
 
 var Footer = /*#__PURE__*/function (_React$Component) {
   _inherits(Footer, _React$Component);
@@ -312,6 +316,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+ // Styles for homepage
 
 var styles = {
   mainContainer: {
@@ -328,6 +333,10 @@ var styles = {
     padding: "0 0.25rem 0.25rem"
   }
 };
+/*
+ * Home component with search input
+ * Displays current popular searches
+ */
 
 var Home = /*#__PURE__*/function (_React$Component) {
   _inherits(Home, _React$Component);
@@ -351,7 +360,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
     key: "handleChange",
     value: function handleChange(evt) {
       this.setState(_defineProperty({}, evt.target.name, evt.target.value));
-    }
+    } // Get popular searches after the component mounts
+
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
@@ -450,6 +460,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+/*
+ * Nav Bar component using react-bootstrap components
+ */
 
 var Navigation = /*#__PURE__*/function (_React$Component) {
   _inherits(Navigation, _React$Component);
@@ -624,14 +637,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-var GET_POPULAR = "GET_POPULAR";
+/*
+ * Action creators, thunks, and reducer
+ * Get actor information from API
+ */
+
+var GET_POPULAR = "GET_POPULAR"; // Action creator for dispatch
 
 var gotPopular = function gotPopular(apiResults) {
   return {
     type: GET_POPULAR,
     popularPeople: apiResults
   };
-};
+}; //Gets list of current popular actors
+
 
 var getPopular = function getPopular() {
   return /*#__PURE__*/function () {
@@ -703,7 +722,8 @@ var getImagePath = /*#__PURE__*/function () {
   return function getImagePath(_x2, _x3) {
     return _ref2.apply(this, arguments);
   };
-}();
+}(); // State contains list of popular people
+
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -743,13 +763,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+/*
+ * Reducer composed with middleware
+ */
+
 var reducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])({
   data: _data_js__WEBPACK_IMPORTED_MODULE_4__["default"]
 });
 var middleware = Object(redux_devtools_extension__WEBPACK_IMPORTED_MODULE_3__["composeWithDevTools"])(Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_2__["default"], Object(redux_logger__WEBPACK_IMPORTED_MODULE_1__["createLogger"])({
   collapsed: true
 })));
-var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, middleware);
+var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, middleware); // Export store for use in React components
+
 /* harmony default export */ __webpack_exports__["default"] = (store);
 
 /***/ }),
