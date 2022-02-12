@@ -352,7 +352,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
     _this.state = {
-      searchInput: ""
+      searchInput: "",
+      status: "waiting"
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
     _this.search = _this.search.bind(_assertThisInitialized(_this));
@@ -376,8 +377,13 @@ var Home = /*#__PURE__*/function (_React$Component) {
     key: "search",
     value: function search(evt) {
       evt.preventDefault();
-      console.log(this.state.searchInput);
+      this.setState({
+        status: "loading"
+      });
       this.props.searchStar(this.state.searchInput);
+      this.setState({
+        status: "loaded"
+      });
       this.setState({
         searchInput: ""
       });
@@ -401,7 +407,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
         onClick: this.search,
         variant: "outline-secondary",
         id: "button-addon2"
-      }, "Search")), this.props.popularPeople && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
+      }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
           style: styles.starFigure
@@ -412,7 +418,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
           className: "text-center"
         }, star.name));
-      })));
+      })), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Loading"), this.state.status === "loaded" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Results came back"));
     }
   }]);
 
@@ -421,7 +427,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
 var mapState = function mapState(state) {
   return {
-    popularPeople: state.data.popularPeople
+    popularPeople: state.data.popularPeople,
+    searchResults: state.data.singleStar
   };
 };
 
@@ -850,7 +857,6 @@ var gotStar = function gotStar(star) {
 
 
 var searchStar = function searchStar(starName) {
-  console.log(starName);
   return /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
       var res;

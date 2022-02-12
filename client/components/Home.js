@@ -36,6 +36,7 @@ class Home extends React.Component {
     super(props);
     this.state = {
       searchInput: "",
+      status: "waiting",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -58,8 +59,9 @@ class Home extends React.Component {
   search(evt) {
     evt.preventDefault();
 
-    console.log(this.state.searchInput);
+    this.setState({ status: "loading" });
     this.props.searchStar(this.state.searchInput);
+    this.setState({ status: "loaded" });
 
     this.setState({ searchInput: "" });
   }
@@ -86,7 +88,7 @@ class Home extends React.Component {
           </Button>
         </InputGroup>
 
-        {this.props.popularPeople && (
+        {this.props.popularPeople && this.state.status === "waiting" && (
           <Container>
             <h3>Trending Searches</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
@@ -105,6 +107,10 @@ class Home extends React.Component {
             })}
           </Container>
         )}
+
+        {this.state.status === "loading" && <h2>Loading</h2>}
+
+        {this.state.status === "loaded" && <h2>Results came back</h2>}
       </Container>
     );
   }
@@ -113,6 +119,7 @@ class Home extends React.Component {
 const mapState = (state) => {
   return {
     popularPeople: state.data.popularPeople,
+    searchResults: state.data.singleStar,
   };
 };
 

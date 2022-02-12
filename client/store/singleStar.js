@@ -26,7 +26,6 @@ const gotStar = (star) => {
 
 // Thunk to search star by name
 export const searchStar = (starName) => {
-  console.log(starName);
   return async (dispatch) => {
     try {
       const res = await axios.get(
