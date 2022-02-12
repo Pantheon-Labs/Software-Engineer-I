@@ -48,6 +48,8 @@ export const getStar = (starId) => {};
 // Reducer contains all information from star API call
 export default function (state = {}, action) {
   switch (action.type) {
+    case SEARCH_STAR:
+      return { ...state, searchResults: action.searchResults };
     case GET_STAR:
       return action.star;
     default:
