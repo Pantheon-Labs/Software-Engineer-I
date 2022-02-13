@@ -422,9 +422,15 @@ var Home = /*#__PURE__*/function (_React$Component) {
           className: "text-center"
         }, star.name));
       })), this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-          key: star.name
-        }, star.name);
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
+          key: star.id
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
+          style: styles.starImage,
+          alt: "Profile image of ".concat(star.name),
+          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path)
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
+          className: "text-center"
+        }, star.name));
       }));
     }
   }]);

@@ -115,7 +115,18 @@ class Home extends React.Component {
 
         {this.props.searchResults.length > 0 &&
           this.props.searchResults.map((star) => {
-            return <div key={star.name}>{star.name}</div>;
+            return (
+              <Figure key={star.id}>
+                <Figure.Image
+                  style={styles.starImage}
+                  alt={`Profile image of ${star.name}`}
+                  src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                />
+                <Figure.Caption className="text-center">
+                  {star.name}
+                </Figure.Caption>
+              </Figure>
+            );
           })}
       </Container>
     );
