@@ -14,6 +14,7 @@ import { searchStar } from "../store/singleStar";
 const styles = {
   mainContainer: {
     paddingTop: "5rem",
+    paddingBottom: "5rem",
   },
   starImage: {
     height: "5rem",

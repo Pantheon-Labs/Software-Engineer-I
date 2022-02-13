@@ -323,7 +323,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var styles = {
   mainContainer: {
-    paddingTop: "5rem"
+    paddingTop: "5rem",
+    paddingBottom: "5rem"
   },
   starImage: {
     height: "5rem",
@@ -624,10 +625,7 @@ var Routes = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        id: "routes",
-        styles: {
-          overflow: "scroll"
-        }
+        id: "routes"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Route"], {
         exact: true,
         path: "/",
