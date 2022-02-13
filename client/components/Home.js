@@ -30,7 +30,7 @@ const styles = {
     padding: "0 0.25rem 0.25rem",
   },
   searchResult: {
-    paddingTop: "0.5rem",
+    paddingTop: "0.5",
     paddingBottom: "0.5rem",
   },
 };
@@ -123,7 +123,7 @@ class Home extends React.Component {
         {this.props.searchResults.length > 0 &&
           this.props.searchResults.map((star) => {
             return (
-              <Container key={star.id} styles={styles.searchResult}>
+              <Container key={star.id} style={styles.searchResult}>
                 <Row>
                   <Col>
                     <Image

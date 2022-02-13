@@ -337,7 +337,7 @@ var styles = {
     padding: "0 0.25rem 0.25rem"
   },
   searchResult: {
-    paddingTop: "0.5rem",
+    paddingTop: "0.5",
     paddingBottom: "0.5rem"
   }
 };
@@ -428,7 +428,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
       })), this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
           key: star.id,
-          styles: styles.searchResult
+          style: styles.searchResult
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
           style: styles.starImage,
           alt: "Profile image of ".concat(star.name),
