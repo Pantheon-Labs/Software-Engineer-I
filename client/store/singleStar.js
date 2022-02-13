@@ -41,8 +41,13 @@ export const searchStar = (starName) => {
 // Call to api and then dispatch
 export const getStar = (starId) => {};
 
+// Default state
+const defaultState = {
+  searchResults: [],
+};
+
 // Reducer contains all information from star API call
-export default function (state = {}, action) {
+export default function (state = defaultState, action) {
   switch (action.type) {
     case SEARCH_STAR:
       return { ...state, searchResults: action.searchResults };

@@ -2,6 +2,10 @@ const axios = require("axios");
 const router = require("express").Router();
 module.exports = router;
 
+/*
+ * Routes on "/api"
+ */
+
 router.get("/", async (req, res, next) => {
   try {
     const response = await axios.get(

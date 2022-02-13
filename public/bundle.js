@@ -418,7 +418,11 @@ var Home = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
           className: "text-center"
         }, star.name));
-      })), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Loading"), this.state.status === "loaded" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Results came back"));
+      })), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Loading"), this.props.searchResults.length && this.props.searchResults.map(function (star) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          key: star.name
+        }, star.name);
+      }));
     }
   }]);
 
@@ -428,7 +432,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
 var mapState = function mapState(state) {
   return {
     popularPeople: state.data.popularPeople,
-    searchResults: state.data.singleStar
+    searchResults: state.singleStar.searchResults
   };
 };
 
@@ -888,10 +892,14 @@ var searchStar = function searchStar(starName) {
   }();
 }; // Call to api and then dispatch
 
-var getStar = function getStar(starId) {}; // Reducer contains all information from star API call
+var getStar = function getStar(starId) {}; // Default state
+
+var defaultState = {
+  searchResults: []
+}; // Reducer contains all information from star API call
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultState;
   var action = arguments.length > 1 ? arguments[1] : undefined;
 
   switch (action.type) {

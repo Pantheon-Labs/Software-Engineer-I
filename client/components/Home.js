@@ -110,7 +110,10 @@ class Home extends React.Component {
 
         {this.state.status === "loading" && <h2>Loading</h2>}
 
-        {this.state.status === "loaded" && <h2>Results came back</h2>}
+        {this.props.searchResults.length &&
+          this.props.searchResults.map((star) => {
+            return <div key={star.name}>{star.name}</div>;
+          })}
       </Container>
     );
   }
@@ -119,7 +122,7 @@ class Home extends React.Component {
 const mapState = (state) => {
   return {
     popularPeople: state.data.popularPeople,
-    searchResults: state.data.singleStar,
+    searchResults: state.singleStar.searchResults,
   };
 };
 
