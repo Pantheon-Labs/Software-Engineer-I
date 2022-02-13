@@ -18,15 +18,8 @@ const gotPopular = (apiResults) => {
 export const getPopular = () => {
   return async (dispatch) => {
     try {
-      console.log(process.env);
-      const res = await axios.get(
-        "https://api.themoviedb.org/3/person/popular",
-        {
-          params: { api_key: process.env.TMDB_KEY },
-        }
-      );
-
-      dispatch(gotPopular(res.data.results));
+      const res = await axios.get("/api");
+      dispatch(gotPopular(res.data));
     } catch (err) {
       throw err;
     }

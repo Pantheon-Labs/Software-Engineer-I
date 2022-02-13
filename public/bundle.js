@@ -682,31 +682,26 @@ var getPopular = function getPopular() {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              console.log(process.env);
-              _context.next = 4;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.themoviedb.org/3/person/popular", {
-                params: {
-                  api_key: process.env.TMDB_KEY
-                }
-              });
+              _context.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api");
 
-            case 4:
+            case 3:
               res = _context.sent;
-              dispatch(gotPopular(res.data.results));
-              _context.next = 11;
+              dispatch(gotPopular(res.data));
+              _context.next = 10;
               break;
 
-            case 8:
-              _context.prev = 8;
+            case 7:
+              _context.prev = 7;
               _context.t0 = _context["catch"](0);
               throw _context.t0;
 
-            case 11:
+            case 10:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 8]]);
+      }, _callee, null, [[0, 7]]);
     }));
 
     return function (_x) {
@@ -814,7 +809,7 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStar", function() { return getStar; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
@@ -862,10 +857,9 @@ var searchStar = function searchStar(starName) {
             case 0:
               _context.prev = 0;
               _context.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("https://api.themoviedb.org/3/search/person", {
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/search/person", {
                 params: {
-                  api_key: process.env.TMDB_KEY,
-                  query: starName
+                  starName: starName
                 }
               });
 
@@ -913,7 +907,6 @@ var getStar = function getStar(starId) {}; // Reducer contains all information f
       return state;
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 

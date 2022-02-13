@@ -27,12 +27,9 @@ const gotStar = (star) => {
 export const searchStar = (starName) => {
   return async (dispatch) => {
     try {
-      const res = await axios.get(
-        "https://api.themoviedb.org/3/search/person",
-        {
-          params: { api_key: process.env.TMDB_KEY, query: starName },
-        }
-      );
+      const res = await axios.get("/api/search/person", {
+        params: { starName: starName },
+      });
 
       dispatch(searchedStar(res.data));
     } catch (err) {
