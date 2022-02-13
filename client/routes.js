@@ -6,7 +6,7 @@ import { Route } from "react-router-dom";
 class Routes extends React.Component {
   render() {
     return (
-      <div>
+      <div id="routes">
         <Route exact path="/" component={Home} />
         <Route path="/about" component={About} />
       </div>

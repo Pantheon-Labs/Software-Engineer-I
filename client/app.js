@@ -10,7 +10,7 @@ const styles = {
 
 const App = () => {
   return (
-    <div style={styles}>
+    <div id="react-app" style={styles}>
       <Navbar />
       <Routes />
       <Footer />

@@ -68,7 +68,11 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Container style={styles.mainContainer} className="text-center">
+      <Container
+        id="main-container"
+        style={styles.mainContainer}
+        className="text-center"
+      >
         <h1>Home</h1>
         <InputGroup className="mb-3">
           <FormControl
@@ -108,9 +112,7 @@ class Home extends React.Component {
           </Container>
         )}
 
-        {this.state.status === "loading" && <h2>Loading</h2>}
-
-        {this.props.searchResults.length &&
+        {this.props.searchResults.length > 0 &&
           this.props.searchResults.map((star) => {
             return <div key={star.name}>{star.name}</div>;
           })}
