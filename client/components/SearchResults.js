@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
 
 // Styles for search results
@@ -26,29 +26,43 @@ const styles = {
 class SearchResults extends React.Component {
   constructor(props) {
     super(props);
+    this.onClick = this.onClick.bind(this);
+  }
+
+  // Function for when search results are clicked
+  onClick(star) {
+    console.log(`clicked on ${star.name}`);
   }
 
   render() {
     return (
-      this.props.searchResults.length > 0 &&
-      this.props.searchResults.map((star) => {
-        return (
-          <Container key={star.id} style={styles.searchResult}>
-            <Row>
-              <Col xs={3}>
-                <Image
-                  style={styles.starImage}
-                  alt={`Profile image of ${star.name}`}
-                  src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                />
-              </Col>
-              <Col xs={7} className="text-left">
-                <p className="text-left">{star.name}</p>
-              </Col>
-            </Row>
-          </Container>
-        );
-      })
+      <ListGroup>
+        {this.props.searchResults.length > 0 &&
+          this.props.searchResults.map((star) => {
+            return (
+              <ListGroup.Item
+                key={star.id}
+                action
+                onClick={() => this.onClick(star)}
+              >
+                <Container style={styles.searchResult}>
+                  <Row>
+                    <Col xs={3}>
+                      <Image
+                        style={styles.starImage}
+                        alt={`Profile image of ${star.name}`}
+                        src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                      />
+                    </Col>
+                    <Col xs={7} className="text-left">
+                      <p className="text-left">{star.name}</p>
+                    </Col>
+                  </Row>
+                </Container>
+              </ListGroup.Item>
+            );
+          })}
+      </ListGroup>
     );
   }
 }

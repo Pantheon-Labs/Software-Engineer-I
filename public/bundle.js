@@ -598,17 +598,34 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(SearchResults);
 
   function SearchResults(props) {
+    var _this;
+
     _classCallCheck(this, SearchResults);
 
-    return _super.call(this, props);
-  }
+    _this = _super.call(this, props);
+    _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
+    return _this;
+  } // Function for when search results are clicked
+
 
   _createClass(SearchResults, [{
+    key: "onClick",
+    value: function onClick(star) {
+      console.log("clicked on ".concat(star.name));
+    }
+  }, {
     key: "render",
     value: function render() {
-      return this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
+      var _this2 = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"], null, this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"].Item, {
           key: star.id,
+          action: true,
+          onClick: function onClick() {
+            return _this2.onClick(star);
+          }
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
           style: styles.searchResult
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"], {
           xs: 3
@@ -621,8 +638,8 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
           className: "text-left"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
           className: "text-left"
-        }, star.name))));
-      });
+        }, star.name)))));
+      }));
     }
   }]);
 
