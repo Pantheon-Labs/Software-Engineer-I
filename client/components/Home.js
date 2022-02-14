@@ -1,14 +1,12 @@
 import React from "react";
 import {
   Container,
-  Row,
-  Col,
   Figure,
   InputGroup,
   Button,
   FormControl,
-  Image,
 } from "react-bootstrap";
+import SearchResults from "./SearchResults";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
 import { searchStar } from "../store/singleStar";
@@ -28,12 +26,6 @@ const styles = {
   },
   starFigure: {
     padding: "0 0.25rem 0.25rem",
-  },
-  searchResult: {
-    paddingTop: "0.5",
-    paddingBottom: "0.5rem",
-    marginLeft: "3rem",
-    textAlign: "left",
   },
 };
 
@@ -122,25 +114,7 @@ class Home extends React.Component {
           </Container>
         )}
 
-        {this.props.searchResults.length > 0 &&
-          this.props.searchResults.map((star) => {
-            return (
-              <Container key={star.id} style={styles.searchResult}>
-                <Row>
-                  <Col xs={3}>
-                    <Image
-                      style={styles.starImage}
-                      alt={`Profile image of ${star.name}`}
-                      src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                    />
-                  </Col>
-                  <Col xs={7} className="text-left">
-                    <p className="text-left">{star.name}</p>
-                  </Col>
-                </Row>
-              </Container>
-            );
-          })}
+        {this.props.searchResults.length > 0 && <SearchResults />}
       </Container>
     );
   }
