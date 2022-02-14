@@ -32,6 +32,8 @@ const styles = {
   searchResult: {
     paddingTop: "0.5",
     paddingBottom: "0.5rem",
+    marginLeft: "3rem",
+    textAlign: "left",
   },
 };
 
@@ -125,15 +127,15 @@ class Home extends React.Component {
             return (
               <Container key={star.id} style={styles.searchResult}>
                 <Row>
-                  <Col>
+                  <Col xs={3}>
                     <Image
                       style={styles.starImage}
                       alt={`Profile image of ${star.name}`}
                       src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
                     />
                   </Col>
-                  <Col>
-                    <p>{star.name}</p>
+                  <Col xs={7} className="text-left">
+                    <p className="text-left">{star.name}</p>
                   </Col>
                 </Row>
               </Container>
