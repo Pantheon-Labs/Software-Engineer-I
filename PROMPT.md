@@ -43,9 +43,8 @@ We don't _officially_ have any bonus points to award, but we'll certainly be pre
 
 # Example Prompts
 - **Reddit Client**: Make a React app that pulls Reddit posts from the [Reddit API](https://www.reddit.com/dev/api/)
-- **GitHub Client**: Build a React app that uses the API to retrieve and display interesting information
+- **GitHub Client**: Build a React app that uses the [GitHub API](https://docs.github.com/en/rest) to retrieve and display interesting information
 - **Hire Me Site**: Build a React app that tells us about you, your strengths, your passions, and why you want to join us!
-- **Pantheon Labs Site**: Create a website for Pantheon Labs
 - **Food/Drink Recommendation API**: Create an API that allows users to fetch recommendations for food/drinks based on location, weather, or something else!
 - **Nostalgia Machine**: Please help us forget that it's 2022
 
