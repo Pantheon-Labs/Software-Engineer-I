@@ -30,9 +30,6 @@ export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Removes '_' as it's not allowed in bucket name
-    const nanoid = customAlphabet(NANOID_ALPHABET, 5);
-
     // Create S3 Bucket for storing images + some randomness if someone else tries to deploy
     const bucket = new s3.Bucket(
       this,
@@ -40,7 +37,7 @@ export class CdkStack extends cdk.Stack {
       {
         enforceSSL: true,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        bucketName: `${process.env.NODE_ENV}-pantheon-assets-${nanoid()}`,
+        bucketName: `${process.env.NODE_ENV}-pantheon-assets`,
         versioned: true,
       }
     );
