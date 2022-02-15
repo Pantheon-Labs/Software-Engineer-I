@@ -1,11 +1,17 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
+# Actor Search
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
+Application to search for actors.
 
+## Set up
 
-</br></br></br></br>
+To install:
 
-<!-- Delete this line and everything above it -->
+```
+npm install
+```
 
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+To build and run:
+
+```
+npm run start-dev
+```

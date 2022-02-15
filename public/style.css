@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,200;0,400;0,600;1,500&display=swap");
+
+body {
+  font-family: "Source Sans 3", sans-serif;
+  min-height: 100%;
+}
+
+#app {
+  min-height: 100%;
+}
+
+h1 {
+  font-weight: 600;
+}
+
+h2 {
+  font-weight: 400;
+}
