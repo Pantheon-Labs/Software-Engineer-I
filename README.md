@@ -1,11 +1,19 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
+## TODO :>]
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
+### Pre-requisites
 
+1. Install Docker
+2. Install CDK - 1.44.0 - NOT V2!!!!!!!
+3. AWS Account with credentials
+   TODO
+4. `npm install` & `cdk bootstrap`
 
-</br></br></br></br>
+TODO - generate .env files
+TODO Deploy commands, per .env
 
-<!-- Delete this line and everything above it -->
+### Troubleshooting:
 
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+> [internal] load metadata for public.ecr.aws/sam/build-nodejs14.x:latest:
+> failed to create LLB definition: unexpected status code [manifests latest]: 403 Forbidden
+
+Run this command: `aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/sam/build-nodejs`
