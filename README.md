@@ -1,11 +1,16 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
+## Description
 
+This application is to showcase my skill with the technologies listed below. It was created in under 3 hours and with no prior experience with Chakra UI.
 
-</br></br></br></br>
+## Technologies used
 
-<!-- Delete this line and everything above it -->
+ - Next.js
+ - Node.js
+ - Chakra UI
+ - Typescript
 
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+## Thought process
+I wanted to showcase my ability to create something quickly while still maintaining code readability and showcasing a solid understanding of the technologies used. So I decided to give myself a time limit to complete this project. 
+
+This would prevent me from styling the application to a professional level since I am not 100% familiar with Chakra UI, but it allows me to demonstrate my ability to read documentation quickly and get started working on the codebase.
