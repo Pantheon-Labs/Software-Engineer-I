@@ -66,6 +66,7 @@ class SearchResults extends React.Component {
                   />
                   <span style={styles.resultText}>
                     <p>{star.name}</p>
+                    <p>{star.birthday}</p>
                   </span>
                 </Container>
               </ListGroup.Item>
