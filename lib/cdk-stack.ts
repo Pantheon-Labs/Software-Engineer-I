@@ -7,14 +7,16 @@ import {
   HttpMethod,
   PayloadFormatVersion,
 } from "@aws-cdk/aws-apigatewayv2";
+import * as sfn from "@aws-cdk/aws-stepfunctions";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
-import { RetentionDays } from "@aws-cdk/aws-logs";
+import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
 import { EventBus } from "@aws-cdk/aws-events";
 import { customAlphabet } from "nanoid";
 import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
+import { NANOID_ALPHABET } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -29,7 +31,7 @@ export class CdkStack extends cdk.Stack {
     super(scope, id, props);
 
     // Removes '_' as it's not allowed in bucket name
-    const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 5);
+    const nanoid = customAlphabet(NANOID_ALPHABET, 5);
 
     // Create S3 Bucket for storing images + some randomness if someone else tries to deploy
     const bucket = new s3.Bucket(
@@ -66,15 +68,14 @@ export class CdkStack extends cdk.Stack {
     });
 
     // Create lambda to generate signed URLs
-    // TODO IAM policy
     const generateSignedUrlFunction = new NodejsFunction(
       this,
       `${process.env.NODE_ENV}-generate-signed-url-function`,
       {
         functionName: `${process.env.NODE_ENV}-generate-signed-url-function`,
         environment: {
-          // To get the dynamic event bus name - // TODO
           NODE_ENV: process.env.NODE_ENV as string,
+          BUCKET_NAME: bucket.bucketName,
         },
         timeout: cdk.Duration.seconds(5),
         memorySize: 256,
@@ -119,7 +120,44 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
-    // Create step function to parallel process the requests - TODO
-    // Also has direct integrations ^
+    // Bus to capture S3 upload events
+    const bus = new EventBus(this, `${process.env.NODE_ENV}-EventBus`, {
+      eventBusName: `${process.env.NODE_ENV}-EventBus`,
+    });
+
+    bus.archive(`${process.env.NODE_ENV}-pantheon-EventArchive`, {
+      archiveName: `${process.env.NODE_ENV}-pantheon-EventArchive`,
+      eventPattern: {
+        account: [cdk.Stack.of(this).account],
+      },
+      retention: cdk.Duration.days(30),
+    });
+
+    // Step function to process the tasks
+    const definition = new sfn.Succeed(this, "Success :)");
+
+    const log = new LogGroup(
+      this,
+      `${process.env.NODE_ENV}-pantheon-state-machine-log-group`
+    );
+
+    const StateMachine = new sfn.StateMachine(
+      this,
+      `${process.env.NODE_ENV}-pantheon-state-machine`,
+      {
+        stateMachineName: `${process.env.NODE_ENV}-pantheon-state-machine`,
+        definition,
+        timeout: cdk.Duration.minutes(5),
+        stateMachineType: sfn.StateMachineType.EXPRESS,
+        logs: {
+          // Not enabled by default
+          includeExecutionData: true,
+          destination: log,
+          level: sfn.LogLevel.ALL,
+        },
+      }
+    );
+    // TODO
+    table.grantWriteData(StateMachine);
   }
 }
