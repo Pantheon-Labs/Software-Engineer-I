@@ -22,15 +22,14 @@ export const main = async (
   const command = new PutObjectCommand(bucketParams);
 
   try {
-    const signedUrl = await getSignedUrl(s3Client, command, {
+    const preSignedUrl = await getSignedUrl(s3Client, command, {
       expiresIn: 3600,
     });
     return {
       statusCode: 201,
       body: JSON.stringify({
         message: "Saul Goodman!",
-        signedUrl,
-        event,
+        preSignedUrl,
       }),
     };
     // TODO types
