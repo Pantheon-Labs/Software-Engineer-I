@@ -29,7 +29,6 @@ export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Create S3 Bucket for storing images + some randomness if someone else tries to deploy
     const bucket = new s3.Bucket(
       this,
       `${process.env.NODE_ENV}-pantheon-assets`,
@@ -63,23 +62,13 @@ export class CdkStack extends cdk.Stack {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
-    enum FILE_TYPES {
-      JPEG = ".jpeg",
-      JPG = ".jpg",
-      PNG = ".png",
-    }
-    const list = Object.values(FILE_TYPES);
-    const half = Math.ceil(Object.values(list).length / 2);
-    const fileTypes = list.slice(0, half);
+    // Signed URL should only allow these file types in the images/ directory
+    const allowedFileTypes = [".jpeg", ".png", ".jpg", ".pdf", ".txt"];
 
-    const resources = fileTypes.map(
-      (fileType: FILE_TYPES) => bucket.bucketArn + `/images/*${fileType}`
     );
-
-    // Lambda needs this role to create the signed URL
     const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
       actions: ["s3:PutObject"],
-      resources,
+      resources: [bucket.bucketArn + `/images/*`],
     });
 
     // Create lambda to generate signed URLs
