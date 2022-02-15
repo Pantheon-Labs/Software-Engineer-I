@@ -56,11 +56,11 @@ describe("API", () => {
   it("allows uploading a file of every type", async () => {
     expect.assertions(ALLOWED_FILE_TYPES.length);
 
-    const allFiles = fs.readdirSync("./testFiles");
+    const allFiles = fs.readdirSync("./testFiles/");
 
     for await (const fileType of ALLOWED_FILE_TYPES) {
-      const { data } = await axios.post(API_URL + "/signed-url", {
-        fileType: fileType,
+      const { data } = await axios.post(`${API_URL}/signed-url`, {
+        fileType,
       });
 
       const ourFile = allFiles.find((file) => file.includes(fileType));
@@ -75,5 +75,4 @@ describe("API", () => {
       }
     }
   });
-  it.todo("Blocks the upload if the image is over 1mb");
 });

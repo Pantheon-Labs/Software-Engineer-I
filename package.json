@@ -15,6 +15,7 @@
     "@aws-cdk/aws-stepfunctions": "^1.144.0",
     "@aws-cdk/core": "^1.144.0",
     "@aws-sdk/client-s3": "^3.51.0",
+    "@aws-sdk/s3-presigned-post": "^3.51.0",
     "@aws-sdk/s3-request-presigner": "^3.51.0",
     "@chakra-ui/react": "^1.8.3",
     "@emotion/react": "^11.7.1",
