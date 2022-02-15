@@ -21,7 +21,10 @@ import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
 import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
 import { EventBus, Rule } from "@aws-cdk/aws-events";
 import * as EventSources from "@aws-cdk/aws-lambda-event-sources";
-import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
+import {
+  NodejsFunction,
+  NodejsFunctionProps,
+} from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
 
 const resultDotEnv = dotenv.config({
@@ -32,6 +35,18 @@ if (resultDotEnv.error) {
   throw resultDotEnv.error;
 }
 
+const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
+  timeout: cdk.Duration.seconds(5),
+  memorySize: 128,
+  logRetention: RetentionDays.ONE_DAY,
+  runtime: Runtime.NODEJS_14_X,
+  architecture: Architecture.ARM_64,
+  bundling: {
+    minify: true,
+    externalModules: ["aws-sdk"],
+  },
+  handler: "main",
+};
 export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -85,20 +100,11 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-generate-signed-url-function`,
       {
         functionName: `${process.env.NODE_ENV}-generate-signed-url-function`,
-        timeout: cdk.Duration.seconds(5),
-        memorySize: 256,
-        logRetention: RetentionDays.ONE_WEEK,
-        runtime: Runtime.NODEJS_14_X,
-        architecture: Architecture.ARM_64,
+        ...LAMBDA_CONFIG,
         environment: {
           BUCKET_NAME: bucket.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        bundling: {
-          minify: true,
-          externalModules: ["aws-sdk"],
-        },
-        handler: "main",
         description: `Generates signed URLs to upload into the ${bucket.bucketName} bucket`,
         entry: path.join(__dirname, `/../functions/generate-signed-url.ts`),
       }
@@ -182,20 +188,11 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-file-upload-processor-function`,
       {
         functionName: `${process.env.NODE_ENV}-file-upload-processor-function`,
+        ...LAMBDA_CONFIG,
         environment: {
           BUCKET_NAME: bucket.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        timeout: cdk.Duration.seconds(5),
-        memorySize: 256,
-        logRetention: RetentionDays.ONE_WEEK,
-        runtime: Runtime.NODEJS_14_X,
-        architecture: Architecture.ARM_64,
-        bundling: {
-          minify: true,
-          externalModules: ["aws-sdk"],
-        },
-        handler: "main",
         description: `Reacts to S3 upload events. If a file is too big, it will delete it. If the size is fine, it'll send the event to EventBridge`,
         entry: path.join(__dirname, `/../functions/file-upload-processor.ts`),
       }
@@ -317,6 +314,30 @@ export class CdkStack extends cdk.Stack {
         },
       }
     );
+
+    // Create lambda to generate signed URLs
+    const healthCheckFunction = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-health-check-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-health-check-function`,
+        ...LAMBDA_CONFIG,
+        description: `Returns 200 :)`,
+        entry: path.join(__dirname, `/../functions/health-check.ts`),
+      }
+    );
+
+    API.addRoutes({
+      path: "/",
+      methods: [HttpMethod.GET],
+      integration: new HttpLambdaIntegration(
+        `${process.env.NODE_ENV}-health-check-integration`,
+        healthCheckFunction,
+        {
+          payloadFormatVersion: PayloadFormatVersion.VERSION_2_0,
+        }
+      ),
+    });
 
     new cdk.CfnOutput(this, "CLOUDFRONT_URL: ", {
       value: distribution.distributionDomainName as string,
