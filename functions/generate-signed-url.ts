@@ -26,7 +26,7 @@ export const main = async (
       expiresIn: 3600,
     });
     return {
-      statusCode: 200,
+      statusCode: 201,
       body: JSON.stringify({
         message: "Saul Goodman!",
         signedUrl,

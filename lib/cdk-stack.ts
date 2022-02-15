@@ -127,6 +127,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "API URL: ", { value: API.url as string });
+
     API.addRoutes({
       path: "/signed-url",
       methods: [HttpMethod.POST],
