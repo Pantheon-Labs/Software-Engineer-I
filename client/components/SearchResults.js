@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
+import { astrology } from "../signs";
 
 // Styles for search results
 const styles = {
