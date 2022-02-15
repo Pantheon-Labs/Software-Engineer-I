@@ -36,6 +36,18 @@ router.get("/search/person", async (req, res, next) => {
   }
 });
 
+router.get("/person/birthday", async (req, res, next) => {
+  try {
+    const response = await axios.get("https://api.themoviedb.org/3/person", {
+      params: { api_key: process.env.TMDB_KEY, person_id: req.query["starId"] },
+    });
+
+    res.json(response.data.birthday);
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.use((req, res, next) => {
   const error = new Error("Not Found");
   error.status = 404;
