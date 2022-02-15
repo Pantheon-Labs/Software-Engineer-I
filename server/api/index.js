@@ -38,9 +38,12 @@ router.get("/search/person", async (req, res, next) => {
 
 router.get("/person/birthday", async (req, res, next) => {
   try {
-    const response = await axios.get("https://api.themoviedb.org/3/person", {
-      params: { api_key: process.env.TMDB_KEY, person_id: req.query["starId"] },
-    });
+    const response = await axios.get(
+      "https://api.themoviedb.org/3/person/" + req.query["starId"],
+      {
+        params: { api_key: process.env.TMDB_KEY },
+      }
+    );
 
     res.json(response.data.birthday);
   } catch (err) {

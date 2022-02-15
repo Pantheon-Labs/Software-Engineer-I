@@ -943,13 +943,14 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!************************************!*\
   !*** ./client/store/singleStar.js ***!
   \************************************/
-/*! exports provided: searchStar, getStar, default */
+/*! exports provided: searchStar, getStar, getBirthday, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStar", function() { return getStar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBirthday", function() { return getBirthday; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -989,7 +990,7 @@ var gotStar = function gotStar(star) {
 var searchStar = function searchStar(starName) {
   return /*#__PURE__*/function () {
     var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(dispatch) {
-      var res;
+      var res, birthday, i;
       return regeneratorRuntime.wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -1004,21 +1005,45 @@ var searchStar = function searchStar(starName) {
 
             case 3:
               res = _context.sent;
-              dispatch(searchedStar(res.data));
-              _context.next = 10;
+              birthday = "uknown";
+              i = 0;
+
+            case 6:
+              if (!(i < 1)) {
+                _context.next = 14;
+                break;
+              }
+
+              _context.next = 9;
+              return getBirthday(res.data[i].id);
+
+            case 9:
+              birthday = _context.sent;
+              res.data[i] = _objectSpread(_objectSpread({}, res.data[i]), {}, {
+                birthday: birthday ? birthday : "unknown"
+              });
+
+            case 11:
+              i++;
+              _context.next = 6;
               break;
 
-            case 7:
-              _context.prev = 7;
+            case 14:
+              dispatch(searchedStar(res.data));
+              _context.next = 20;
+              break;
+
+            case 17:
+              _context.prev = 17;
               _context.t0 = _context["catch"](0);
               throw _context.t0;
 
-            case 10:
+            case 20:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 7]]);
+      }, _callee, null, [[0, 17]]);
     }));
 
     return function (_x) {
@@ -1027,7 +1052,45 @@ var searchStar = function searchStar(starName) {
   }();
 }; // Call to api and then dispatch
 
-var getStar = function getStar(starId) {}; // Default state
+var getStar = function getStar(starId) {}; // Function to get birthday
+
+var getBirthday = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(starId) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/person/birthday", {
+              params: {
+                starId: starId
+              }
+            });
+
+          case 3:
+            res = _context2.sent;
+            console.log(res.data);
+            return _context2.abrupt("return", res.data);
+
+          case 8:
+            _context2.prev = 8;
+            _context2.t0 = _context2["catch"](0);
+            throw _context2.t0;
+
+          case 11:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+
+  return function getBirthday(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}(); // Default state
 
 var defaultState = {
   searchResults: []

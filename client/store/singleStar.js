@@ -31,6 +31,17 @@ export const searchStar = (starName) => {
         params: { starName: starName },
       });
 
+      let birthday = "uknown";
+
+      for (let i = 0; i < 1; i++) {
+        birthday = await getBirthday(res.data[i].id);
+
+        res.data[i] = {
+          ...res.data[i],
+          birthday: birthday ? birthday : "unknown",
+        };
+      }
+
       dispatch(searchedStar(res.data));
     } catch (err) {
       throw err;
@@ -40,6 +51,20 @@ export const searchStar = (starName) => {
 
 // Call to api and then dispatch
 export const getStar = (starId) => {};
+
+// Function to get birthday
+export const getBirthday = async (starId) => {
+  try {
+    const res = await axios.get("/api/person/birthday", {
+      params: { starId },
+    });
+
+    console.log(res.data);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
 
 // Default state
 const defaultState = {
