@@ -1,8 +1,11 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import skillsRoute from "./src/routes/skills";
+import cors from "cors";
 
 const app: Application = express();
-const port = 3000;
+const port = 3001;
+
+app.use(cors());
 
 // Body parsing Middleware
 app.use(express.json());
