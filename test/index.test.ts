@@ -75,4 +75,9 @@ describe("API", () => {
       }
     }
   });
+
+
+  it("asynchronously deletes files larger than 1mb", async () => {
+    
+  })
 });

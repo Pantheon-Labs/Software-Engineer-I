@@ -66,7 +66,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
-      actions: ["s3:PutObject"],
+      actions: ["s3:PutObject", "s3:DeleteObject"],
       resources: [bucket.bucketArn + `/images/*`],
     });
 
@@ -211,5 +211,7 @@ export class CdkStack extends cdk.Stack {
         source: ["s3.upload"],
       },
     });
+
+    bus.grantPutEventsTo(fileUploadProcessor);
   }
 }
