@@ -1,5 +1,7 @@
 ## TODO :>]
 
+![infra](infra.png)
+
 ### Pre-requisites
 
 1. Install Docker

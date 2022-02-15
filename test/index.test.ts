@@ -6,9 +6,6 @@ import { ALLOWED_FILE_TYPES } from "../Config";
 import { s3Client } from "../awsClients/s3Client";
 import {
   GetObjectCommand,
-  PutObjectCommand,
-  PutObjectCommandInput,
-  GetObjectCommandOutput,
 } from "@aws-sdk/client-s3";
 const rawdata = fs.readFileSync(`./cdk-outputs.json`);
 const cdkOutput = JSON.parse(rawdata.toString());
