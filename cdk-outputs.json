@@ -1,1 +1,7 @@
-{}
+{
+  "development-pantheon-project": {
+    "APIURL": "https://o403ptj373.execute-api.us-east-1.amazonaws.com/",
+    "CLOUDFRONTURL": "d34dqq35zs1f33.cloudfront.net",
+    "BUCKETNAME": "development-pantheon-assets"
+  }
+}

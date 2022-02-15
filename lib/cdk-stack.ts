@@ -311,7 +311,7 @@ export class CdkStack extends cdk.Stack {
         webAclId: API_WAF.attrArn,
         defaultBehavior: {
           origin: new origins.HttpOrigin(cfOrigin),
-          originRequestPolicy: cf.OriginRequestPolicy.ALL_VIEWER,
+          originRequestPolicy: cf.OriginRequestPolicy.CORS_CUSTOM_ORIGIN,
           cachePolicy,
           allowedMethods: cf.AllowedMethods.ALLOW_ALL,
         },
