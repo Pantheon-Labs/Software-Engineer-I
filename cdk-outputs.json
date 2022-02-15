@@ -1,0 +1,6 @@
+{
+  "development-pantheon-project": {
+    "APIURL": "https://bm7e73oar1.execute-api.us-east-1.amazonaws.com/",
+    "BUCKETNAME": "development-pantheon-assets"
+  }
+}

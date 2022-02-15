@@ -66,7 +66,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
-      actions: ["s3:PutObject", "s3:DeleteObject"],
+      actions: ["s3:PutObject"],
       resources: [bucket.bucketArn + `/images/*`],
     });
 
@@ -76,15 +76,15 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-generate-signed-url-function`,
       {
         functionName: `${process.env.NODE_ENV}-generate-signed-url-function`,
-        environment: {
-          NODE_ENV: process.env.NODE_ENV as string,
-          BUCKET_NAME: bucket.bucketName,
-        },
         timeout: cdk.Duration.seconds(5),
         memorySize: 256,
         logRetention: RetentionDays.ONE_WEEK,
         runtime: Runtime.NODEJS_14_X,
         architecture: Architecture.ARM_64,
+        environment: {
+          BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
         bundling: {
           minify: true,
           externalModules: ["aws-sdk"],
@@ -100,6 +100,7 @@ export class CdkStack extends cdk.Stack {
         statements: [s3PreSignedUrlPutObjectPolicy],
       })
     );
+
     // TODO global rate limiting
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,
@@ -113,8 +114,6 @@ export class CdkStack extends cdk.Stack {
         allowCredentials: true,
       },
     });
-
-    new cdk.CfnOutput(this, "API URL: ", { value: API.url as string });
 
     API.addRoutes({
       path: "/signed-url",
@@ -175,8 +174,8 @@ export class CdkStack extends cdk.Stack {
       {
         functionName: `${process.env.NODE_ENV}-file-upload-processor-function`,
         environment: {
-          NODE_ENV: process.env.NODE_ENV as string,
           BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
         },
         timeout: cdk.Duration.seconds(5),
         memorySize: 256,
@@ -200,6 +199,16 @@ export class CdkStack extends cdk.Stack {
       })
     );
 
+    const s3DeleteLargeObjectPolicy = new iam.PolicyStatement({
+      actions: ["s3:DeleteObject"],
+      resources: [bucket.bucketArn + `/images/*`],
+    });
+
+    fileUploadProcessor.role?.attachInlinePolicy(
+      new iam.Policy(this, "delete-large-object-policy", {
+        statements: [s3DeleteLargeObjectPolicy],
+      })
+    );
     // We want to send all communication events to the step function, we can handle routing there
     new Rule(this, "StartStateMachine", {
       eventBus: bus,
@@ -213,5 +222,10 @@ export class CdkStack extends cdk.Stack {
     });
 
     bus.grantPutEventsTo(fileUploadProcessor);
+
+    new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
+    new cdk.CfnOutput(this, "BUCKET_NAME: ", {
+      value: bucket.bucketName as string,
+    });
   }
 }

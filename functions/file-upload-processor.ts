@@ -23,6 +23,7 @@ export const main = async (event: S3Event) => {
 
     try {
       await s3Client.send(new DeleteObjectCommand(params));
+      console.log("Object too large, deleted!");
       return;
     } catch (error) {
       console.error("Error ocurred deleting object", error);
