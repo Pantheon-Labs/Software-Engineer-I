@@ -7,16 +7,15 @@ import {
   HttpMethod,
   PayloadFormatVersion,
 } from "@aws-cdk/aws-apigatewayv2";
+import * as iam from "@aws-cdk/aws-iam";
 import * as sfn from "@aws-cdk/aws-stepfunctions";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
 import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
 import { EventBus } from "@aws-cdk/aws-events";
-import { customAlphabet } from "nanoid";
 import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
-import { NANOID_ALPHABET } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -64,6 +63,25 @@ export class CdkStack extends cdk.Stack {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
+    enum FILE_TYPES {
+      JPEG = ".jpeg",
+      JPG = ".jpg",
+      PNG = ".png",
+    }
+    const list = Object.values(FILE_TYPES);
+    const half = Math.ceil(Object.values(list).length / 2);
+    const fileTypes = list.slice(0, half);
+
+    const resources = fileTypes.map(
+      (fileType: FILE_TYPES) => bucket.bucketArn + `/images/*${fileType}`
+    );
+
+    // Lambda needs this role to create the signed URL
+    const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
+      actions: ["s3:PutObject"],
+      resources,
+    });
+
     // Create lambda to generate signed URLs
     const generateSignedUrlFunction = new NodejsFunction(
       this,
@@ -89,7 +107,11 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
-    // Create API Gateway
+    generateSignedUrlFunction.role?.attachInlinePolicy(
+      new iam.Policy(this, "presigned-url-put-object-policy", {
+        statements: [s3PreSignedUrlPutObjectPolicy],
+      })
+    );
     // TODO global rate limiting
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,

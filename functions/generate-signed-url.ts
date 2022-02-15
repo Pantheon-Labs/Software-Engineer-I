@@ -12,11 +12,11 @@ export const main = async (
 ): Promise<APIGatewayProxyResultV2> => {
   console.log(event);
 
+  // NOTE: File types are limited in the IAM policy, see cdk-stack -> lambda function resource
   const bucketParams: PutObjectCommandInput = {
     Bucket: process.env.BUCKET_NAME,
-    Key: `images/` + nanoid(42),
-    // Max 1mb images
-    ContentLength: 1000000,
+    Key: `images/${nanoid(40)}`,
+    ContentLength: 10, // TODO
   };
 
   const command = new PutObjectCommand(bucketParams);
@@ -33,7 +33,7 @@ export const main = async (
         event,
       }),
     };
-    // TODo types
+    // TODO types
   } catch (err) {
     console.log("Error creating presigned URL", err);
     return {
