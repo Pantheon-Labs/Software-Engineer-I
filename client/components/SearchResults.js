@@ -67,7 +67,17 @@ class SearchResults extends React.Component {
                   />
                   <span style={styles.resultText}>
                     <p>{star.name}</p>
-                    <p>{star.birthday}</p>
+                    {star.birthday[9] ? (
+                      <p>
+                        {
+                          astrology[star.birthday[5] + star.birthday[6]][
+                            star.birthday[8] + star.birthday[9]
+                          ]
+                        }
+                      </p>
+                    ) : (
+                      <p>Unkown</p>
+                    )}
                   </span>
                 </Container>
               </ListGroup.Item>
