@@ -1,17 +1,28 @@
 /* eslint-disable jest/no-conditional-expect */
 import axios from "axios";
-import FormData from "form-data";
+
 import fs from "fs";
 import { ALLOWED_FILE_TYPES } from "../Config";
+import { s3Client } from "../awsClients/s3Client";
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  PutObjectCommandInput,
+  GetObjectCommandOutput,
+} from "@aws-sdk/client-s3";
+const rawdata = fs.readFileSync(`./cdk-outputs.json`);
+const cdkOutput = JSON.parse(rawdata.toString());
 
 // TODO pass this dynamically from CDK
-const API_URL = `https://bm7e73oar1.execute-api.us-east-1.amazonaws.com`;
+const API_URL = cdkOutput["development-pantheon-project"].APIURL;
+const BUCKET_NAME = cdkOutput["development-pantheon-project"].BUCKETNAME;
+
 describe("API", () => {
   it("rejects the signed url request if body is empty", async () => {
     expect.assertions(2);
 
     try {
-      await axios.post(API_URL + "/signed-url");
+      await axios.post(API_URL + "signed-url");
     } catch (error: any) {
       expect(error.response.status).toBe(400);
       expect(error.response.data.message).toBe(`Body cannot be empty`);
@@ -20,7 +31,7 @@ describe("API", () => {
 
   it("blocks file types that aren't approved", async () => {
     try {
-      await axios.post(API_URL + "/signed-url", {
+      await axios.post(API_URL + "signed-url", {
         fileType: ".txt",
       });
     } catch (error: any) {
@@ -36,7 +47,7 @@ describe("API", () => {
 
     // I think this will break :(
     for await (const fileType of ALLOWED_FILE_TYPES) {
-      const { status, data } = await axios.post(`${API_URL}/signed-url`, {
+      const { status, data } = await axios.post(API_URL + "signed-url", {
         fileType,
       });
       try {
@@ -56,15 +67,15 @@ describe("API", () => {
   it("allows uploading a file of every type", async () => {
     expect.assertions(ALLOWED_FILE_TYPES.length);
 
-    const allFiles = fs.readdirSync("./testFiles/");
+    const allFiles = fs.readdirSync("./testFiles/good/");
 
     for await (const fileType of ALLOWED_FILE_TYPES) {
-      const { data } = await axios.post(`${API_URL}/signed-url`, {
+      const { data } = await axios.post(API_URL + "signed-url", {
         fileType,
       });
 
       const ourFile = allFiles.find((file) => file.includes(fileType));
-      const file = fs.readFileSync(`./testFiles/${ourFile}`);
+      const file = fs.readFileSync(`./testFiles/good/${ourFile}`);
 
       try {
         const { status } = await axios.put(data.preSignedUrl, file);
@@ -73,6 +84,37 @@ describe("API", () => {
         // todo types :(
         console.error(error.response);
       }
+    }
+  });
+
+  it("asynchronously deletes files larger than 1mb", async () => {
+    expect.assertions(1);
+    const file = fs.readFileSync(`./testFiles/bad/too_large.jpeg`);
+
+    const { data } = await axios.post(API_URL + "signed-url", {
+      fileType: ".jpeg",
+    });
+
+    // Upload
+    await axios.put(data.preSignedUrl, file);
+
+    const fileKey = data.preSignedUrl
+      .split("amazonaws.com/")
+      .pop()
+      .split("?X-Amz-Algorithm=AWS4-HMAC-SHA256&")
+      .shift();
+
+    try {
+      await new Promise((r) => setTimeout(r, 5000));
+      await s3Client.send(
+        new GetObjectCommand({
+          Bucket: BUCKET_NAME,
+          Key: fileKey,
+        })
+      );
+    } catch (error: any) {
+      console.error(error);
+      expect(error["$metadata"].httpStatusCode).toBe(404);
     }
   });
 });

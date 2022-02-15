@@ -7,13 +7,16 @@ import {
   HttpMethod,
   PayloadFormatVersion,
 } from "@aws-cdk/aws-apigatewayv2";
+import { SfnStateMachine } from "@aws-cdk/aws-events-targets";
+
 import * as iam from "@aws-cdk/aws-iam";
 import * as sfn from "@aws-cdk/aws-stepfunctions";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
 import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
-import { EventBus } from "@aws-cdk/aws-events";
+import { EventBus, Rule } from "@aws-cdk/aws-events";
+import * as EventSources from "@aws-cdk/aws-lambda-event-sources";
 import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
 
@@ -73,15 +76,15 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-generate-signed-url-function`,
       {
         functionName: `${process.env.NODE_ENV}-generate-signed-url-function`,
-        environment: {
-          NODE_ENV: process.env.NODE_ENV as string,
-          BUCKET_NAME: bucket.bucketName,
-        },
         timeout: cdk.Duration.seconds(5),
         memorySize: 256,
         logRetention: RetentionDays.ONE_WEEK,
         runtime: Runtime.NODEJS_14_X,
         architecture: Architecture.ARM_64,
+        environment: {
+          BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
         bundling: {
           minify: true,
           externalModules: ["aws-sdk"],
@@ -97,6 +100,7 @@ export class CdkStack extends cdk.Stack {
         statements: [s3PreSignedUrlPutObjectPolicy],
       })
     );
+
     // TODO global rate limiting
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,
@@ -110,8 +114,6 @@ export class CdkStack extends cdk.Stack {
         allowCredentials: true,
       },
     });
-
-    new cdk.CfnOutput(this, "API URL: ", { value: API.url as string });
 
     API.addRoutes({
       path: "/signed-url",
@@ -162,7 +164,68 @@ export class CdkStack extends cdk.Stack {
         },
       }
     );
-    // TODO
+    // TODO might not need all these permissions
     table.grantWriteData(StateMachine);
+
+    // Create lambda to generate signed URLs
+    const fileUploadProcessor = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-file-upload-processor-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-file-upload-processor-function`,
+        environment: {
+          BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
+        timeout: cdk.Duration.seconds(5),
+        memorySize: 256,
+        logRetention: RetentionDays.ONE_WEEK,
+        runtime: Runtime.NODEJS_14_X,
+        architecture: Architecture.ARM_64,
+        bundling: {
+          minify: true,
+          externalModules: ["aws-sdk"],
+        },
+        handler: "main",
+        description: `Reacts to S3 upload events. If a file is too big, it will delete it. If the size is fine, it'll send the event to EventBridge`,
+        entry: path.join(__dirname, `/../functions/file-upload-processor.ts`),
+      }
+    );
+
+    fileUploadProcessor.addEventSource(
+      new EventSources.S3EventSource(bucket, {
+        events: [s3.EventType.OBJECT_CREATED],
+        filters: [{ prefix: "images/" }],
+      })
+    );
+
+    const s3DeleteLargeObjectPolicy = new iam.PolicyStatement({
+      actions: ["s3:DeleteObject"],
+      resources: [bucket.bucketArn + `/images/*`],
+    });
+
+    fileUploadProcessor.role?.attachInlinePolicy(
+      new iam.Policy(this, "delete-large-object-policy", {
+        statements: [s3DeleteLargeObjectPolicy],
+      })
+    );
+    // We want to send all communication events to the step function, we can handle routing there
+    new Rule(this, "StartStateMachine", {
+      eventBus: bus,
+      description:
+        "Passthrough to start state machine, no processing needed. Filtering is done in the lambda.",
+      ruleName: "StartStateMachine",
+      targets: [new SfnStateMachine(StateMachine)],
+      eventPattern: {
+        source: ["s3.upload"],
+      },
+    });
+
+    bus.grantPutEventsTo(fileUploadProcessor);
+
+    new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
+    new cdk.CfnOutput(this, "BUCKET_NAME: ", {
+      value: bucket.bucketName as string,
+    });
   }
 }
