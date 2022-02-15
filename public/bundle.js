@@ -333,7 +333,7 @@ var styles = {
     width: "4rem",
     borderRadius: "10%",
     objectFit: "cover",
-    objectPosition: "0 0"
+    objectPosition: "50% 0"
   },
   starFigure: {
     padding: "0 0.25rem 0.25rem"
@@ -419,7 +419,11 @@ var Home = /*#__PURE__*/function (_React$Component) {
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
           style: styles.starImage,
           alt: "Profile image of ".concat(star.name),
-          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path)
+          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path),
+          onError: function onError(evt) {
+            evt.target.onError = null;
+            evt.target.src = "/default.png";
+          }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
           className: "text-center"
         }, star.name));
@@ -579,7 +583,7 @@ var styles = {
     width: "4rem",
     borderRadius: "10%",
     objectFit: "cover",
-    objectPosition: "0 0"
+    objectPosition: "50% 0"
   },
   searchResult: {
     paddingTop: "0.5",
@@ -631,8 +635,12 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
           xs: 3
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
           style: styles.starImage,
-          alt: "Profile image of ".concat(star.name),
-          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path)
+          alt: "Image of ".concat(star.name),
+          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path),
+          onError: function onError(evt) {
+            evt.target.onError = null;
+            evt.target.src = "./default.png";
+          }
         })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Col"], {
           xs: 7,
           className: "text-left"

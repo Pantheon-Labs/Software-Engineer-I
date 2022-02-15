@@ -9,7 +9,7 @@ const styles = {
     width: "4rem",
     borderRadius: "10%",
     objectFit: "cover",
-    objectPosition: "0 0",
+    objectPosition: "50% 0",
   },
   searchResult: {
     paddingTop: "0.5",
@@ -52,7 +52,10 @@ class SearchResults extends React.Component {
                         style={styles.starImage}
                         alt={`Image of ${star.name}`}
                         src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                        onerror="this.onerror=null; this.src='/default.png'"
+                        onError={(evt) => {
+                          evt.target.onError = null;
+                          evt.target.src = "./default.png";
+                        }}
                       />
                     </Col>
                     <Col xs={7} className="text-left">

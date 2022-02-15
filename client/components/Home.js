@@ -22,7 +22,7 @@ const styles = {
     width: "4rem",
     borderRadius: "10%",
     objectFit: "cover",
-    objectPosition: "0 0",
+    objectPosition: "50% 0",
   },
   starFigure: {
     padding: "0 0.25rem 0.25rem",
@@ -104,7 +104,10 @@ class Home extends React.Component {
                     style={styles.starImage}
                     alt={`Profile image of ${star.name}`}
                     src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                    onerror="this.onerror=null; this.src='/default.png'"
+                    onError={(evt) => {
+                      evt.target.onError = null;
+                      evt.target.src = "/default.png";
+                    }}
                   />
                   <Figure.Caption className="text-center">
                     {star.name}
