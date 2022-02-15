@@ -47,6 +47,11 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
+    // Delete all objects after 1 day
+    bucket.addLifecycleRule({
+      expiration: cdk.Duration.days(1),
+    });
+
     // Create Dynamo table
     const table = new dynamodb.Table(
       this,
