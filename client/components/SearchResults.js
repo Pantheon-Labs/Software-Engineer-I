@@ -50,8 +50,9 @@ class SearchResults extends React.Component {
                     <Col xs={3}>
                       <Image
                         style={styles.starImage}
-                        alt={`Profile image of ${star.name}`}
+                        alt={`Image of ${star.name}`}
                         src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                        onerror="this.onerror=null; this.src='/default.png'"
                       />
                     </Col>
                     <Col xs={7} className="text-left">

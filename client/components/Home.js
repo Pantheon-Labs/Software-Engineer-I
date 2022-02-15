@@ -104,6 +104,7 @@ class Home extends React.Component {
                     style={styles.starImage}
                     alt={`Profile image of ${star.name}`}
                     src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                    onerror="this.onerror=null; this.src='/default.png'"
                   />
                   <Figure.Caption className="text-center">
                     {star.name}
