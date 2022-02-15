@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
+import { Container, Image, ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
 import { astrology } from "../signs";
 
