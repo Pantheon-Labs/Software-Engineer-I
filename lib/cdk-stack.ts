@@ -7,16 +7,15 @@ import {
   HttpMethod,
   PayloadFormatVersion,
 } from "@aws-cdk/aws-apigatewayv2";
+import * as iam from "@aws-cdk/aws-iam";
 import * as sfn from "@aws-cdk/aws-stepfunctions";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
 import * as dynamodb from "@aws-cdk/aws-dynamodb";
 import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
 import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
 import { EventBus } from "@aws-cdk/aws-events";
-import { customAlphabet } from "nanoid";
 import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
-import { NANOID_ALPHABET } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -30,17 +29,13 @@ export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Removes '_' as it's not allowed in bucket name
-    const nanoid = customAlphabet(NANOID_ALPHABET, 5);
-
-    // Create S3 Bucket for storing images + some randomness if someone else tries to deploy
     const bucket = new s3.Bucket(
       this,
       `${process.env.NODE_ENV}-pantheon-assets`,
       {
         enforceSSL: true,
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        bucketName: `${process.env.NODE_ENV}-pantheon-assets-${nanoid()}`,
+        bucketName: `${process.env.NODE_ENV}-pantheon-assets`,
         versioned: true,
       }
     );
@@ -65,6 +60,11 @@ export class CdkStack extends cdk.Stack {
       partitionKey: { name: "GSI1PK", type: dynamodb.AttributeType.STRING },
       sortKey: { name: "GSI1SK", type: dynamodb.AttributeType.STRING },
       projectionType: dynamodb.ProjectionType.ALL,
+    });
+
+    const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
+      actions: ["s3:PutObject"],
+      resources: [bucket.bucketArn + `/images/*`],
     });
 
     // Create lambda to generate signed URLs
@@ -92,7 +92,11 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
-    // Create API Gateway
+    generateSignedUrlFunction.role?.attachInlinePolicy(
+      new iam.Policy(this, "presigned-url-put-object-policy", {
+        statements: [s3PreSignedUrlPutObjectPolicy],
+      })
+    );
     // TODO global rate limiting
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,
@@ -108,6 +112,7 @@ export class CdkStack extends cdk.Stack {
     });
 
     new cdk.CfnOutput(this, "API URL: ", { value: API.url as string });
+
     API.addRoutes({
       path: "/signed-url",
       methods: [HttpMethod.POST],
