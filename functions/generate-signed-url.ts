@@ -3,7 +3,7 @@ import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { s3Client } from "../awsClients/s3Client";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { customAlphabet } from "nanoid";
-import { NANOID_ALPHABET } from "../Config";
+import { ALLOWED_FILE_TYPES, NANOID_ALPHABET } from "../Config";
 
 const nanoid = customAlphabet(NANOID_ALPHABET);
 
@@ -12,19 +12,48 @@ export const main = async (
 ): Promise<APIGatewayProxyResultV2> => {
   console.log(event);
 
-  // NOTE: File types are limited in the IAM policy, see cdk-stack -> lambda function resource
+  if (!event?.body) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: "Body cannot be empty",
+      }),
+    };
+  }
+  const body = JSON.parse(event.body);
+
+  if (!body?.fileType) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `Missing 'fileType', must be one of ${ALLOWED_FILE_TYPES}`,
+      }),
+    };
+  }
+
+  const { fileType } = body;
+
+  if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `'fileType' must be one of ${ALLOWED_FILE_TYPES}`,
+      }),
+    };
+  }
   const bucketParams: PutObjectCommandInput = {
     Bucket: process.env.BUCKET_NAME,
-    Key: `images/${nanoid(40)}`,
-    ContentLength: 10, // TODO
+    Key: `images/${nanoid(40)}${fileType}`,
   };
 
-  const command = new PutObjectCommand(bucketParams);
-
   try {
-    const preSignedUrl = await getSignedUrl(s3Client, command, {
-      expiresIn: 3600,
-    });
+    const preSignedUrl = await getSignedUrl(
+      s3Client,
+      new PutObjectCommand(bucketParams),
+      {
+        expiresIn: 3600,
+      }
+    );
     return {
       statusCode: 201,
       body: JSON.stringify({
@@ -36,7 +65,7 @@ export const main = async (
   } catch (err) {
     console.log("Error creating presigned URL", err);
     return {
-      statusCode: 500, // TODO AWS SDK docs has this
+      statusCode: 500, // TODO correct error code from sdk
       body: JSON.stringify({
         error: err,
       }),

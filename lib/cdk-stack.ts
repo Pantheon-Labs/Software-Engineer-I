@@ -62,10 +62,6 @@ export class CdkStack extends cdk.Stack {
       projectionType: dynamodb.ProjectionType.ALL,
     });
 
-    // Signed URL should only allow these file types in the images/ directory
-    const allowedFileTypes = [".jpeg", ".png", ".jpg", ".pdf", ".txt"];
-
-    );
     const s3PreSignedUrlPutObjectPolicy = new iam.PolicyStatement({
       actions: ["s3:PutObject"],
       resources: [bucket.bucketArn + `/images/*`],
