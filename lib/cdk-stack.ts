@@ -1,6 +1,10 @@
 import * as cdk from "@aws-cdk/core";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as dotenv from "dotenv";
+import * as waf from "@aws-cdk/aws-wafv2";
+import * as cf from "@aws-cdk/aws-cloudfront";
+import * as origins from "@aws-cdk/aws-cloudfront-origins";
+
 import {
   CorsHttpMethod,
   HttpApi,
@@ -105,13 +109,13 @@ export class CdkStack extends cdk.Stack {
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,
       corsPreflight: {
-        allowHeaders: ["Content-Type"],
+        allowHeaders: ["*"],
         allowMethods: [
           CorsHttpMethod.OPTIONS,
           CorsHttpMethod.GET,
           CorsHttpMethod.POST,
         ],
-        allowCredentials: true,
+        allowOrigins: ["*"],
       },
     });
 
@@ -223,6 +227,95 @@ export class CdkStack extends cdk.Stack {
 
     bus.grantPutEventsTo(fileUploadProcessor);
 
+    // Create the WAF & its rules
+    const API_WAF = new waf.CfnWebACL(this, `${process.env.NODE_ENV}-API-WAF`, {
+      name: `${process.env.NODE_ENV}-API-WAF`,
+
+      description: "Blocks IPs that make too many requests",
+      defaultAction: {
+        allow: {},
+      },
+      scope: "CLOUDFRONT",
+      visibilityConfig: {
+        cloudWatchMetricsEnabled: true,
+        metricName: "cloudfront-ipset-waf",
+        sampledRequestsEnabled: true,
+      },
+      rules: [
+        {
+          name: `too-many-requests-rule`,
+          priority: 0,
+          statement: {
+            rateBasedStatement: {
+              limit: 300, // In a 5 minute period
+              aggregateKeyType: "IP",
+            },
+          },
+          action: {
+            block: {
+              customResponse: {
+                responseCode: 429,
+              },
+            },
+          },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: `${process.env.NODE_ENV}-WAF-BLOCKED-IPs`,
+          },
+        },
+        {
+          name: "AWS-AWSManagedRulesAmazonIpReputationList",
+          priority: 2,
+          statement: {
+            managedRuleGroupStatement: {
+              vendorName: "AWS",
+              name: "AWSManagedRulesAmazonIpReputationList",
+            },
+          },
+          overrideAction: {
+            none: {},
+          },
+          visibilityConfig: {
+            sampledRequestsEnabled: false,
+            cloudWatchMetricsEnabled: true,
+            metricName: "AWS-AWSManagedRulesAmazonIpReputationList",
+          },
+        },
+      ],
+    });
+
+    // No caching! We're using Cloudfront for its global network and WAF
+    const cachePolicy = new cf.CachePolicy(
+      this,
+      `${process.env.NODE_ENV}-Cache-Policy`,
+      {
+        defaultTtl: cdk.Duration.seconds(0),
+        minTtl: cdk.Duration.seconds(0),
+        maxTtl: cdk.Duration.seconds(0),
+      }
+    );
+
+    // @ts-ignore TODO
+    // Cloudfront cant take the https and the API URL ends in '/'
+    const cfOrigin = API.url.split("https://").pop().slice(0, -1);
+    const distribution = new cf.Distribution(
+      this,
+      `${process.env.NODE_ENV}-CF-API-Distribution`,
+      {
+        webAclId: API_WAF.attrArn,
+        defaultBehavior: {
+          origin: new origins.HttpOrigin(cfOrigin),
+          originRequestPolicy: cf.OriginRequestPolicy.ALL_VIEWER,
+          cachePolicy,
+          allowedMethods: cf.AllowedMethods.ALLOW_ALL,
+        },
+      }
+    );
+
+    new cdk.CfnOutput(this, "CLOUDFRONT_URL: ", {
+      value: distribution.distributionDomainName as string,
+    });
     new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
     new cdk.CfnOutput(this, "BUCKET_NAME: ", {
       value: bucket.bucketName as string,
