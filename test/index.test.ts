@@ -4,12 +4,7 @@ import axios from "axios";
 import fs from "fs";
 import { ALLOWED_FILE_TYPES } from "../Config";
 import { s3Client } from "../awsClients/s3Client";
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  PutObjectCommandInput,
-  GetObjectCommandOutput,
-} from "@aws-sdk/client-s3";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 const rawdata = fs.readFileSync(`./cdk-outputs.json`);
 const cdkOutput = JSON.parse(rawdata.toString());
 
@@ -18,6 +13,12 @@ const API_URL = cdkOutput["development-pantheon-project"].APIURL;
 const BUCKET_NAME = cdkOutput["development-pantheon-project"].BUCKETNAME;
 
 describe("API", () => {
+  it("returns 200 from healthcheck", async () => {
+    expect.assertions(2);
+    const { status, data } = await axios.get(API_URL);
+    expect(status).toBe(200);
+    expect(data.message).toBe("Saul Goodman!");
+  });
   it("rejects the signed url request if body is empty", async () => {
     expect.assertions(2);
 

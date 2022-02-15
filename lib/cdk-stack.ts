@@ -1,6 +1,10 @@
 import * as cdk from "@aws-cdk/core";
 import * as s3 from "@aws-cdk/aws-s3";
 import * as dotenv from "dotenv";
+import * as waf from "@aws-cdk/aws-wafv2";
+import * as cf from "@aws-cdk/aws-cloudfront";
+import * as origins from "@aws-cdk/aws-cloudfront-origins";
+
 import {
   CorsHttpMethod,
   HttpApi,
@@ -17,7 +21,10 @@ import { Runtime, Architecture } from "@aws-cdk/aws-lambda";
 import { RetentionDays, LogGroup } from "@aws-cdk/aws-logs";
 import { EventBus, Rule } from "@aws-cdk/aws-events";
 import * as EventSources from "@aws-cdk/aws-lambda-event-sources";
-import { NodejsFunction } from "@aws-cdk/aws-lambda-nodejs";
+import {
+  NodejsFunction,
+  NodejsFunctionProps,
+} from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
 
 const resultDotEnv = dotenv.config({
@@ -28,6 +35,18 @@ if (resultDotEnv.error) {
   throw resultDotEnv.error;
 }
 
+const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
+  timeout: cdk.Duration.seconds(5),
+  memorySize: 128,
+  logRetention: RetentionDays.ONE_DAY,
+  runtime: Runtime.NODEJS_14_X,
+  architecture: Architecture.ARM_64,
+  bundling: {
+    minify: true,
+    externalModules: ["aws-sdk"],
+  },
+  handler: "main",
+};
 export class CdkStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -42,6 +61,11 @@ export class CdkStack extends cdk.Stack {
         versioned: true,
       }
     );
+
+    // Delete all objects after 1 day
+    bucket.addLifecycleRule({
+      expiration: cdk.Duration.days(1),
+    });
 
     // Create Dynamo table
     const table = new dynamodb.Table(
@@ -76,20 +100,11 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-generate-signed-url-function`,
       {
         functionName: `${process.env.NODE_ENV}-generate-signed-url-function`,
-        timeout: cdk.Duration.seconds(5),
-        memorySize: 256,
-        logRetention: RetentionDays.ONE_WEEK,
-        runtime: Runtime.NODEJS_14_X,
-        architecture: Architecture.ARM_64,
+        ...LAMBDA_CONFIG,
         environment: {
           BUCKET_NAME: bucket.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        bundling: {
-          minify: true,
-          externalModules: ["aws-sdk"],
-        },
-        handler: "main",
         description: `Generates signed URLs to upload into the ${bucket.bucketName} bucket`,
         entry: path.join(__dirname, `/../functions/generate-signed-url.ts`),
       }
@@ -105,13 +120,13 @@ export class CdkStack extends cdk.Stack {
     const API = new HttpApi(this, `${process.env.NODE_ENV}-pantheon-API`, {
       description: `API for https://github.com/joswayski/Software-Engineer-I`,
       corsPreflight: {
-        allowHeaders: ["Content-Type"],
+        allowHeaders: ["*"],
         allowMethods: [
           CorsHttpMethod.OPTIONS,
           CorsHttpMethod.GET,
           CorsHttpMethod.POST,
         ],
-        allowCredentials: true,
+        allowOrigins: ["*"],
       },
     });
 
@@ -173,20 +188,11 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-file-upload-processor-function`,
       {
         functionName: `${process.env.NODE_ENV}-file-upload-processor-function`,
+        ...LAMBDA_CONFIG,
         environment: {
           BUCKET_NAME: bucket.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        timeout: cdk.Duration.seconds(5),
-        memorySize: 256,
-        logRetention: RetentionDays.ONE_WEEK,
-        runtime: Runtime.NODEJS_14_X,
-        architecture: Architecture.ARM_64,
-        bundling: {
-          minify: true,
-          externalModules: ["aws-sdk"],
-        },
-        handler: "main",
         description: `Reacts to S3 upload events. If a file is too big, it will delete it. If the size is fine, it'll send the event to EventBridge`,
         entry: path.join(__dirname, `/../functions/file-upload-processor.ts`),
       }
@@ -223,6 +229,119 @@ export class CdkStack extends cdk.Stack {
 
     bus.grantPutEventsTo(fileUploadProcessor);
 
+    // Create the WAF & its rules
+    const API_WAF = new waf.CfnWebACL(this, `${process.env.NODE_ENV}-API-WAF`, {
+      name: `${process.env.NODE_ENV}-API-WAF`,
+
+      description: "Blocks IPs that make too many requests",
+      defaultAction: {
+        allow: {},
+      },
+      scope: "CLOUDFRONT",
+      visibilityConfig: {
+        cloudWatchMetricsEnabled: true,
+        metricName: "cloudfront-ipset-waf",
+        sampledRequestsEnabled: true,
+      },
+      rules: [
+        {
+          name: `too-many-requests-rule`,
+          priority: 0,
+          statement: {
+            rateBasedStatement: {
+              limit: 300, // In a 5 minute period
+              aggregateKeyType: "IP",
+            },
+          },
+          action: {
+            block: {
+              customResponse: {
+                responseCode: 429,
+              },
+            },
+          },
+          visibilityConfig: {
+            sampledRequestsEnabled: true,
+            cloudWatchMetricsEnabled: true,
+            metricName: `${process.env.NODE_ENV}-WAF-BLOCKED-IPs`,
+          },
+        },
+        {
+          name: "AWS-AWSManagedRulesAmazonIpReputationList",
+          priority: 2,
+          statement: {
+            managedRuleGroupStatement: {
+              vendorName: "AWS",
+              name: "AWSManagedRulesAmazonIpReputationList",
+            },
+          },
+          overrideAction: {
+            none: {},
+          },
+          visibilityConfig: {
+            sampledRequestsEnabled: false,
+            cloudWatchMetricsEnabled: true,
+            metricName: "AWS-AWSManagedRulesAmazonIpReputationList",
+          },
+        },
+      ],
+    });
+
+    // No caching! We're using Cloudfront for its global network and WAF
+    const cachePolicy = new cf.CachePolicy(
+      this,
+      `${process.env.NODE_ENV}-Cache-Policy`,
+      {
+        defaultTtl: cdk.Duration.seconds(0),
+        minTtl: cdk.Duration.seconds(0),
+        maxTtl: cdk.Duration.seconds(0),
+      }
+    );
+
+    // @ts-ignore TODO
+    // Cloudfront cant take the https and the API URL ends in '/'
+    const cfOrigin = API.url.split("https://").pop().slice(0, -1);
+    const distribution = new cf.Distribution(
+      this,
+      `${process.env.NODE_ENV}-CF-API-Distribution`,
+      {
+        webAclId: API_WAF.attrArn,
+        defaultBehavior: {
+          origin: new origins.HttpOrigin(cfOrigin),
+          originRequestPolicy: cf.OriginRequestPolicy.CORS_CUSTOM_ORIGIN,
+          cachePolicy,
+          allowedMethods: cf.AllowedMethods.ALLOW_ALL,
+        },
+      }
+    );
+
+    // Create lambda to generate signed URLs
+    const healthCheckFunction = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-health-check-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-health-check-function`,
+        ...LAMBDA_CONFIG,
+        description: `Returns 200 :)`,
+        entry: path.join(__dirname, `/../functions/health-check.ts`),
+      }
+    );
+
+    API.addRoutes({
+      path: "/",
+      methods: [HttpMethod.GET],
+      integration: new HttpLambdaIntegration(
+        `${process.env.NODE_ENV}-health-check-integration`,
+        healthCheckFunction,
+        {
+          payloadFormatVersion: PayloadFormatVersion.VERSION_2_0,
+        }
+      ),
+    });
+
+    new cdk.CfnOutput(this, "CLOUDFRONT_URL: ", {
+      value: distribution.distributionDomainName as string,
+    });
     new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
     new cdk.CfnOutput(this, "BUCKET_NAME: ", {
       value: bucket.bucketName as string,
