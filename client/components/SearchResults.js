@@ -10,12 +10,18 @@ const styles = {
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0",
+    display: "flex",
+    flexDirection: "row",
   },
   searchResult: {
-    paddingTop: "0.5",
+    paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
-    marginLeft: "3rem",
+    marginLeft: "5%",
     textAlign: "left",
+  },
+  resultText: {
+    paddingLeft: "2rem",
+    paddingTop: "0.5rem",
   },
 };
 
@@ -45,23 +51,22 @@ class SearchResults extends React.Component {
                 action
                 onClick={() => this.onClick(star)}
               >
-                <Container style={styles.searchResult}>
-                  <Row>
-                    <Col xs={3}>
-                      <Image
-                        style={styles.starImage}
-                        alt={`Image of ${star.name}`}
-                        src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                        onError={(evt) => {
-                          evt.target.onError = null;
-                          evt.target.src = "./default.png";
-                        }}
-                      />
-                    </Col>
-                    <Col xs={7} className="text-left">
-                      <p className="text-left">{star.name}</p>
-                    </Col>
-                  </Row>
+                <Container
+                  className="d-flex justify-content-start"
+                  style={styles.searchResult}
+                >
+                  <Image
+                    style={styles.starImage}
+                    alt={`Image of ${star.name}`}
+                    src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                    onError={(evt) => {
+                      evt.target.onError = null;
+                      evt.target.src = "./default.png";
+                    }}
+                  />
+                  <span style={styles.resultText}>
+                    <p>{star.name}</p>
+                  </span>
                 </Container>
               </ListGroup.Item>
             );

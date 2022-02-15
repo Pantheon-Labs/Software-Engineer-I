@@ -25,7 +25,7 @@ const styles = {
     objectPosition: "50% 0",
   },
   starFigure: {
-    padding: "0 0.25rem 0.25rem",
+    padding: "0 0.25rem 0 0.25rem",
   },
 };
 
