@@ -1009,7 +1009,7 @@ var searchStar = function searchStar(starName) {
               i = 0;
 
             case 6:
-              if (!(i < 1)) {
+              if (!(i < res.data.length)) {
                 _context.next = 14;
                 break;
               }
@@ -1071,20 +1071,19 @@ var getBirthday = /*#__PURE__*/function () {
 
           case 3:
             res = _context2.sent;
-            console.log(res.data);
             return _context2.abrupt("return", res.data);
 
-          case 8:
-            _context2.prev = 8;
+          case 7:
+            _context2.prev = 7;
             _context2.t0 = _context2["catch"](0);
             throw _context2.t0;
 
-          case 11:
+          case 10:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, null, [[0, 8]]);
+    }, _callee2, null, [[0, 7]]);
   }));
 
   return function getBirthday(_x2) {

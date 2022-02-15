@@ -33,7 +33,7 @@ export const searchStar = (starName) => {
 
       let birthday = "uknown";
 
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < res.data.length; i++) {
         birthday = await getBirthday(res.data[i].id);
 
         res.data[i] = {
@@ -59,7 +59,6 @@ export const getBirthday = async (starId) => {
       params: { starId },
     });
 
-    console.log(res.data);
     return res.data;
   } catch (err) {
     throw err;
