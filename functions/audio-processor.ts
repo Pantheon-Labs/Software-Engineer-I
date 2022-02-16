@@ -1,10 +1,9 @@
-import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import {
-  Polly,
-  StartSpeechSynthesisTaskCommand,
   StartSpeechSynthesisTaskCommandInput,
   SynthesizeSpeechCommand,
 } from "@aws-sdk/client-polly";
+import { HeadObjectCommand } from "@aws-sdk/client-s3";
+import { s3Client } from "../awsClients/s3Client";
 import { pollyClient } from "../awsClients/pollyClient";
 
 // Input format:
@@ -32,14 +31,30 @@ export const main = async (event: any) => {
     VoiceId: "Joanna",
   };
 
-  // TODO - Check if file exists
   try {
-    await pollyClient.send(new SynthesizeSpeechCommand(params));
-  } catch (error) {}
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: "Saul Goodman!",
-    }),
-  };
+    // If the file exists, do nothing
+    await s3Client.send(
+      new HeadObjectCommand({
+        Bucket: process.env.BUCKET_NAME,
+        Key: S3Key,
+      })
+    );
+    console.log("File already exists with key ", S3Key);
+    return;
+  } catch (error: any) {
+    if (error["$metadata"].httpStatusCode === 404) {
+      // File not found, make it
+      try {
+        await pollyClient.send(new SynthesizeSpeechCommand(params));
+        return;
+      } catch (error) {
+        console.error(`An error ocurred creating the audio file`, error);
+      }
+      return;
+    }
+    console.log(
+      `An error ocurred retrieving file metadata for ${S3Key}`,
+      error
+    );
+  }
 };
