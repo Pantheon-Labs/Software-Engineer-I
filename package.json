@@ -21,6 +21,7 @@
     "@aws-cdk/aws-wafv2": "^1.144.0",
     "@aws-cdk/core": "^1.144.0",
     "@aws-sdk/client-eventbridge": "^3.51.0",
+    "@aws-sdk/client-polly": "^3.51.0",
     "@aws-sdk/client-s3": "^3.51.0",
     "@aws-sdk/s3-presigned-post": "^3.51.0",
     "@aws-sdk/s3-request-presigner": "^3.51.0",
