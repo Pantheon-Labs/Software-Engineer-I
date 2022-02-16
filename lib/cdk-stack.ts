@@ -303,47 +303,48 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results.labels",
     });
 
-    // // TODO this should be Update instead of put
-    // const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
-    //   this,
-    //   "UpdateProcessWithTranslationResults",
-    //   {
-    //     table: table,
-    //     item: {
-    //       PK: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$.detail.key")
-    //       ),
-    //       SK: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$.detail.key")
-    //       ),
-    //       taskStatus: DynamoAttributeValue.fromString(
-    //         TASK_STATUS.TRANSLATIONS_ADDED
-    //       ),
-    //       updatedAt: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$$.State.EnteredTime")
-    //       ),
-    //       labels: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.jsonToString(
-    //           sfn.JsonPath.stringAt("$.translationResults")
-    //         )
-    //       ),
-    //     },
-    //     // pass input to the output
-    //     resultPath: JsonPath.DISCARD,
-    //   }
-    // );
+    // TODO this should be Update instead of put
+    const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
+      this,
+      "UpdateProcessWithTranslationResults",
+      {
+        table: table,
+        item: {
+          PK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          SK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          taskStatus: DynamoAttributeValue.fromString(
+            TASK_STATUS.TRANSLATIONS_ADDED
+          ),
+          updatedAt: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$$.State.EnteredTime")
+          ),
+          labels: DynamoAttributeValue.fromString(
+            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
+          ),
+        },
+        // pass input to the output
+        resultPath: JsonPath.DISCARD,
+      }
+    );
 
     // Step function to process the tasks
     const definition = START_PROCESS.next(
       DETECT_LABELS.next(
         UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
-          translationLoop.iterator(
-            new sfn.Parallel(this, "Get Translations")
-              .branch(TRANSLATE_TO_SPANISH)
-              .branch(TRANSLATE_TO_RUSSIAN)
-              .branch(TRANSLATE_TO_JAPANESE)
-              .branch(TRANSLATE_TO_FRENCH)
-          )
+          translationLoop
+            .iterator(
+              new sfn.Parallel(this, "Get Translations")
+                .branch(TRANSLATE_TO_SPANISH)
+                .branch(TRANSLATE_TO_RUSSIAN)
+                .branch(TRANSLATE_TO_JAPANESE)
+                .branch(TRANSLATE_TO_FRENCH)
+            )
+            .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
+            .next(new sfn.Succeed(this, "Finished!"))
         )
       )
     );
