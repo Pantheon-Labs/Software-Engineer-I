@@ -39,6 +39,7 @@ if (resultDotEnv.error) {
 enum TASK_STATUS {
   STARTING = "STARTING",
   LABELS_ADDED = "LABELS_ADDED",
+  TRANSLATIONS_ADDED = "TRANSLATIONS_ADDED",
 }
 const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
   timeout: cdk.Duration.seconds(5),
@@ -178,7 +179,7 @@ export class CdkStack extends cdk.Stack {
       resultPath: JsonPath.DISCARD,
     });
 
-    const CALL_REKOGNITION = new tasks.CallAwsService(this, "DetectLabels", {
+    const DETECT_LABELS = new tasks.CallAwsService(this, "DetectLabels", {
       service: "rekognition",
       action: "detectLabels",
       iamResources: ["*"],
@@ -238,24 +239,27 @@ export class CdkStack extends cdk.Stack {
       FRENCH = "fr-FR",
     }
 
-    const TRANSLATE_SETTINGS = {
+    const TRANSLATION_SETTINGS = {
       service: "translate",
       action: "translateText",
       iamResources: ["*"],
+      inputPath: "$.Name",
       parameters: {
         SourceLanguageCode: "en",
         TargetLanguageCode: "en",
-        "Text.$": "$.Name",
+        "Text.$": "$", //Input path auto pulls just the label name
       },
-      resultPath: "$.translateResults",
+      // TODO there is a lot of duplicate data, we should filter this.
+      // Each label has the label info in each translation.
+      resultPath: "$.translationResults", // TODO evaluate this
     };
     const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
       this,
       "TranslateToSpanish",
       {
-        ...TRANSLATE_SETTINGS,
+        ...TRANSLATION_SETTINGS,
         parameters: {
-          ...TRANSLATE_SETTINGS.parameters,
+          ...TRANSLATION_SETTINGS.parameters,
           TargetLanguageCode: LANGUAGE_CODES.SPANISH,
         },
       }
@@ -264,9 +268,9 @@ export class CdkStack extends cdk.Stack {
       this,
       "TranslateToRussian",
       {
-        ...TRANSLATE_SETTINGS,
+        ...TRANSLATION_SETTINGS,
         parameters: {
-          ...TRANSLATE_SETTINGS.parameters,
+          ...TRANSLATION_SETTINGS.parameters,
           TargetLanguageCode: LANGUAGE_CODES.RUSSIAN,
         },
       }
@@ -276,9 +280,9 @@ export class CdkStack extends cdk.Stack {
       this,
       "TranslateToJapanese",
       {
-        ...TRANSLATE_SETTINGS,
+        ...TRANSLATION_SETTINGS,
         parameters: {
-          ...TRANSLATE_SETTINGS.parameters,
+          ...TRANSLATION_SETTINGS.parameters,
           TargetLanguageCode: LANGUAGE_CODES.JAPANESE,
         },
       }
@@ -288,23 +292,54 @@ export class CdkStack extends cdk.Stack {
       this,
       "TranslateToFrench",
       {
-        ...TRANSLATE_SETTINGS,
+        ...TRANSLATION_SETTINGS,
         parameters: {
-          ...TRANSLATE_SETTINGS.parameters,
+          ...TRANSLATION_SETTINGS.parameters,
           TargetLanguageCode: LANGUAGE_CODES.FRENCH,
         },
       }
     );
 
-    const map = new sfn.Map(this, "Loop Through labels", {
+    const translationLoop = new sfn.Map(this, "LoopAndTranslate", {
       maxConcurrency: 1,
       itemsPath: sfn.JsonPath.stringAt("$.rekognitionResults.labels"),
     });
+
+    // // TODO this should be Update instead of put
+    // const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
+    //   this,
+    //   "UpdateProcessWithTranslationResults",
+    //   {
+    //     table: table,
+    //     item: {
+    //       PK: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$.detail.key")
+    //       ),
+    //       SK: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$.detail.key")
+    //       ),
+    //       taskStatus: DynamoAttributeValue.fromString(
+    //         TASK_STATUS.TRANSLATIONS_ADDED
+    //       ),
+    //       updatedAt: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$$.State.EnteredTime")
+    //       ),
+    //       labels: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.jsonToString(
+    //           sfn.JsonPath.stringAt("$.translationResults")
+    //         )
+    //       ),
+    //     },
+    //     // pass input to the output
+    //     resultPath: JsonPath.DISCARD,
+    //   }
+    // );
+
     // Step function to process the tasks
     const definition = START_PROCESS.next(
-      CALL_REKOGNITION.next(
+      DETECT_LABELS.next(
         UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
-          map.iterator(
+          translationLoop.iterator(
             new sfn.Parallel(this, "Get Translations")
               .branch(TRANSLATE_TO_SPANISH)
               .branch(TRANSLATE_TO_RUSSIAN)
