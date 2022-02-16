@@ -7,7 +7,7 @@ export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
 export const MAX_LABELS = 3;
 
 export enum LANGUAGE_CODES {
-  SPANISH = "es-US",
+  SPANISH = "es-MX",
   RUSSIAN = "ru-RU",
   JAPANESE = "ja-JP",
   FRENCH = "fr-FR",

@@ -448,7 +448,7 @@ export class CdkStack extends cdk.Stack {
     );
 
     const pollyCreateAudioAsyncPolicy = new iam.PolicyStatement({
-      actions: ["polly:StartSpeechSynthesisTask"],
+      actions: ["polly:SynthesizeSpeech"],
       resources: ["*"],
     });
 
