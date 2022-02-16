@@ -5,3 +5,10 @@ export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
 
 // How many labels should Rekognition return
 export const MAX_LABELS = 3;
+
+export enum LANGUAGE_CODES {
+  SPANISH = "es-US",
+  RUSSIAN = "ru-RU",
+  JAPANESE = "ja-JP",
+  FRENCH = "fr-FR",
+}

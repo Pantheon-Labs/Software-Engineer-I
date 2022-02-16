@@ -27,7 +27,7 @@ import {
 import * as path from "path";
 import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
 import { JsonPath, Parallel } from "@aws-cdk/aws-stepfunctions";
-import { MAX_LABELS } from "../Config";
+import { LANGUAGE_CODES, MAX_LABELS } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -41,6 +41,7 @@ enum TASK_STATUS {
   STARTING = "STARTING",
   LABELS_ADDED = "LABELS_ADDED",
   TRANSLATIONS_ADDED = "TRANSLATIONS_ADDED",
+  AUDO_CREATED = "AUDIO_CREATED",
 }
 const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
   timeout: cdk.Duration.seconds(5),
@@ -231,12 +232,6 @@ export class CdkStack extends cdk.Stack {
 
     // NOTE: Must be supported by Polly!
     // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
-    enum LANGUAGE_CODES {
-      SPANISH = "es-US",
-      RUSSIAN = "ru-RU",
-      JAPANESE = "ja-JP",
-      FRENCH = "fr-FR",
-    }
 
     const TRANSLATION_SETTINGS = {
       service: "translate",
@@ -332,6 +327,8 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
+    // TODO Permissions way too broad
+    bucket.grantReadWrite(audioProcessor);
     const CREATE_AUDIO_FILE = new tasks.LambdaInvoke(
       this,
       "InvokeAudioProcessor",
@@ -449,6 +446,18 @@ export class CdkStack extends cdk.Stack {
         statements: [s3DeleteLargeObjectPolicy],
       })
     );
+
+    const pollyCreateAudioAsyncPolicy = new iam.PolicyStatement({
+      actions: ["polly:StartSpeechSynthesisTask"],
+      resources: ["*"],
+    });
+
+    audioProcessor.role?.attachInlinePolicy(
+      new iam.Policy(this, "polly-create-audio-async-policy", {
+        statements: [pollyCreateAudioAsyncPolicy],
+      })
+    );
+
     // We want to send all communication events to the step function, we can handle routing there
     new Rule(this, "StartStateMachine", {
       eventBus: bus,
