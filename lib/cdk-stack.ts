@@ -39,6 +39,7 @@ if (resultDotEnv.error) {
 enum TASK_STATUS {
   STARTING = "STARTING",
   LABELS_ADDED = "LABELS_ADDED",
+  TRANSLATIONS_ADDED = "TRANSLATIONS_ADDED",
 }
 const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
   timeout: cdk.Duration.seconds(5),
@@ -178,7 +179,7 @@ export class CdkStack extends cdk.Stack {
       resultPath: JsonPath.DISCARD,
     });
 
-    const CALL_REKOGNITION = new tasks.CallAwsService(this, "DetectLabels", {
+    const DETECT_LABELS = new tasks.CallAwsService(this, "DetectLabels", {
       service: "rekognition",
       action: "detectLabels",
       iamResources: ["*"],
@@ -194,7 +195,7 @@ export class CdkStack extends cdk.Stack {
       resultSelector: {
         "labels.$": "$.Labels",
       },
-      resultPath: "$.rekognitionResults",
+      resultPath: "$.results",
     });
 
     // TODO this should be Update instead of put
@@ -219,9 +220,7 @@ export class CdkStack extends cdk.Stack {
           // "Confidence\":98.20931
           // uhh. So yeah just going to dump the JSON into dynamo as a string and parse it on the FE
           labels: DynamoAttributeValue.fromString(
-            sfn.JsonPath.jsonToString(
-              sfn.JsonPath.stringAt("$.rekognitionResults.labels")
-            )
+            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
           ),
         },
         // pass input to the output
@@ -229,9 +228,124 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
+    // NOTE: Must be supported by Polly!
+    // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
+    enum LANGUAGE_CODES {
+      SPANISH = "es-US",
+      RUSSIAN = "ru-RU",
+      JAPANESE = "ja-JP",
+      FRENCH = "fr-FR",
+    }
+
+    const TRANSLATION_SETTINGS = {
+      service: "translate",
+      action: "translateText",
+      iamResources: ["*"],
+      inputPath: "$.Name",
+      parameters: {
+        SourceLanguageCode: "en",
+        TargetLanguageCode: "en",
+        "Text.$": "$", //Input path auto pulls just the label name
+      },
+      resultPath: "$.translationResults",
+    };
+    const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
+      this,
+      "TranslateToSpanish",
+      {
+        ...TRANSLATION_SETTINGS,
+        parameters: {
+          ...TRANSLATION_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.SPANISH,
+        },
+      }
+    );
+    const TRANSLATE_TO_RUSSIAN = new tasks.CallAwsService(
+      this,
+      "TranslateToRussian",
+      {
+        ...TRANSLATION_SETTINGS,
+        parameters: {
+          ...TRANSLATION_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.RUSSIAN,
+        },
+      }
+    );
+
+    const TRANSLATE_TO_JAPANESE = new tasks.CallAwsService(
+      this,
+      "TranslateToJapanese",
+      {
+        ...TRANSLATION_SETTINGS,
+        parameters: {
+          ...TRANSLATION_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.JAPANESE,
+        },
+      }
+    );
+
+    const TRANSLATE_TO_FRENCH = new tasks.CallAwsService(
+      this,
+      "TranslateToFrench",
+      {
+        ...TRANSLATION_SETTINGS,
+        parameters: {
+          ...TRANSLATION_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.FRENCH,
+        },
+      }
+    );
+
+    const translationLoop = new sfn.Map(this, "LoopAndTranslate", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$.results.labels"),
+      // After we get the translations, update the labels
+      resultPath: "$.results.labels",
+    });
+
+    // // TODO this should be Update instead of put
+    // const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
+    //   this,
+    //   "UpdateProcessWithTranslationResults",
+    //   {
+    //     table: table,
+    //     item: {
+    //       PK: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$.detail.key")
+    //       ),
+    //       SK: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$.detail.key")
+    //       ),
+    //       taskStatus: DynamoAttributeValue.fromString(
+    //         TASK_STATUS.TRANSLATIONS_ADDED
+    //       ),
+    //       updatedAt: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.stringAt("$$.State.EnteredTime")
+    //       ),
+    //       labels: DynamoAttributeValue.fromString(
+    //         sfn.JsonPath.jsonToString(
+    //           sfn.JsonPath.stringAt("$.translationResults")
+    //         )
+    //       ),
+    //     },
+    //     // pass input to the output
+    //     resultPath: JsonPath.DISCARD,
+    //   }
+    // );
+
     // Step function to process the tasks
     const definition = START_PROCESS.next(
-      CALL_REKOGNITION.next(UPDATE_PROCESS_WITH_LABEL_RESULTS)
+      DETECT_LABELS.next(
+        UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
+          translationLoop.iterator(
+            new sfn.Parallel(this, "Get Translations")
+              .branch(TRANSLATE_TO_SPANISH)
+              .branch(TRANSLATE_TO_RUSSIAN)
+              .branch(TRANSLATE_TO_JAPANESE)
+              .branch(TRANSLATE_TO_FRENCH)
+          )
+        )
+      )
     );
 
     const log = new LogGroup(
@@ -376,7 +490,8 @@ export class CdkStack extends cdk.Stack {
     );
 
     // @ts-ignore TODO
-    // Cloudfront cant take the 'https' and the APIGW URL ends in '/'
+    // Cloudfront cant take the 'https://' and the APIGW URL ends in '/'
+    // So we have to clean it up a bit
     const cfOrigin = API.url.split("https://").pop().slice(0, -1);
     const distribution = new cf.Distribution(
       this,
@@ -416,12 +531,17 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
-    new cdk.CfnOutput(this, "CLOUDFRONT_URL: ", {
-      value: distribution.distributionDomainName as string,
-    });
-    new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
-    new cdk.CfnOutput(this, "BUCKET_NAME: ", {
-      value: bucket.bucketName as string,
-    });
+    const OUTPUTS = [
+      { name: "CLOUDFRONT_URL", value: distribution.distributionDomainName },
+      { name: "API_URL", value: API.url },
+      { name: "BUCKET_NAME", value: bucket.bucketName },
+    ];
+
+    OUTPUTS.map(
+      (item) =>
+        new cdk.CfnOutput(this, `${item.name}: `, {
+          value: item.value as string,
+        })
+    );
   }
 }
