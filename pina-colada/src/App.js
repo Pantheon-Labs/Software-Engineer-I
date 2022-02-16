@@ -9,6 +9,9 @@ function App() {
           If you like Piña Colada then you'll like me!
         </h1>
       </header>
+      <body className="App-body">
+        
+      </body>
     </div>
   );
 }
