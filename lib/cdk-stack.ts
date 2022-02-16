@@ -27,6 +27,7 @@ import {
 import * as path from "path";
 import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
 import { JsonPath, Parallel } from "@aws-cdk/aws-stepfunctions";
+import { MAX_LABELS } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -190,7 +191,7 @@ export class CdkStack extends cdk.Stack {
             Name: sfn.JsonPath.stringAt("$.detail.key"),
           },
         },
-        MaxLabels: 3,
+        MaxLabels: MAX_LABELS,
       },
       resultSelector: {
         "labels.$": "$.Labels",
@@ -303,6 +304,37 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results.labels",
     });
 
+    const createAudioLoop = new sfn.Map(this, "LoopAndCreateAudio", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$.results.labels"),
+      // After we get the translations, update the labels
+      resultPath: "$.results.labels",
+    });
+
+    // Create lambda to generate signed URLs
+    const audioProcessor = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-audio-processor-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-audio-processor-function`,
+        ...LAMBDA_CONFIG,
+        environment: {
+          BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
+        description: `Creates an audio file and dumps it into S3 for each translation`,
+        entry: path.join(__dirname, `/../functions/audio-processor.ts`),
+      }
+    );
+
+    const CREATE_AUDIO_FILE = new tasks.LambdaInvoke(
+      this,
+      "InvokeAudioProcessor",
+      {
+        lambdaFunction: audioProcessor,
+      }
+    );
+
     // TODO this should be Update instead of put
     const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
       this,
@@ -344,7 +376,7 @@ export class CdkStack extends cdk.Stack {
                 .branch(TRANSLATE_TO_FRENCH)
             )
             .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
-            .next(new sfn.Succeed(this, "Finished!"))
+            .next(createAudioLoop.iterator(CREATE_AUDIO_FILE))
         )
       )
     );

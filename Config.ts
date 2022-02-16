@@ -2,3 +2,6 @@
 export const NANOID_ALPHABET = "1234567890abcdefghijklmnopqrstuvwxyz";
 
 export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
+
+// How many labels should Rekognition return
+export const MAX_LABELS = 3;
