@@ -8,7 +8,6 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 const rawdata = fs.readFileSync(`./cdk-outputs.json`);
 const cdkOutput = JSON.parse(rawdata.toString());
 
-// TODO pass this dynamically from CDK
 const API_URL = cdkOutput["development-pantheon-project"].APIURL;
 const BUCKET_NAME = cdkOutput["development-pantheon-project"].BUCKETNAME;
 

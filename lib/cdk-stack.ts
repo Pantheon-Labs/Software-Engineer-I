@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import * as waf from "@aws-cdk/aws-wafv2";
 import * as cf from "@aws-cdk/aws-cloudfront";
 import * as origins from "@aws-cdk/aws-cloudfront-origins";
-
+import * as tasks from "@aws-cdk/aws-stepfunctions-tasks";
 import {
   CorsHttpMethod,
   HttpApi,
@@ -12,7 +12,6 @@ import {
   PayloadFormatVersion,
 } from "@aws-cdk/aws-apigatewayv2";
 import { SfnStateMachine } from "@aws-cdk/aws-events-targets";
-
 import * as iam from "@aws-cdk/aws-iam";
 import * as sfn from "@aws-cdk/aws-stepfunctions";
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations";
@@ -26,6 +25,8 @@ import {
   NodejsFunctionProps,
 } from "@aws-cdk/aws-lambda-nodejs";
 import * as path from "path";
+import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
+import { JsonPath, Parallel } from "@aws-cdk/aws-stepfunctions";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -35,12 +36,17 @@ if (resultDotEnv.error) {
   throw resultDotEnv.error;
 }
 
+enum TASK_STATUS {
+  STARTING = "STARTING",
+  LABELS_ADDED = "LABELS_ADDED",
+}
 const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
   timeout: cdk.Duration.seconds(5),
   memorySize: 128,
   logRetention: RetentionDays.ONE_DAY,
   runtime: Runtime.NODEJS_14_X,
   architecture: Architecture.ARM_64,
+  reservedConcurrentExecutions: 3,
   bundling: {
     minify: true,
     externalModules: ["aws-sdk"],
@@ -78,7 +84,6 @@ export class CdkStack extends cdk.Stack {
         timeToLiveAttribute: "ttlExpiry",
         billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
         stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
-        pointInTimeRecovery: true,
       }
     );
 
@@ -155,8 +160,79 @@ export class CdkStack extends cdk.Stack {
       retention: cdk.Duration.days(30),
     });
 
+    const START_PROCESS = new tasks.DynamoPutItem(this, "StartProcess", {
+      table: table,
+      item: {
+        PK: DynamoAttributeValue.fromString(
+          sfn.JsonPath.stringAt("$.detail.key")
+        ),
+        SK: DynamoAttributeValue.fromString(
+          sfn.JsonPath.stringAt("$.detail.key")
+        ),
+        taskStatus: DynamoAttributeValue.fromString(TASK_STATUS.STARTING),
+        updatedAt: DynamoAttributeValue.fromString(
+          sfn.JsonPath.stringAt("$$.State.EnteredTime")
+        ),
+      },
+      // pass input to the output
+      resultPath: JsonPath.DISCARD,
+    });
+
+    const CALL_REKOGNITION = new tasks.CallAwsService(this, "DetectLabels", {
+      service: "rekognition",
+      action: "detectLabels",
+      iamResources: ["*"],
+      parameters: {
+        Image: {
+          S3Object: {
+            Bucket: bucket.bucketName,
+            Name: sfn.JsonPath.stringAt("$.detail.key"),
+          },
+        },
+        MaxLabels: 3,
+      },
+      resultSelector: {
+        "labels.$": "$.Labels",
+      },
+      resultPath: "$.rekognitionResults",
+    });
+
+    // TODO this should be Update instead of put
+    const UPDATE_PROCESS_WITH_LABEL_RESULTS = new tasks.DynamoPutItem(
+      this,
+      "UpdateProcessWithLabelReults",
+      {
+        table: table,
+        item: {
+          PK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          SK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          taskStatus: DynamoAttributeValue.fromString(TASK_STATUS.LABELS_ADDED),
+          updatedAt: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$$.State.EnteredTime")
+          ),
+          // Note: floats are not supported by step functions???
+          // "Confidence\" is not supported by Step Functions
+          // "Confidence\":98.20931
+          // uhh. So yeah just going to dump the JSON into dynamo as a string and parse it on the FE
+          labels: DynamoAttributeValue.fromString(
+            sfn.JsonPath.jsonToString(
+              sfn.JsonPath.stringAt("$.rekognitionResults.labels")
+            )
+          ),
+        },
+        // pass input to the output
+        resultPath: JsonPath.DISCARD,
+      }
+    );
+
     // Step function to process the tasks
-    const definition = new sfn.Succeed(this, "Success :)");
+    const definition = START_PROCESS.next(
+      CALL_REKOGNITION.next(UPDATE_PROCESS_WITH_LABEL_RESULTS)
+    );
 
     const log = new LogGroup(
       this,
@@ -181,6 +257,7 @@ export class CdkStack extends cdk.Stack {
     );
     // TODO might not need all these permissions
     table.grantWriteData(StateMachine);
+    bucket.grantRead(StateMachine, "images/*");
 
     // Create lambda to generate signed URLs
     const fileUploadProcessor = new NodejsFunction(
@@ -299,7 +376,7 @@ export class CdkStack extends cdk.Stack {
     );
 
     // @ts-ignore TODO
-    // Cloudfront cant take the https and the API URL ends in '/'
+    // Cloudfront cant take the 'https' and the APIGW URL ends in '/'
     const cfOrigin = API.url.split("https://").pop().slice(0, -1);
     const distribution = new cf.Distribution(
       this,
@@ -315,7 +392,7 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
-    // Create lambda to generate signed URLs
+    // Healthcheck lambda to verify WAF is working / general debugging
     const healthCheckFunction = new NodejsFunction(
       this,
       `${process.env.NODE_ENV}-health-check-function`,
