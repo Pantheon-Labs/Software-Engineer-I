@@ -229,9 +229,90 @@ export class CdkStack extends cdk.Stack {
       }
     );
 
+    // NOTE: Must be supported by Polly!
+    // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
+    enum LANGUAGE_CODES {
+      SPANISH = "es-US",
+      RUSSIAN = "ru-RU",
+      JAPANESE = "ja-JP",
+      FRENCH = "fr-FR",
+    }
+
+    const TRANSLATE_SETTINGS = {
+      service: "translate",
+      action: "translateText",
+      iamResources: ["*"],
+      parameters: {
+        SourceLanguageCode: "en",
+        TargetLanguageCode: "en",
+        "Text.$": "$.Name",
+      },
+      resultPath: "$.translateResults",
+    };
+    const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
+      this,
+      "TranslateToSpanish",
+      {
+        ...TRANSLATE_SETTINGS,
+        parameters: {
+          ...TRANSLATE_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.SPANISH,
+        },
+      }
+    );
+    const TRANSLATE_TO_RUSSIAN = new tasks.CallAwsService(
+      this,
+      "TranslateToRussian",
+      {
+        ...TRANSLATE_SETTINGS,
+        parameters: {
+          ...TRANSLATE_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.RUSSIAN,
+        },
+      }
+    );
+
+    const TRANSLATE_TO_JAPANESE = new tasks.CallAwsService(
+      this,
+      "TranslateToJapanese",
+      {
+        ...TRANSLATE_SETTINGS,
+        parameters: {
+          ...TRANSLATE_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.JAPANESE,
+        },
+      }
+    );
+
+    const TRANSLATE_TO_FRENCH = new tasks.CallAwsService(
+      this,
+      "TranslateToFrench",
+      {
+        ...TRANSLATE_SETTINGS,
+        parameters: {
+          ...TRANSLATE_SETTINGS.parameters,
+          TargetLanguageCode: LANGUAGE_CODES.FRENCH,
+        },
+      }
+    );
+
+    const map = new sfn.Map(this, "Loop Through labels", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$.rekognitionResults.labels"),
+    });
     // Step function to process the tasks
     const definition = START_PROCESS.next(
-      CALL_REKOGNITION.next(UPDATE_PROCESS_WITH_LABEL_RESULTS)
+      CALL_REKOGNITION.next(
+        UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
+          map.iterator(
+            new sfn.Parallel(this, "Get Translations")
+              .branch(TRANSLATE_TO_SPANISH)
+              .branch(TRANSLATE_TO_RUSSIAN)
+              .branch(TRANSLATE_TO_JAPANESE)
+              .branch(TRANSLATE_TO_FRENCH)
+          )
+        )
+      )
     );
 
     const log = new LogGroup(
@@ -376,7 +457,8 @@ export class CdkStack extends cdk.Stack {
     );
 
     // @ts-ignore TODO
-    // Cloudfront cant take the 'https' and the APIGW URL ends in '/'
+    // Cloudfront cant take the 'https://' and the APIGW URL ends in '/'
+    // So we have to clean it up a bit
     const cfOrigin = API.url.split("https://").pop().slice(0, -1);
     const distribution = new cf.Distribution(
       this,
@@ -416,12 +498,17 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
-    new cdk.CfnOutput(this, "CLOUDFRONT_URL: ", {
-      value: distribution.distributionDomainName as string,
-    });
-    new cdk.CfnOutput(this, "API_URL: ", { value: API.url as string });
-    new cdk.CfnOutput(this, "BUCKET_NAME: ", {
-      value: bucket.bucketName as string,
-    });
+    const OUTPUTS = [
+      { name: "CLOUDFRONT_URL", value: distribution.distributionDomainName },
+      { name: "API_URL", value: API.url },
+      { name: "BUCKET_NAME", value: bucket.bucketName },
+    ];
+
+    OUTPUTS.map(
+      (item) =>
+        new cdk.CfnOutput(this, `${item.name}: `, {
+          value: item.value as string,
+        })
+    );
   }
 }
