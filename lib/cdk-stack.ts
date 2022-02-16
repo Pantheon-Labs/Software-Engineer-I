@@ -27,6 +27,7 @@ import {
 import * as path from "path";
 import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
 import { JsonPath, Parallel } from "@aws-cdk/aws-stepfunctions";
+import { LANGUAGE_CODES, MAX_LABELS } from "../Config";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -40,6 +41,7 @@ enum TASK_STATUS {
   STARTING = "STARTING",
   LABELS_ADDED = "LABELS_ADDED",
   TRANSLATIONS_ADDED = "TRANSLATIONS_ADDED",
+  AUDO_CREATED = "AUDIO_CREATED",
 }
 const LAMBDA_CONFIG: Partial<NodejsFunctionProps> = {
   timeout: cdk.Duration.seconds(5),
@@ -190,7 +192,7 @@ export class CdkStack extends cdk.Stack {
             Name: sfn.JsonPath.stringAt("$.detail.key"),
           },
         },
-        MaxLabels: 3,
+        MaxLabels: MAX_LABELS,
       },
       resultSelector: {
         "labels.$": "$.Labels",
@@ -230,12 +232,6 @@ export class CdkStack extends cdk.Stack {
 
     // NOTE: Must be supported by Polly!
     // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
-    enum LANGUAGE_CODES {
-      SPANISH = "es-US",
-      RUSSIAN = "ru-RU",
-      JAPANESE = "ja-JP",
-      FRENCH = "fr-FR",
-    }
 
     const TRANSLATION_SETTINGS = {
       service: "translate",
@@ -303,47 +299,91 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results.labels",
     });
 
-    // // TODO this should be Update instead of put
-    // const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
-    //   this,
-    //   "UpdateProcessWithTranslationResults",
-    //   {
-    //     table: table,
-    //     item: {
-    //       PK: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$.detail.key")
-    //       ),
-    //       SK: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$.detail.key")
-    //       ),
-    //       taskStatus: DynamoAttributeValue.fromString(
-    //         TASK_STATUS.TRANSLATIONS_ADDED
-    //       ),
-    //       updatedAt: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.stringAt("$$.State.EnteredTime")
-    //       ),
-    //       labels: DynamoAttributeValue.fromString(
-    //         sfn.JsonPath.jsonToString(
-    //           sfn.JsonPath.stringAt("$.translationResults")
-    //         )
-    //       ),
-    //     },
-    //     // pass input to the output
-    //     resultPath: JsonPath.DISCARD,
-    //   }
-    // );
+    const getLabelsForAudioLoop = new sfn.Map(this, "GetLabelsForAudioLoop", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$.results.labels"),
+      resultPath: "$.results.labels",
+    });
+
+    const createAudioLoop = new sfn.Map(this, "CreateAudioLoop", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$"),
+      resultPath: "$[0].beans",
+    });
+
+    // Create lambda to generate signed URLs
+    const audioProcessor = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-audio-processor-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-audio-processor-function`,
+        ...LAMBDA_CONFIG,
+        environment: {
+          BUCKET_NAME: bucket.bucketName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
+        description: `Creates an audio file and dumps it into S3 for each translation`,
+        entry: path.join(__dirname, `/../functions/audio-processor.ts`),
+      }
+    );
+
+    // TODO Permissions way too broad
+    bucket.grantReadWrite(audioProcessor);
+    const CREATE_AUDIO_FILE = new tasks.LambdaInvoke(
+      this,
+      "InvokeAudioProcessor",
+      {
+        lambdaFunction: audioProcessor,
+      }
+    );
+
+    // TODO this should be Update instead of put
+    const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
+      this,
+      "UpdateProcessWithTranslationResults",
+      {
+        table: table,
+        item: {
+          PK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          SK: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$.detail.key")
+          ),
+          taskStatus: DynamoAttributeValue.fromString(
+            TASK_STATUS.TRANSLATIONS_ADDED
+          ),
+          updatedAt: DynamoAttributeValue.fromString(
+            sfn.JsonPath.stringAt("$$.State.EnteredTime")
+          ),
+          labels: DynamoAttributeValue.fromString(
+            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
+          ),
+        },
+        // pass input to the output
+        resultPath: JsonPath.DISCARD,
+      }
+    );
 
     // Step function to process the tasks
     const definition = START_PROCESS.next(
       DETECT_LABELS.next(
         UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
-          translationLoop.iterator(
-            new sfn.Parallel(this, "Get Translations")
-              .branch(TRANSLATE_TO_SPANISH)
-              .branch(TRANSLATE_TO_RUSSIAN)
-              .branch(TRANSLATE_TO_JAPANESE)
-              .branch(TRANSLATE_TO_FRENCH)
-          )
+          translationLoop
+            .iterator(
+              new sfn.Parallel(this, "Get Translations")
+                .branch(TRANSLATE_TO_SPANISH)
+                .branch(TRANSLATE_TO_RUSSIAN)
+                .branch(TRANSLATE_TO_JAPANESE)
+                .branch(TRANSLATE_TO_FRENCH)
+            )
+            .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
+            .next(
+              getLabelsForAudioLoop.iterator(
+                createAudioLoop.iterator(CREATE_AUDIO_FILE)
+              )
+            )
+            .next(new sfn.Succeed(this, "Finished!"))
         )
       )
     );
@@ -406,6 +446,18 @@ export class CdkStack extends cdk.Stack {
         statements: [s3DeleteLargeObjectPolicy],
       })
     );
+
+    const pollyCreateAudioAsyncPolicy = new iam.PolicyStatement({
+      actions: ["polly:SynthesizeSpeech"],
+      resources: ["*"],
+    });
+
+    audioProcessor.role?.attachInlinePolicy(
+      new iam.Policy(this, "polly-create-audio-async-policy", {
+        statements: [pollyCreateAudioAsyncPolicy],
+      })
+    );
+
     // We want to send all communication events to the step function, we can handle routing there
     new Rule(this, "StartStateMachine", {
       eventBus: bus,
