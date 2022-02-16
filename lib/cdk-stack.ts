@@ -195,7 +195,7 @@ export class CdkStack extends cdk.Stack {
       resultSelector: {
         "labels.$": "$.Labels",
       },
-      resultPath: "$.rekognitionResults",
+      resultPath: "$.results",
     });
 
     // TODO this should be Update instead of put
@@ -220,9 +220,7 @@ export class CdkStack extends cdk.Stack {
           // "Confidence\":98.20931
           // uhh. So yeah just going to dump the JSON into dynamo as a string and parse it on the FE
           labels: DynamoAttributeValue.fromString(
-            sfn.JsonPath.jsonToString(
-              sfn.JsonPath.stringAt("$.rekognitionResults.labels")
-            )
+            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
           ),
         },
         // pass input to the output
@@ -249,9 +247,7 @@ export class CdkStack extends cdk.Stack {
         TargetLanguageCode: "en",
         "Text.$": "$", //Input path auto pulls just the label name
       },
-      // TODO there is a lot of duplicate data, we should filter this.
-      // Each label has the label info in each translation.
-      resultPath: "$.translationResults", // TODO evaluate this
+      resultPath: "$.translationResults",
     };
     const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
       this,
@@ -302,7 +298,9 @@ export class CdkStack extends cdk.Stack {
 
     const translationLoop = new sfn.Map(this, "LoopAndTranslate", {
       maxConcurrency: 1,
-      itemsPath: sfn.JsonPath.stringAt("$.rekognitionResults.labels"),
+      itemsPath: sfn.JsonPath.stringAt("$.results.labels"),
+      // After we get the translations, update the labels
+      resultPath: "$.results.labels",
     });
 
     // // TODO this should be Update instead of put
