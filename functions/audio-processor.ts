@@ -10,45 +10,32 @@ import {
 import fs from "fs";
 import { s3Client } from "../awsClients/s3Client";
 import { pollyClient } from "../awsClients/pollyClient";
-import { LANGUAGE_CODES } from "../Config";
 import { Readable } from "stream";
-
-// Polly codes need to be change da bit as they need the suffix
-// But the rekognition result does not return it :(
-enum POLLY_CODES {
-  es = LANGUAGE_CODES.SPANISH,
-  ru = LANGUAGE_CODES.RUSSIAN,
-  ja = LANGUAGE_CODES.JAPANESE,
-  fr = LANGUAGE_CODES.FRENCH,
+import { BASE_LANGUAGE_CODES, POLLY_CODES } from "../Config";
+interface AudioProcessingEvent {
+  Confidence: number;
+  Name: string;
+  translationResults: {
+    SourceLanguageCode: "en";
+    TargetLanguageCode: BASE_LANGUAGE_CODES;
+    TranslatedText: string;
+  };
 }
-
-// Input format:
-// {
-//   Confidence: 85.85332,
-//   Instances: [],
-//   Name: 'Man',
-//   Parents: [ { Name: 'Person' } ],
-//   translationResults: {
-//     SourceLanguageCode: 'en',
-//     TargetLanguageCode: 'ja',
-//     TranslatedText: 'おとこ'
-//   }
-// }
-// TODO types
-export const main = async (event: any) => {
+export const main = async (event: AudioProcessingEvent) => {
   console.log(JSON.stringify(event));
 
   const code = event.translationResults.TargetLanguageCode;
+
   const S3Key = `audio/${event.Name}/${code}`;
   const params: SynthesizeSpeechCommandInput = {
     OutputFormat: "mp3",
+    // @ts-ignore
     LanguageCode: POLLY_CODES[code],
     Text: event.translationResults.TranslatedText,
     VoiceId: "Joanna",
   };
 
   try {
-    // If the file exists, do nothing
     await s3Client.send(
       new HeadObjectCommand({
         Bucket: process.env.BUCKET_NAME,
@@ -59,7 +46,6 @@ export const main = async (event: any) => {
     return;
   } catch (error: any) {
     if (error["$metadata"].httpStatusCode === 404) {
-      // File not found, make it
       try {
         const result = await pollyClient.send(
           new SynthesizeSpeechCommand(params)
@@ -67,8 +53,10 @@ export const main = async (event: any) => {
 
         if (!result || !result.AudioStream) {
           console.error(`Bad response from Polly`, result);
+          return;
         }
 
+        // Lambda must use /tmp/ directory
         const fileName = `/tmp/${event.Name}_${code}.mp3`;
 
         async function saveStream(fromStream: Readable, fileName: string) {
@@ -94,7 +82,6 @@ export const main = async (event: any) => {
             ContentType: result.ContentType,
           };
 
-          console.log("PARAMS", params);
           await s3Client.send(new PutObjectCommand(params));
           console.log("File sent to S3!");
         } catch (error) {

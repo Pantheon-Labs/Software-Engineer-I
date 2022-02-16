@@ -42,7 +42,6 @@ export const main = async (event: S3Event) => {
     Entries: [entry],
   };
   try {
-    console.log(entry);
     await EBClient.send(new PutEventsCommand(newEvent));
     console.log("Message sent to EventBridge!");
     return;
