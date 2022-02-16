@@ -7,11 +7,29 @@ export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
 export const MAX_LABELS = 5;
 
 // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
+export enum BASE_LANGUAGE_CODES {
+  SPANISH = "es",
+  RUSSIAN = "ru",
+  JAPANESE = "ja",
+  FRENCH = "fr",
+}
+
 export enum LANGUAGE_CODES {
   SPANISH = "es-MX",
   RUSSIAN = "ru-RU",
   JAPANESE = "ja-JP",
   FRENCH = "fr-FR",
+}
+
+/**
+ * Polly codes need to be changed a bit as they need the suffix
+ * and the codes provided by rekognition result do not return it :(
+ */
+export enum POLLY_CODES {
+  es = LANGUAGE_CODES.SPANISH,
+  ru = LANGUAGE_CODES.RUSSIAN,
+  ja = LANGUAGE_CODES.JAPANESE,
+  fr = LANGUAGE_CODES.FRENCH,
 }
 
 /**
