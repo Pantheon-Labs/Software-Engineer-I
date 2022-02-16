@@ -304,11 +304,16 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results.labels",
     });
 
-    const createAudioLoop = new sfn.Map(this, "LoopAndCreateAudio", {
+    const getLabelsForAudioLoop = new sfn.Map(this, "GetLabelsForAudioLoop", {
       maxConcurrency: 1,
       itemsPath: sfn.JsonPath.stringAt("$.results.labels"),
-      // After we get the translations, update the labels
       resultPath: "$.results.labels",
+    });
+
+    const createAudioLoop = new sfn.Map(this, "CreateAudioLoop", {
+      maxConcurrency: 1,
+      itemsPath: sfn.JsonPath.stringAt("$"),
+      resultPath: "$[0].beans",
     });
 
     // Create lambda to generate signed URLs
@@ -376,7 +381,12 @@ export class CdkStack extends cdk.Stack {
                 .branch(TRANSLATE_TO_FRENCH)
             )
             .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
-            .next(createAudioLoop.iterator(CREATE_AUDIO_FILE))
+            .next(
+              getLabelsForAudioLoop.iterator(
+                createAudioLoop.iterator(CREATE_AUDIO_FILE)
+              )
+            )
+            .next(new sfn.Succeed(this, "Finished!"))
         )
       )
     );
