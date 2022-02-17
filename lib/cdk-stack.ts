@@ -510,9 +510,13 @@ export class CdkStack extends cdk.Stack {
     });
 
     generateSignedUrlFunction.role?.attachInlinePolicy(
-      new iam.Policy(this, "presigned-url-put-object-policy", {
-        statements: [putPresignedURLPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-presigned-url-put-object-policy`,
+        {
+          statements: [putPresignedURLPolicy],
+        }
+      )
     );
 
     const pollySynthSpeechPolicy = new iam.PolicyStatement({
@@ -521,9 +525,13 @@ export class CdkStack extends cdk.Stack {
     });
 
     audioProcessor.role?.attachInlinePolicy(
-      new iam.Policy(this, "polly-create-audio-async-policy", {
-        statements: [pollySynthSpeechPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-polly-create-audio-async-policy`,
+        {
+          statements: [pollySynthSpeechPolicy],
+        }
+      )
     );
 
     const deleteLargeObjPolicy = new iam.PolicyStatement({
@@ -532,12 +540,16 @@ export class CdkStack extends cdk.Stack {
     });
 
     fileUploadProcessor.role?.attachInlinePolicy(
-      new iam.Policy(this, "delete-large-object-policy", {
-        statements: [deleteLargeObjPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-delete-large-object-policy`,
+        {
+          statements: [deleteLargeObjPolicy],
+        }
+      )
     );
 
-    // TODO some permissions might be too broad
+    // TODO these general permissions are wayyy too broad :(
     TABLE.grantWriteData(StateMachine);
     TABLE.grantReadData(getResultsFunction);
     BUCKET.grantRead(StateMachine, "images/*");
