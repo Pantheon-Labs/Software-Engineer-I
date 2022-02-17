@@ -1,8 +1,8 @@
 /* eslint-disable jest/no-conditional-expect */
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import fs from "fs";
-import { ALLOWED_FILE_TYPES } from "../Config";
+import { ALLOWED_FILE_TYPES } from "../src/Config";
 import { s3Client } from "../awsClients/s3Client";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 const rawdata = fs.readFileSync(`./cdk-outputs.json`);
@@ -56,6 +56,7 @@ describe("API", () => {
           expect.objectContaining({
             message: "Saul Goodman!",
             preSignedUrl: expect.any(String), // TODO string containing bucket url
+            fileId: expect.any(String),
           })
         );
       } catch (error: any) {
@@ -116,5 +117,48 @@ describe("API", () => {
       console.error(error);
       expect(error["$metadata"].httpStatusCode).toBe(404);
     }
+  });
+
+  it("throws an error retrieving file process data if no file provided", async () => {
+    expect.assertions(2);
+    try {
+      await axios.get(API_URL + "results?fileId=");
+    } catch (error: any) {
+      expect(error.response.status).toBe(400);
+      expect(error.response.data.message).toBe("Missing 'fileId' query param");
+    }
+  });
+
+  it("throws an error if file doesnt exist when retrieving results", async () => {
+    expect.assertions(2);
+    try {
+      await axios.get(API_URL + "results?fileId=beans");
+    } catch (error: any) {
+      expect(error.response.status).toBe(404);
+      expect(error.data.message).toBe(`File 'beans' not found`);
+    }
+  });
+  it("returns file process data", async () => {
+    expect.assertions(2);
+    const file = fs.readdirSync("./testFiles/good/file_1.png");
+
+    const { data } = await axios.post(API_URL + "signed-url", {
+      fileType: ".png",
+    });
+
+    // Upload file
+    const result = await axios.put(data.preSignedUrl, file);
+
+    const { fileId } = result.data;
+
+    const final = await axios.get(API_URL + `results?fileId=${fileId}`);
+    expect(final.status).toBe(200);
+    expect(final.data).toEqual(
+      expect.objectContaining({
+        PK: expect.stringMatching(fileId),
+        SK: expect.stringMatching(fileId),
+        updatedAt: expect.any(String),
+      })
+    );
   });
 });

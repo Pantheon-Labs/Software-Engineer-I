@@ -32,7 +32,8 @@ import {
   MAX_LABELS,
   TRANSLATION_SETTINGS,
   WAF_SETTINGS,
-} from "../Config";
+} from "../src/Config";
+import { HttpMethods } from "@aws-cdk/aws-s3";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -73,6 +74,14 @@ export class CdkStack extends cdk.Stack {
         blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         bucketName: `${process.env.NODE_ENV}-pantheon-assets`,
         versioned: true,
+        cors: [
+          {
+            allowedHeaders: ["*"],
+            allowedMethods: [HttpMethods.GET, HttpMethods.PUT],
+            allowedOrigins: ["*"],
+            exposedHeaders: [],
+          },
+        ],
       }
     );
 
@@ -167,11 +176,25 @@ export class CdkStack extends cdk.Stack {
           BUCKET_NAME: BUCKET.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        description: `Generates signed URLs to upload into the ${BUCKET.bucketName} BUCKET`,
+        description: `Generates signed URLs to upload into the ${BUCKET.bucketName} bucket`,
         entry: path.join(__dirname, `/../functions/generate-signed-url.ts`),
       }
     );
 
+    const getResultsFunction = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-get-results-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-get-results-function`,
+        ...LAMBDA_CONFIG,
+        environment: {
+          TABLE_NAME: TABLE.tableName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
+        description: `Retrieves the info (labels & translations) for a file`,
+        entry: path.join(__dirname, `/../functions/get-results.ts`),
+      }
+    );
     // Acts as a general debugger and tests if WAF is working
     const healthCheckFunction = new NodejsFunction(
       this,
@@ -372,7 +395,7 @@ export class CdkStack extends cdk.Stack {
     const CREATE_AUDO_LOOP = new sfn.Map(this, "CREATE_AUDO_LOOP", {
       maxConcurrency: 1,
       itemsPath: sfn.JsonPath.stringAt("$"),
-      resultPath: "$[0].beans",
+      resultPath: "$[0].audio",
     });
 
     const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(

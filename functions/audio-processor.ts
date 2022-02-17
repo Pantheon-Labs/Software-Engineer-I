@@ -11,7 +11,7 @@ import fs from "fs";
 import { s3Client } from "../awsClients/s3Client";
 import { pollyClient } from "../awsClients/pollyClient";
 import { Readable } from "stream";
-import { BASE_LANGUAGE_CODES, POLLY_CODES } from "../Config";
+import { BASE_LANGUAGE_CODES, POLLY_CODES } from "../src/Config";
 interface AudioProcessingEvent {
   Confidence: number;
   Name: string;
