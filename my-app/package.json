@@ -1,7 +1,7 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "https://primike.github.io/Software-Engineer-I/my-app",
+  "homepage": "https://primike.github.io/Software-Engineer-I/",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^1.8.3",
