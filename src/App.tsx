@@ -11,8 +11,9 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { ALLOWED_FILE_TYPES } from "./Config";
 import { useRef, useState, useEffect } from "react";
 import { Button, Icon, InputGroup, Container, Center } from "@chakra-ui/react";
-import { UseFormRegisterReturn } from "react-hook-form";
 import axios from "axios";
+import useResults from "./useResults";
+// @ts-ignore
 
 const handleError = (
   message: string,
@@ -26,39 +27,14 @@ const handleError = (
 const App = () => {
   // TODO set at build time
   const API_URL = "https://o403ptj373.execute-api.us-east-1.amazonaws.com";
-  const [helperText, setHelperText] = useState("Max file size is 1mb");
+  const [uploadStatus, setUploadStatus] = useState(false);
   const [fileURL, setFileURL] = useState("");
   const [fileId, setFileId] = useState("");
-  const [labels, setLabels] = useState({
-    PK: "",
-    SK: "",
-    updatedAt: "",
-    labels: [],
-  });
 
-  // TODO use swr
-  useEffect(() => {
-    async function fetchData() {
-      if (fileId !== "" && fileId) {
-        try {
-          const result = await axios.get(API_URL + `/results?fileId=${fileId}`);
-
-          setLabels(JSON.parse(result.data));
-        } catch (error: any) {
-          // 404 could mean it hasn't processed yet so we need to poll again
-          if (error.response.status !== 404) {
-            console.error(error);
-            alert(
-              `An error ocurred retrieving file data, check console for more info`
-            );
-          }
-        }
-      }
-      return;
-    }
-
-    fetchData();
-  }, [fileId]);
+  const { results, isResultsLoading, isResultsError } = useResults(
+    API_URL,
+    fileId
+  );
 
   const getSignedUrl = async (file: File) => {
     try {
@@ -69,7 +45,7 @@ const App = () => {
 
       try {
         await axios.put(data.preSignedUrl, file);
-        setHelperText("Uploaded!");
+        setUploadStatus(false);
         setFileId(data.fileId);
       } catch (error) {
         console.error(error);
@@ -108,31 +84,41 @@ const App = () => {
 
     const url = URL.createObjectURL(file);
     setFileURL(url);
-    setHelperText(`Uploading ${file.name}...`);
+    setUploadStatus(true);
     getSignedUrl(file);
   };
 
   const fileInputRef = useRef();
 
-  const Labels =
-    labels?.labels.length > 0 ? (
-      <List>
-        {labels?.labels.map((item) => (
-          <ListItem>{JSON.stringify(item)}</ListItem>
-        ))}
-      </List>
-    ) : null;
-
   const Image = fileURL !== "" && (
     <img alt="Your uploaded file" src={fileURL} />
   );
 
+  const Results = isResultsError ? (
+    <p>An error ocurred </p>
+  ) : isResultsLoading ? (
+    <p>Loading results...</p>
+  ) : (
+    JSON.stringify(results?.labels)
+  );
+
+  // <div>
+  //   <ul>
+  //     {JSON.parse(results?.labels).map((item: any) => (
+  //       <li>{JSON.stringify(item)}</li>
+  //     ))}
+  //   </ul>
+  // </div>
   return (
     <>
       <Center w="100%" h="100%">
         <Flex align="center" justify="center" w="50%" h="30%" m={20}>
           <FormControl border="1px" borderColor="gray.200" p={8}>
-            <Button onClick={() => fileInputRef?.current.click()}>
+            <Button
+              isLoading={uploadStatus}
+              loadingText="Uploading..."
+              onClick={() => fileInputRef?.current.click()}
+            >
               Upload an image
             </Button>
             <Input
@@ -152,7 +138,7 @@ const App = () => {
               onInput={(e) => validateFile(e)}
               accept={ALLOWED_FILE_TYPES.join(", ")}
             />
-            <FormHelperText mb={2}>{helperText}</FormHelperText>
+            <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
             {fileId !== "" && fileId ? (
               <Link
                 mb={8}
@@ -165,7 +151,7 @@ const App = () => {
             ) : null}
 
             {Image}
-            {Labels}
+            {Results}
           </FormControl>
         </Flex>{" "}
       </Center>
