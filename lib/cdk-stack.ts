@@ -28,7 +28,7 @@ import * as path from "path";
 import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
 import { JsonPath } from "@aws-cdk/aws-stepfunctions";
 import {
-  LANGUAGE_CODES,
+  TRANSLATE_LANGUAGE_CODES,
   MAX_LABELS,
   TRANSLATION_SETTINGS,
   WAF_SETTINGS,
@@ -327,7 +327,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.SPANISH,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.SPANISH,
         },
       }
     );
@@ -338,7 +338,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.RUSSIAN,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.RUSSIAN,
         },
       }
     );
@@ -350,7 +350,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.JAPANESE,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.JAPANESE,
         },
       }
     );
@@ -362,7 +362,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.FRENCH,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.FRENCH,
         },
       }
     );

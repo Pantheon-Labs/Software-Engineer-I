@@ -11,13 +11,17 @@ import fs from "fs";
 import { s3Client } from "../awsClients/s3Client";
 import { pollyClient } from "../awsClients/pollyClient";
 import { Readable } from "stream";
-import { BASE_LANGUAGE_CODES, POLLY_CODES } from "../src/Config";
+import {
+  POLLY_LANGUAGES,
+  POLLY_VOICES,
+  TRANSLATE_LANGUAGE_CODES,
+} from "../src/Config";
 interface AudioProcessingEvent {
   Confidence: number;
   Name: string;
   translationResults: {
     SourceLanguageCode: "en";
-    TargetLanguageCode: BASE_LANGUAGE_CODES;
+    TargetLanguageCode: TRANSLATE_LANGUAGE_CODES;
     TranslatedText: string;
   };
 }
@@ -27,12 +31,12 @@ export const main = async (event: AudioProcessingEvent) => {
   const code = event.translationResults.TargetLanguageCode;
 
   const S3Key = `audio/${event.Name}/${code}`;
+
   const params: SynthesizeSpeechCommandInput = {
     OutputFormat: "mp3",
-    // @ts-ignore
-    LanguageCode: POLLY_CODES[code],
+    LanguageCode: POLLY_LANGUAGES[code],
     Text: event.translationResults.TranslatedText,
-    VoiceId: "Joanna",
+    VoiceId: POLLY_VOICES[code],
   };
 
   try {

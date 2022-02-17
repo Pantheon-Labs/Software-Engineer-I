@@ -6,36 +6,36 @@ export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
 // How many labels should Rekognition return
 export const MAX_LABELS = 10;
 
-// https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
-export enum BASE_LANGUAGE_CODES {
-  SPANISH = "es",
-  RUSSIAN = "ru",
-  JAPANESE = "ja", // Needs conversion for FE flag
-  FRENCH = "fr",
-}
-
-export enum LANGUAGE_CODES {
-  SPANISH = "es-MX", // Needs conversion for FE flag
-  RUSSIAN = "ru-RU",
-  JAPANESE = "ja-JP",
-  FRENCH = "fr-FR",
-}
-
-/**
- * Polly codes need to be changed a bit as they need the suffix
- * and the codes provided by rekognition result do not return it :(
- */
-export enum POLLY_CODES {
-  es = LANGUAGE_CODES.SPANISH,
-  ru = LANGUAGE_CODES.RUSSIAN,
-  ja = LANGUAGE_CODES.JAPANESE,
-  fr = LANGUAGE_CODES.FRENCH,
-}
-
 /**
  * NOTE: Must be supported by Polly!
  * https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
  */
+export enum TRANSLATE_LANGUAGE_CODES {
+  SPANISH = "es", // Needs conversion for FE flag
+  RUSSIAN = "ru",
+  JAPANESE = "ja",
+  FRENCH = "fr",
+}
+
+/**
+ * Polly codes for generating voices. https://docs.aws.amazon.com/polly/latest/dg/voicelist.html
+ */
+export enum POLLY_VOICES {
+  es = "Mia",
+  ru = "Tatyana",
+  ja = "Mizuki",
+  fr = "Celine",
+}
+
+// The actual language codes that polly uses differ a bit
+// from the translate ones as they require a suffix of the country
+export enum POLLY_LANGUAGES {
+  es = "es-MX",
+  ru = "ru-RU",
+  ja = "ja-JP",
+  fr = "fr-FR",
+}
+
 export const TRANSLATION_SETTINGS = {
   service: "translate",
   action: "translateText",

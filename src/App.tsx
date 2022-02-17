@@ -3,31 +3,22 @@ import {
   Flex,
   FormControl,
   FormHelperText,
-  Grid,
-  GridItem,
   Input,
   Spinner,
   VStack,
   HStack,
   Link,
   Text,
-  Stack,
-  List,
-  ListItem,
-  SimpleGrid,
   Image,
   Divider,
 } from "@chakra-ui/react";
-
 import { Heading } from "@chakra-ui/react";
-
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { ALLOWED_FILE_TYPES } from "./Config";
-import { useRef, useState, useEffect } from "react";
-import { Button, Icon, InputGroup, Container, Center } from "@chakra-ui/react";
+import { useRef, useState } from "react";
+import { Button, Icon } from "@chakra-ui/react";
 import axios from "axios";
 import useResults from "./useResults";
-import { AnyPrincipal } from "@aws-cdk/aws-iam";
 import { GiSpeaker } from "react-icons/gi";
 // @ts-ignore
 
