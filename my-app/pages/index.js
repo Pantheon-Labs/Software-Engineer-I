@@ -3,6 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import axios from "axios";
 import { useEffect, useState } from 'react';
+import Card from '../Components/Card';
 
 export default function Home() {
 	const [characters, setCharacters] = useState([])
@@ -15,15 +16,24 @@ export default function Home() {
 	};
 
 	useEffect(() => {
-		axios.request(options).then(function (response) {
+		/*axios.request(options).then(function (response) {
 			console.log(response.data);
-			setCharacters(response.data);
+			setCharacters(JSON.parse(JSON.stringify(response.data.results)));
 		}).catch(function (error) {
 			console.error(error);
-		});
-	},[]);
+		});*/
+		const requestData = async () => {
+			const axiosData = await axios.get("https://rickandmortyapi.com/api/character");
+			setCharacters(axiosData.data.results);
 
-	console.log("characters from " +characters);
+		}
+		return requestData();
+	}, [setCharacters]);
+
+	let char = characters[0]
+	console.log("characters from " + characters);
+	console.log("characters from " + char);
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -33,9 +43,14 @@ export default function Home() {
 			</Head>
 
 			<main className={styles.main}>
-				{characters && (
-					Object.entries(characters).map(function(keyName, i) { <div key={i}>{characters[keyName]}</div>})
+				{//characters.length > 0 && (
+					characters.map((keyName, i) => {
+						console.log(`keyName=${keyName} id=${i}`);
+						`<div key=${i}>${characters[i].name}</div>`
+					}
+					//)
 				)}
+				<Card character={characters} />
 
 				<div className={styles.grid}>
 					{//characters}
