@@ -1,17 +1,25 @@
-import { Box, Text } from '@chakra-ui/react';
+import { Box, Divider, Text } from '@chakra-ui/react';
 
 const SelectedNoteContainer = ({ note }) => {
 	console.log(note);
 	return (
 		<>
 			<Box
-				minW=""
-				borderWidth="1px"
+				w="120vh"
+				minH="80vh"
+				borderWidth="5px"
 				borderRadius="lg"
 				overflow="hidden"
 				bg="theme.paper"
 			>
-				<Text color="black">{note.content}</Text>
+				<Box style={{ padding: '40px' }}>
+					<Text fontSize="3xl" color="black" marginBottom="20px">
+						{note.title}
+					</Text>
+					<Text marginLeft="20px" color="black">
+						{note.content}
+					</Text>
+				</Box>
 			</Box>
 		</>
 	);

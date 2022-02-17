@@ -7,13 +7,14 @@ import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 
 const colors = {
 	theme: {
-		primary: '#FFE5D9',
-		secondary: '#FCD5CE',
-		background: '#ECE4DB',
+		primary: '#E5E5E5',
+		secondary: '#E5E5E5',
+		background: '#FFFFFF',
 		paper: '#F8EDEB',
+		selected: '#e85d04',
 	},
 	font: {
-		color: 'black',
+		color: '000',
 	},
 };
 

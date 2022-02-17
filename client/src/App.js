@@ -38,6 +38,7 @@ function App() {
 							<NoteCardContainer
 								selectNote={selectNote}
 								notes={notes}
+								selectedNote={selectedNote}
 							/>
 						)}
 						{error && (
@@ -49,9 +50,11 @@ function App() {
 				</Box>
 
 				<Box flex="1" bg="theme.background">
-					{selectedNote && (
-						<SelectedNoteContainer note={selectedNote} />
-					)}
+					<Center w="100%" h="100%">
+						{selectedNote && (
+							<SelectedNoteContainer note={selectedNote} />
+						)}
+					</Center>
 				</Box>
 			</Flex>
 		</Grid>

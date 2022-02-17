@@ -1,22 +1,37 @@
-import { Center, Flex, Spacer, VStack } from '@chakra-ui/react';
+import {
+	Box,
+	Center,
+	Divider,
+	Flex,
+	StackDivider,
+	VStack,
+} from '@chakra-ui/react';
 import NoteCard from './NoteCard';
 import { Text } from '@chakra-ui/react';
 
-const NoteCardContainer = ({ notes, selectNote }) => {
+const NoteCardContainer = ({ notes, selectNote, selectedNote }) => {
 	return (
 		<>
 			<Flex>
-				<VStack>
-					<Text color="black" fontSize="3xl">
-						Notes
-					</Text>
+				<VStack spacing={null}>
+					<Box w="50vh" h="10vh" bg="theme.primary">
+						<Center w="100%" h="100%">
+							<Text as="em" color="black" fontSize="3xl">
+								Sam's Notes
+							</Text>
+						</Center>
+					</Box>
 					{notes.data.map((note) => {
 						return (
-							<NoteCard
-								selectNote={selectNote}
-								key={note.id}
-								note={note}
-							/>
+							<>
+								<NoteCard
+									selectedNote={selectedNote}
+									selectNote={selectNote}
+									key={note.id}
+									note={note}
+								/>
+								<StackDivider />
+							</>
 						);
 					})}
 
