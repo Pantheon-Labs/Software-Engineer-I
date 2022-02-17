@@ -295,6 +295,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -384,13 +388,43 @@ var Home = /*#__PURE__*/function (_React$Component) {
 
   }, {
     key: "handleClick",
-    value: function handleClick(star) {
-      this.props.getStar(star.id); // Open SingleStar modal
+    value: function () {
+      var _handleClick = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(star) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return this.props.getStar(star.id);
 
-      this.setState({
-        showSingleStar: true
-      });
-    } // Handle closing single star modal
+              case 3:
+                // Open SingleStar modal
+                this.setState({
+                  showSingleStar: true
+                });
+                _context.next = 9;
+                break;
+
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
+                this.setState(_context.t0);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 6]]);
+      }));
+
+      function handleClick(_x) {
+        return _handleClick.apply(this, arguments);
+      }
+
+      return handleClick;
+    }() // Handle closing single star modal
 
   }, {
     key: "handleClose",
@@ -398,6 +432,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
       this.setState({
         showSingleStar: false
       });
+      this.props.clearStar();
     } // Search function on input
 
   }, {
@@ -485,6 +520,9 @@ var mapDispatch = function mapDispatch(dispatch) {
     },
     getStar: function getStar(starId) {
       return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_6__["getStar"])(starId));
+    },
+    clearStar: function clearStar() {
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_6__["clearStar"])());
     }
   };
 };
@@ -1501,14 +1539,14 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!************************************!*\
   !*** ./client/store/singleStar.js ***!
   \************************************/
-/*! exports provided: searchStar, getStar, getBirthday, default */
+/*! exports provided: searchStar, getStar, clearStar, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStar", function() { return getStar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBirthday", function() { return getBirthday; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearStar", function() { return clearStar; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -1526,8 +1564,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * Action creators, thunks, and reducer for individual celebrities
  */
 
+var SEARCH_STAR = "SEARCH_STAR";
 var GET_STAR = "GET_STAR";
-var SEARCH_STAR = "SEARCH_STAR"; // Search for actor by name
+var CLEAR_STAR = "CLEAR_STAR"; // Search for actor by name
 
 var searchedStar = function searchedStar(searchResults) {
   return {
@@ -1541,6 +1580,13 @@ var gotStar = function gotStar(star) {
   return {
     type: GET_STAR,
     star: star
+  };
+}; // Action creator to clear star
+
+
+var clearedStar = function clearedStar() {
+  return {
+    type: CLEAR_STAR
   };
 }; // Thunk to search star by name
 
@@ -1659,7 +1705,13 @@ var getStar = function getStar(starId) {
       return _ref2.apply(this, arguments);
     };
   }();
-}; // Function to get birthday
+}; // Dispatch function to clear singleStar
+
+var clearStar = function clearStar() {
+  return function (dispatch) {
+    dispatch(clearedStar());
+  };
+}; // Helper function to get birthday
 
 var getBirthday = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(starId) {
@@ -1698,6 +1750,7 @@ var getBirthday = /*#__PURE__*/function () {
   };
 }(); // Default state
 
+
 var defaultState = {
   searchResults: [],
   singleStar: null
@@ -1716,6 +1769,11 @@ var defaultState = {
     case GET_STAR:
       return _objectSpread(_objectSpread({}, state), {}, {
         singleStar: action.star
+      });
+
+    case CLEAR_STAR:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        singleStar: null
       });
 
     default:

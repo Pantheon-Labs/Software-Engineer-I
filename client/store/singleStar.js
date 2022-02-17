@@ -4,8 +4,9 @@ import axios from "axios";
  * Action creators, thunks, and reducer for individual celebrities
  */
 
-const GET_STAR = "GET_STAR";
 const SEARCH_STAR = "SEARCH_STAR";
+const GET_STAR = "GET_STAR";
+const CLEAR_STAR = "CLEAR_STAR";
 
 // Search for actor by name
 const searchedStar = (searchResults) => {
@@ -20,6 +21,13 @@ const gotStar = (star) => {
   return {
     type: GET_STAR,
     star,
+  };
+};
+
+// Action creator to clear star
+const clearedStar = () => {
+  return {
+    type: CLEAR_STAR,
   };
 };
 
@@ -71,8 +79,15 @@ export const getStar = (starId) => {
   };
 };
 
-// Function to get birthday
-export const getBirthday = async (starId) => {
+// Dispatch function to clear singleStar
+export const clearStar = () => {
+  return (dispatch) => {
+    dispatch(clearedStar());
+  };
+};
+
+// Helper function to get birthday
+const getBirthday = async (starId) => {
   try {
     const res = await axios.get("/api/person/birthday", {
       params: { starId },
@@ -97,6 +112,8 @@ export default function (state = defaultState, action) {
       return { ...state, searchResults: action.searchResults };
     case GET_STAR:
       return { ...state, singleStar: action.star };
+    case CLEAR_STAR:
+      return { ...state, singleStar: null };
     default:
       return state;
   }

@@ -10,7 +10,7 @@ import SearchResults from "./SearchResults";
 import SingleStar from "./SingleStar";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
-import { searchStar, getStar } from "../store/singleStar";
+import { searchStar, getStar, clearStar } from "../store/singleStar";
 
 // Styles for homepage
 const styles = {
@@ -62,16 +62,21 @@ class Home extends React.Component {
   }
 
   // Handle click if user clicks on star
-  handleClick(star) {
-    this.props.getStar(star.id);
+  async handleClick(star) {
+    try {
+      await this.props.getStar(star.id);
 
-    // Open SingleStar modal
-    this.setState({ showSingleStar: true });
+      // Open SingleStar modal
+      this.setState({ showSingleStar: true });
+    } catch (err) {
+      this.setState(err);
+    }
   }
 
   // Handle closing single star modal
   handleClose() {
     this.setState({ showSingleStar: false });
+    this.props.clearStar();
   }
 
   // Search function on input
@@ -167,6 +172,7 @@ const mapDispatch = (dispatch) => {
     getPopular: () => dispatch(getPopular()),
     searchStar: (starName) => dispatch(searchStar(starName)),
     getStar: (starId) => dispatch(getStar(starId)),
+    clearStar: () => dispatch(clearStar()),
   };
 };
 
