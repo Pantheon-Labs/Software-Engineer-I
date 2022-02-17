@@ -2,6 +2,8 @@ import {
   Flex,
   FormControl,
   FormHelperText,
+  Grid,
+  GridItem,
   Input,
   Link,
   List,
@@ -99,13 +101,14 @@ const App = () => {
   ) : isResultsLoading ? (
     <p>Loading results...</p>
   ) : (
-    <div>
-      <ul>
-        {results?.labels.map((item: any) => (
-          <li>{JSON.stringify(item)}</li>
-        ))}
-      </ul>
-    </div>
+    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
+      {results?.labels.map((item: any) => (
+        <GridItem mt={4} w="100%" h="10" bg="gray.50">
+          <h5></h5>
+          <p></p>
+        </GridItem>
+      ))}
+    </Grid>
   );
 
   return (
@@ -138,7 +141,7 @@ const App = () => {
               accept={ALLOWED_FILE_TYPES.join(", ")}
             />
             <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
-            {fileId !== "" && fileId ? (
+            {results && !isResultsError && !isResultsLoading ? (
               <Link
                 mb={8}
                 color="blue.500"

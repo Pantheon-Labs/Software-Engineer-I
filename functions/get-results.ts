@@ -41,7 +41,7 @@ export const main = async (
 
     const result = await ddbClient.send(new GetCommand(params));
 
-    if (!result.Item) {
+    if (!result.Item || !result.Item?.labels) {
       return {
         statusCode: 404,
         body: JSON.stringify({
@@ -51,16 +51,30 @@ export const main = async (
     }
 
     // So we don't have to do it in the FE
-    const cleanedItem = {
+    const parsedItem = {
       ...result.Item,
       labels: JSON.parse(result.Item.labels),
     };
+
+    // TODO move this to another lambda function after the results
+    // @ts-ignore
+    const cleanedItem = parsedItem.labels.map((item) =>
+      item.map(
+        // @ts-ignore
+        (subItem) =>
+          // @ts-ignore
+          (labels[subItem["Name"]] = {
+            Confidence: subItem["Confidence"],
+            ...subItem["translationResults"],
+          })
+      )
+    );
     return {
       statusCode: 200,
       body: JSON.stringify(cleanedItem),
     };
   } catch (err) {
-    console.log("Error creating presigned URL", err);
+    console.log("Error creating results", err);
     return {
       statusCode: 500, // TODO correct error code from sdk
       body: JSON.stringify({
