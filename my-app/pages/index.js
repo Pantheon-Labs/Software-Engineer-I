@@ -4,31 +4,39 @@ import styles from '../styles/Home.module.css'
 import axios from "axios";
 import { useEffect, useState } from 'react';
 import Card from '../Components/Card';
+import PageNav from '../Components/PageNav';
 
 export default function Home() {
-	const [characters, setCharacters] = useState([])
+	const [characters, setCharacters] = useState([]);
+	const [pageInfo, setPageInfo] = useState([]);
 
-	//var axios = require("axios").default;
+	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?name=Rick");
 
 	var options = {
 		method: 'GET',
-		url: 'https://rickandmortyapi.com/api/character',
+		url: 'https://rickandmortyapi.com/api/character/?name=Rick',
 	};
 
 	useEffect(() => {
-		/*axios.request(options).then(function (response) {
-			console.log(response.data);
-			setCharacters(JSON.parse(JSON.stringify(response.data.results)));
-		}).catch(function (error) {
-			console.error(error);
-		});*/
 		const requestData = async () => {
-			const axiosData = await axios.get("https://rickandmortyapi.com/api/character");
-			setCharacters(axiosData.data.results);
+			const axiosData = await axios.get(characterUrl)
+				.then(function (res) {
+					setCharacters(res.data.results);
+					setPageInfo(res.data.info)
+					console.log("Success " + res.data);
+				})
+				.catch(function (res) {
+					if (res instanceof Error) {
+						console.log("Failed " + res.message);
+					} else {
+						console.log("Didn't fail " + res.data);
+					}
+				});
 
+			//setCharacterUrl(axiosData.data.info.next)
 		}
 		return requestData();
-	}, [setCharacters]);
+	}, [characterUrl]);
 
 	let char = characters[0]
 	console.log("characters from " + characters);
@@ -43,13 +51,14 @@ export default function Home() {
 			</Head>
 
 			<main className={styles.main}>
-				{//characters.length > 0 && (
+				<PageNav nav={pageInfo} setCharacterUrl={setCharacterUrl} />
+				{/*characters.length > 0 && (
 					characters.map((keyName, i) => {
 						console.log(`keyName=${keyName} id=${i}`);
 						`<div key=${i}>${characters[i].name}</div>`
 					}
 					//)
-				)}
+				)*/}
 				<Card character={characters} />
 
 				<div className={styles.grid}>
