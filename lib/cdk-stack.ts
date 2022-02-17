@@ -271,6 +271,18 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
+    API.addRoutes({
+      path: "/results",
+      methods: [HttpMethod.GET],
+      integration: new HttpLambdaIntegration(
+        `${process.env.NODE_ENV}-get-results-integration`,
+        getResultsFunction,
+        {
+          payloadFormatVersion: PayloadFormatVersion.VERSION_2_0,
+        }
+      ),
+    });
+
     /**
      * STEPS FOR STATE MACHINE
      */
@@ -527,6 +539,7 @@ export class CdkStack extends cdk.Stack {
 
     // TODO some permissions might be too broad
     TABLE.grantWriteData(StateMachine);
+    TABLE.grantReadData(getResultsFunction);
     BUCKET.grantRead(StateMachine, "images/*");
     BUS.grantPutEventsTo(fileUploadProcessor);
     BUCKET.grantReadWrite(audioProcessor);
