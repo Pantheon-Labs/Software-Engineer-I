@@ -5,7 +5,7 @@ class Home extends Component {
         return (
             <div>
                 <h3>About me</h3>
-                <p>My name is Abraham Diaz and I am a graduate from Flatiron</p>
+                <p>My name is Abraham Diaz and I am a graduate from Flatiron. I was diagnosed with Autism and ADHD as a child but that didn't stop me from doing what learning how to code.</p>
             </div>
         )
     }
