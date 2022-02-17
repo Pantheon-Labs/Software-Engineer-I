@@ -1,19 +1,25 @@
-import { Box } from '@chakra-ui/react';
+import { Box, Center, Text } from '@chakra-ui/react';
 
-const NoteCard = ({ note }) => {
+const NoteCard = ({ note, selectNote }) => {
 	return (
 		<>
 			<Box
+				onClick={() => {
+					selectNote(note);
+				}}
 				minH="10vh"
-				minW="45vh"
+				minW="50vh"
 				bg={'theme.secondary'}
 				_hover={{
-					background: '#D8E2DC',
+					background: 'theme.background',
 					color: 'black',
-					boxShadow: '5px 5px 10px',
 				}}
 			>
-				<h1>{note.title}</h1>
+				<Center w="100%" h="100%">
+					<Text fontSize="1xl" color="black">
+						{note.title}
+					</Text>
+				</Center>
 			</Box>
 		</>
 	);

@@ -1,15 +1,26 @@
-import { Center, Flex, VStack } from '@chakra-ui/react';
+import { Center, Flex, Spacer, VStack } from '@chakra-ui/react';
 import NoteCard from './NoteCard';
+import { Text } from '@chakra-ui/react';
 
-const NoteCardContainer = ({ notes }) => {
+const NoteCardContainer = ({ notes, selectNote }) => {
 	return (
 		<>
 			<Flex>
 				<VStack>
-					<h1>Number of notes: {notes.numberOfHits}</h1>
+					<Text color="black" fontSize="3xl">
+						Notes
+					</Text>
 					{notes.data.map((note) => {
-						return <NoteCard key={note.id} note={note} />;
+						return (
+							<NoteCard
+								selectNote={selectNote}
+								key={note.id}
+								note={note}
+							/>
+						);
 					})}
+
+					{/* <Text>{notes.numberOfHits}</Text> */}
 				</VStack>
 			</Flex>
 		</>

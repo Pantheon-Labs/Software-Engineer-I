@@ -2,6 +2,7 @@ import { Box, Center, Flex, Grid, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import './App.css';
 import NoteCardContainer from './components/NoteCardContainer';
+import SelectedNoteContainer from './components/SelectedNoteContainer';
 
 const url = 'http://localhost:5000/api/v1/notes';
 
@@ -19,16 +20,26 @@ function App() {
 	};
 	const [notes, setNotes] = useState(null);
 	const [error, setError] = useState(null);
+	const [selectedNote, setSelectedNote] = useState(null);
 
 	useEffect(() => {
 		fetchNotes(url);
 	}, []);
+
+	const selectNote = (note) => {
+		setSelectedNote(note);
+	};
 	return (
 		<Grid minH="100vh">
 			<Flex color="white">
 				<Box w="50vh" bg="theme.primary" boxShadow="10px 10px">
 					<Center>
-						{notes && <NoteCardContainer notes={notes} />}
+						{notes && (
+							<NoteCardContainer
+								selectNote={selectNote}
+								notes={notes}
+							/>
+						)}
 						{error && (
 							<h1>
 								Oops!! There was a problem grabbing your notes
@@ -38,7 +49,9 @@ function App() {
 				</Box>
 
 				<Box flex="1" bg="theme.background">
-					<Text>Box 3</Text>
+					{selectedNote && (
+						<SelectedNoteContainer note={selectedNote} />
+					)}
 				</Box>
 			</Flex>
 		</Grid>
