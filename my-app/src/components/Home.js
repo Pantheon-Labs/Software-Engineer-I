@@ -1,6 +1,10 @@
+import AirbnbExample from "./Event"
+
 function Home() {
     return (
-        <>s</>
+        <>
+            
+        </>
     )
 }
 
