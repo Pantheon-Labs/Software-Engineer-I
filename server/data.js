@@ -16,7 +16,7 @@ const data = [
 		title: 'Job Hunt',
 		list: true,
 		content: [
-			'Work on Pantheon Labs Project',
+			'Work on Pantheon Labs Project and submit it ASAP!!!',
 			'continue implementing auth into the destop variant of the bike GPS app',
 			'add more functionality to the React Native side of the bike GPS app',
 		],
@@ -29,9 +29,10 @@ const data = [
 	},
 	{
 		id: 4,
-		title: 'Bike Thoughs',
+		title: 'Bike Thoughts',
 		list: false,
-		content: 'Buy new terravail tires for spring!',
+		content:
+			'Gotta keep training over hilly terrain as much as possible. Start riding with extra gear and weight on the bike so that you can prepare to ride 100 miles from NYC to Philadelphia.',
 	},
 	{
 		id: 5,
@@ -44,9 +45,10 @@ const data = [
 	},
 	{
 		id: 6,
-		title: 'Test Note',
+		title: 'Who is Sam Bencivengo?',
 		list: false,
-		content: 'This is a test note file, hopefully this works!',
+		content:
+			'...and why did I build this simulation of my notes app? I wanted to whip up something clean that would (hopefully) be impressive, an example of something practical, and would tell you about who I am',
 	},
 ];
 

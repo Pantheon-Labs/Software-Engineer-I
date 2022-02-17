@@ -9,7 +9,7 @@ const colors = {
 	theme: {
 		primary: '#E5E5E5',
 		secondary: '#E5E5E5',
-		background: '#FFFFFF',
+		background: '#14213D',
 		paper: '#F8EDEB',
 		selected: '#e85d04',
 	},

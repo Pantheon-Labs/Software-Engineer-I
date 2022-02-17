@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Grid, Text } from '@chakra-ui/react';
+import { Box, Center, Flex, Grid } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import './App.css';
 import NoteCardContainer from './components/NoteCardContainer';
@@ -12,6 +12,8 @@ function App() {
 			const res = await fetch(url);
 			const data = await res.json();
 			setNotes(data);
+			setSelectedNote(data.data[5]);
+			console.log(data);
 			return data;
 		} catch (error) {
 			console.log(error);
