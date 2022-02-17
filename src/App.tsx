@@ -6,6 +6,7 @@ import {
   Grid,
   GridItem,
   Input,
+  Spinner,
   VStack,
   HStack,
   Link,
@@ -109,6 +110,7 @@ const App = () => {
     <Image mt={2} alt="Your uploaded file" src={fileURL} />
   );
 
+  const resultsLoaded = results && !isResultsError && !isResultsLoading;
   const Results = isResultsError ? (
     <p>An error ocurred </p>
   ) : isResultsLoading ? (
@@ -152,7 +154,7 @@ const App = () => {
 
   return (
     <>
-      <Flex>
+      <Flex align="center" justify="center">
         <Flex
           align="center"
           justify="center"
@@ -190,7 +192,7 @@ const App = () => {
               accept={ALLOWED_FILE_TYPES.join(", ")}
             />
             <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
-            {results && !isResultsError && !isResultsLoading ? (
+            {resultsLoaded ? (
               <Link
                 mb={12}
                 color="blue.500"
@@ -204,17 +206,32 @@ const App = () => {
             {UserImage}
           </FormControl>
         </Flex>
-        <Flex
-          border="2px"
-          align="start"
-          justify="start"
-          h="100%"
-          w="50%"
-          m={20}
-          p={2}
-        >
-          <VStack w="100%">{Results}</VStack>
-        </Flex>
+        {resultsLoaded ? (
+          <Flex
+            border="2px"
+            align="start"
+            justify="start"
+            h="100%"
+            w="50%"
+            m={20}
+            p={2}
+          >
+            <VStack w="100%">{Results}</VStack>
+          </Flex>
+        ) : (
+          <Flex align="center" justify="center" h="100%" w="50%" m={20} p={2}>
+            {isResultsLoading ? (
+              <Spinner
+                thickness="4px"
+                emptyColor="gray.200"
+                color="blue.500"
+                size="xl"
+              />
+            ) : (
+              <Heading>&larr;Upload a picture :)</Heading>
+            )}
+          </Flex>
+        )}
       </Flex>
     </>
   );
