@@ -30,7 +30,6 @@ export const main = async (
 
   try {
     // TODO types
-
     const params: GetCommandInput = {
       TableName: process.env.TABLE_NAME,
       Key: {
@@ -41,7 +40,11 @@ export const main = async (
 
     const result = await ddbClient.send(new GetCommand(params));
 
+    // If the labels haven't been added we just return not found
+    //  as that is handled as a loading state.. TODO bad practice lol
+    // eventually consistent distributed systems yada yada. IDC.
     if (!result.Item || !result.Item?.labels) {
+      console.log("Missing data!", result);
       return {
         statusCode: 404,
         body: JSON.stringify({
@@ -50,28 +53,32 @@ export const main = async (
       };
     }
 
-    // So we don't have to do it in the FE
     const parsedItem = {
       ...result.Item,
-      labels: JSON.parse(result.Item.labels),
+      labels: JSON.parse(result.Item?.labels),
     };
 
+    console.log("Parsed item", parsedItem, JSON.stringify(parsedItem));
     // TODO move this to another lambda function after the results
+    // Removes some boilerplate and duplicate info
+    let finalResult = {};
     // @ts-ignore
-    const cleanedItem = parsedItem.labels.map((item) =>
+    parsedItem.labels.map((item) =>
       item.map(
         // @ts-ignore
-        (subItem) =>
+        (subItem) => {
           // @ts-ignore
-          (labels[subItem["Name"]] = {
+          finalResult[subItem["Name"]] = {
             Confidence: subItem["Confidence"],
             ...subItem["translationResults"],
-          })
+          };
+          return null;
+        }
       )
     );
     return {
       statusCode: 200,
-      body: JSON.stringify(cleanedItem),
+      body: JSON.stringify(finalResult),
     };
   } catch (err) {
     console.log("Error creating results", err);

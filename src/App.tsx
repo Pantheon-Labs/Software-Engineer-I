@@ -104,7 +104,7 @@ const App = () => {
     <Grid templateColumns="repeat(3, 1fr)" gap={6}>
       {results?.labels.map((item: any) => (
         <GridItem mt={4} w="100%" h="10" bg="gray.50">
-          <h5></h5>
+          <h5>Beans</h5>
           <p></p>
         </GridItem>
       ))}
