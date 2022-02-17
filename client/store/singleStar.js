@@ -34,12 +34,19 @@ export const searchStar = (starName) => {
       let birthday = "uknown";
 
       for (let i = 0; i < res.data.length; i++) {
-        birthday = await getBirthday(res.data[i].id);
+        try {
+          birthday = await getBirthday(res.data[i].id);
 
-        res.data[i] = {
-          ...res.data[i],
-          birthday: birthday ? birthday : "unknown",
-        };
+          res.data[i] = {
+            ...res.data[i],
+            birthday: birthday ? birthday : "unknown",
+          };
+        } catch (err) {
+          res.data[i] = {
+            ...res.data[i],
+            birthday: "unknown",
+          };
+        }
       }
 
       dispatch(searchedStar(res.data));
@@ -49,8 +56,20 @@ export const searchStar = (starName) => {
   };
 };
 
-// Call to api and then dispatch
-export const getStar = (starId) => {};
+// Single star call to api and then dispatch
+export const getStar = (starId) => {
+  return async (dispatch) => {
+    try {
+      const res = await axios.get("/api/person", {
+        params: { starId },
+      });
+
+      dispatch(gotStar(res));
+    } catch (err) {
+      throw err;
+    }
+  };
+};
 
 // Function to get birthday
 export const getBirthday = async (starId) => {
@@ -68,6 +87,7 @@ export const getBirthday = async (starId) => {
 // Default state
 const defaultState = {
   searchResults: [],
+  singleStar: null,
 };
 
 // Reducer contains all information from star API call
@@ -76,7 +96,7 @@ export default function (state = defaultState, action) {
     case SEARCH_STAR:
       return { ...state, searchResults: action.searchResults };
     case GET_STAR:
-      return action.star;
+      return { ...state, singleStar: action.star };
     default:
       return state;
   }

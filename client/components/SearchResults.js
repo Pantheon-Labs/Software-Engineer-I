@@ -38,6 +38,7 @@ class SearchResults extends React.Component {
 
   // Function for when search results are clicked
   onClick(star) {
+    this.props.handleShow();
     console.log(`clicked on ${star.name}`);
   }
 

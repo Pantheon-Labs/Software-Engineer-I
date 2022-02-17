@@ -289,9 +289,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 /* harmony import */ var _SearchResults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchResults */ "./client/components/SearchResults.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
-/* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
+/* harmony import */ var _SingleStar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SingleStar */ "./client/components/SingleStar.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
+/* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -315,6 +316,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
 
 
 
@@ -357,9 +359,12 @@ var Home = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.state = {
       searchInput: "",
-      status: "waiting"
+      status: "waiting",
+      showSingleStar: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleShow = _this.handleShow.bind(_assertThisInitialized(_this));
+    _this.handleClose = _this.handleClose.bind(_assertThisInitialized(_this));
     _this.search = _this.search.bind(_assertThisInitialized(_this));
     return _this;
   } // Get popular searches after the component mounts
@@ -375,6 +380,22 @@ var Home = /*#__PURE__*/function (_React$Component) {
     key: "handleChange",
     value: function handleChange(evt) {
       this.setState(_defineProperty({}, evt.target.name, evt.target.value));
+    } // Handle if single star modal is showing or not
+
+  }, {
+    key: "handleShow",
+    value: function handleShow() {
+      this.setState({
+        showSingleStar: true
+      });
+    } // Handle closing single star modal
+
+  }, {
+    key: "handleClose",
+    value: function handleClose() {
+      this.setState({
+        showSingleStar: false
+      });
     } // Search function on input
 
   }, {
@@ -427,7 +448,12 @@ var Home = /*#__PURE__*/function (_React$Component) {
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
           className: "text-center"
         }, star.name));
-      })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+      })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        handleShow: this.handleShow
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SingleStar__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        handleClose: this.handleClose,
+        show: this.state.showSingleStar
+      }));
     }
   }]);
 
@@ -444,15 +470,15 @@ var mapState = function mapState(state) {
 var mapDispatch = function mapDispatch(dispatch) {
   return {
     getPopular: function getPopular() {
-      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_4__["getPopular"])());
+      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_5__["getPopular"])());
     },
     searchStar: function searchStar(starName) {
-      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_5__["searchStar"])(starName));
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_6__["searchStar"])(starName));
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapState, mapDispatch)(Home));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapState, mapDispatch)(Home));
 
 /***/ }),
 
@@ -623,6 +649,7 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
   _createClass(SearchResults, [{
     key: "onClick",
     value: function onClick(star) {
+      this.props.handleShow();
       console.log("clicked on ".concat(star.name));
     }
   }, {
@@ -665,6 +692,87 @@ var mapState = function mapState(state) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapState)(SearchResults));
+
+/***/ }),
+
+/***/ "./client/components/SingleStar.js":
+/*!*****************************************!*\
+  !*** ./client/components/SingleStar.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SingleStar; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+ // Single Star styles
+
+var styles = {
+  modal: {
+    positionTop: "20%"
+  }
+};
+/*
+ * Single star component as modal to display when search is clicked
+ */
+
+var SingleStar = /*#__PURE__*/function (_React$Component) {
+  _inherits(SingleStar, _React$Component);
+
+  var _super = _createSuper(SingleStar);
+
+  function SingleStar(props) {
+    _classCallCheck(this, SingleStar);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(SingleStar, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
+        style: style.modal,
+        show: this.props.show,
+        onHide: this.props.handleClose
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
+        closeButton: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, "Modal heading")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, "Woohoo, you're reading this text in a modal!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        variant: "secondary",
+        onClick: this.props.handleClose
+      }, "Close")));
+    }
+  }]);
+
+  return SingleStar;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
 
 /***/ }),
 
@@ -1437,59 +1545,108 @@ var searchStar = function searchStar(starName) {
 
             case 6:
               if (!(i < res.data.length)) {
-                _context.next = 14;
+                _context.next = 20;
                 break;
               }
 
-              _context.next = 9;
+              _context.prev = 7;
+              _context.next = 10;
               return getBirthday(res.data[i].id);
 
-            case 9:
+            case 10:
               birthday = _context.sent;
               res.data[i] = _objectSpread(_objectSpread({}, res.data[i]), {}, {
                 birthday: birthday ? birthday : "unknown"
               });
+              _context.next = 17;
+              break;
 
-            case 11:
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](7);
+              res.data[i] = _objectSpread(_objectSpread({}, res.data[i]), {}, {
+                birthday: "unknown"
+              });
+
+            case 17:
               i++;
               _context.next = 6;
               break;
 
-            case 14:
+            case 20:
               dispatch(searchedStar(res.data));
-              _context.next = 20;
+              _context.next = 26;
               break;
 
-            case 17:
-              _context.prev = 17;
-              _context.t0 = _context["catch"](0);
-              throw _context.t0;
+            case 23:
+              _context.prev = 23;
+              _context.t1 = _context["catch"](0);
+              throw _context.t1;
 
-            case 20:
+            case 26:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 17]]);
+      }, _callee, null, [[0, 23], [7, 14]]);
     }));
 
     return function (_x) {
       return _ref.apply(this, arguments);
     };
   }();
-}; // Call to api and then dispatch
+}; // Single star call to api and then dispatch
 
-var getStar = function getStar(starId) {}; // Function to get birthday
+var getStar = function getStar(starId) {
+  return /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/person", {
+                params: {
+                  starId: starId
+                }
+              });
+
+            case 3:
+              res = _context2.sent;
+              dispatch(gotStar(res));
+              _context2.next = 10;
+              break;
+
+            case 7:
+              _context2.prev = 7;
+              _context2.t0 = _context2["catch"](0);
+              throw _context2.t0;
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 7]]);
+    }));
+
+    return function (_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+}; // Function to get birthday
 
 var getBirthday = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(starId) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(starId) {
     var res;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            _context3.prev = 0;
+            _context3.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/person/birthday", {
               params: {
                 starId: starId
@@ -1497,29 +1654,30 @@ var getBirthday = /*#__PURE__*/function () {
             });
 
           case 3:
-            res = _context2.sent;
-            return _context2.abrupt("return", res.data);
+            res = _context3.sent;
+            return _context3.abrupt("return", res.data);
 
           case 7:
-            _context2.prev = 7;
-            _context2.t0 = _context2["catch"](0);
-            throw _context2.t0;
+            _context3.prev = 7;
+            _context3.t0 = _context3["catch"](0);
+            throw _context3.t0;
 
           case 10:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, null, [[0, 7]]);
+    }, _callee3, null, [[0, 7]]);
   }));
 
-  return function getBirthday(_x2) {
-    return _ref2.apply(this, arguments);
+  return function getBirthday(_x3) {
+    return _ref3.apply(this, arguments);
   };
 }(); // Default state
 
 var defaultState = {
-  searchResults: []
+  searchResults: [],
+  singleStar: null
 }; // Reducer contains all information from star API call
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
@@ -1533,7 +1691,9 @@ var defaultState = {
       });
 
     case GET_STAR:
-      return action.star;
+      return _objectSpread(_objectSpread({}, state), {}, {
+        singleStar: action.star
+      });
 
     default:
       return state;

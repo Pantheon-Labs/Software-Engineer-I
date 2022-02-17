@@ -7,6 +7,7 @@ import {
   FormControl,
 } from "react-bootstrap";
 import SearchResults from "./SearchResults";
+import SingleStar from "./SingleStar";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
 import { searchStar } from "../store/singleStar";
@@ -39,9 +40,12 @@ class Home extends React.Component {
     this.state = {
       searchInput: "",
       status: "waiting",
+      showSingleStar: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClose = this.handleClose.bind(this);
     this.search = this.search.bind(this);
   }
 
@@ -55,6 +59,16 @@ class Home extends React.Component {
     this.setState({
       [evt.target.name]: evt.target.value,
     });
+  }
+
+  // Handle if single star modal is showing or not
+  handleShow() {
+    this.setState({ showSingleStar: true });
+  }
+
+  // Handle closing single star modal
+  handleClose() {
+    this.setState({ showSingleStar: false });
   }
 
   // Search function on input
@@ -118,7 +132,14 @@ class Home extends React.Component {
           </Container>
         )}
 
-        {this.props.searchResults.length > 0 && <SearchResults />}
+        {this.props.searchResults.length > 0 && (
+          <SearchResults handleShow={this.handleShow} />
+        )}
+
+        <SingleStar
+          handleClose={this.handleClose}
+          show={this.state.showSingleStar}
+        />
       </Container>
     );
   }
