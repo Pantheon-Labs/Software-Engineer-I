@@ -175,7 +175,7 @@ const App = () => {
               loadingText="Uploading..."
               onClick={() => fileInputRef?.current.click()}
             >
-              Upload an image
+              Upload a picture
             </Button>
             <Input
               ref={fileInputRef}
