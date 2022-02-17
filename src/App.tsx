@@ -80,7 +80,7 @@ const App = () => {
     console.log("Validating", files);
 
     if (!files || files.length < 1) {
-      return handleError("File is required", e);
+      return;
     }
 
     if (files.length > 1) {
@@ -110,6 +110,11 @@ const App = () => {
     <Image mt={2} alt="Your uploaded file" src={fileURL} />
   );
 
+  const playAudio = (link: string) => {
+    const audio = new Audio(link);
+
+    audio.play();
+  };
   const resultsLoaded = results && !isResultsError && !isResultsLoading;
   const Results = isResultsError ? (
     <p>An error ocurred </p>
@@ -140,9 +145,16 @@ const App = () => {
                       : detail.TargetLanguageCode.toUpperCase()
                   }.svg`}
                 />
-                <Button leftIcon={<Icon w={8} h={8} as={GiSpeaker} />}>
+                <Button
+                  onClick={() =>
+                    playAudio(
+                      `https://development-pantheon-assets.s3.amazonaws.com/audio/${result.label}/${detail.TargetLanguageCode}`
+                    )
+                  }
+                  leftIcon={<Icon w={8} h={8} as={GiSpeaker} />}
+                >
                   {detail.TranslatedText}
-                </Button>
+                </Button>{" "}
               </Box>
             ))}
           </HStack>
@@ -211,6 +223,7 @@ const App = () => {
             border="2px"
             align="start"
             justify="start"
+            rounded={"lg"}
             h="100%"
             w="50%"
             m={20}

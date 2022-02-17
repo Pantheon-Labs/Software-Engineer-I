@@ -80,6 +80,7 @@ export const main = async (event: AudioProcessingEvent) => {
             Key: S3Key,
             Body,
             ContentType: result.ContentType,
+            ACL: "public-read",
           };
 
           await s3Client.send(new PutObjectCommand(params));

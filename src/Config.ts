@@ -4,7 +4,7 @@ export const NANOID_ALPHABET = "1234567890abcdefghijklmnopqrstuvwxyz";
 export const ALLOWED_FILE_TYPES = [".jpeg", ".png", ".jpg"];
 
 // How many labels should Rekognition return
-export const MAX_LABELS = 5;
+export const MAX_LABELS = 10;
 
 // https://docs.aws.amazon.com/polly/latest/dg/SupportedLanguage.html
 export enum BASE_LANGUAGE_CODES {

@@ -71,7 +71,6 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-pantheon-assets`,
       {
         enforceSSL: true,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         bucketName: `${process.env.NODE_ENV}-pantheon-assets`,
         versioned: true,
         cors: [
@@ -530,6 +529,7 @@ export class CdkStack extends cdk.Stack {
     BUCKET.grantRead(StateMachine, "images/*");
     BUS.grantPutEventsTo(fileUploadProcessor);
     BUCKET.grantReadWrite(audioProcessor);
+    BUCKET.grantPutAcl(audioProcessor);
 
     /**
      * OUTPUTS
