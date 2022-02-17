@@ -157,7 +157,7 @@ const App = () => {
 
   return (
     <>
-      <Flex align="center" justify="center">
+      <Flex align="start" justify="center">
         <Flex
           align="center"
           justify="center"

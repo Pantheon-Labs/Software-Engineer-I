@@ -1,9 +1,11 @@
 import useSWR from "swr";
+import useSWRImmutable from 'swr/immutable'
+
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function useResults(API_URL: string, fileId: string) {
   const shouldFetch = API_URL && fileId !== "" && fileId;
-  const { data, error } = useSWR(
+  const { data, error } = useSWRImmutable(
     shouldFetch && API_URL + "/results?fileId=" + fileId,
     fetcher,
     {
