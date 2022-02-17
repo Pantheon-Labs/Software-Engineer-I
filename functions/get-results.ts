@@ -1,13 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
-import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
-import { s3Client } from "../awsClients/s3Client";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { customAlphabet } from "nanoid";
-import { ALLOWED_FILE_TYPES, NANOID_ALPHABET } from "../src/Config";
 import { GetCommandInput, GetCommand } from "@aws-sdk/lib-dynamodb";
-
 import { ddbClient } from "../awsClients/ddbClient";
-const nanoid = customAlphabet(NANOID_ALPHABET);
 
 export const main = async (
   event: APIGatewayProxyEventV2
@@ -52,7 +45,7 @@ export const main = async (
       return {
         statusCode: 404,
         body: JSON.stringify({
-          message: `File ${fileId} not found`,
+          message: `File '${fileId}' not found`,
         }),
       };
     }

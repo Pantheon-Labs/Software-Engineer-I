@@ -50,18 +50,15 @@ describe("API", () => {
       const { status, data } = await axios.post(API_URL + "signed-url", {
         fileType,
       });
-      try {
-        expect(status).toBe(201);
-        expect(data).toEqual(
-          expect.objectContaining({
-            message: "Saul Goodman!",
-            preSignedUrl: expect.any(String), // TODO string containing bucket url
-            fileId: expect.any(String),
-          })
-        );
-      } catch (error: any) {
-        console.error(error.response);
-      }
+
+      expect(status).toBe(201);
+      expect(data).toEqual(
+        expect.objectContaining({
+          message: "Saul Goodman!",
+          preSignedUrl: expect.any(String), // TODO string containing bucket url
+          fileId: expect.any(String),
+        })
+      );
     }
   });
 
@@ -78,13 +75,8 @@ describe("API", () => {
       const ourFile = allFiles.find((file) => file.includes(fileType));
       const file = fs.readFileSync(`./testFiles/good/${ourFile}`);
 
-      try {
-        const { status } = await axios.put(data.preSignedUrl, file);
-        expect(status).toBe(200);
-      } catch (error: any) {
-        // todo types :(
-        console.error(error.response);
-      }
+      const { status } = await axios.put(data.preSignedUrl, file);
+      expect(status).toBe(200);
     }
   });
 
@@ -114,7 +106,6 @@ describe("API", () => {
         })
       );
     } catch (error: any) {
-      console.error(error);
       expect(error["$metadata"].httpStatusCode).toBe(404);
     }
   });
@@ -125,7 +116,9 @@ describe("API", () => {
       await axios.get(API_URL + "results?fileId=");
     } catch (error: any) {
       expect(error.response.status).toBe(400);
-      expect(error.response.data.message).toBe("Missing 'fileId' query param");
+      expect(error.response.data.message).toBe(
+        "Missing 'fileId' in query params"
+      );
     }
   });
 
@@ -135,21 +128,23 @@ describe("API", () => {
       await axios.get(API_URL + "results?fileId=beans");
     } catch (error: any) {
       expect(error.response.status).toBe(404);
-      expect(error.data.message).toBe(`File 'beans' not found`);
+      expect(error.response.data.message).toBe(`File 'beans' not found`);
     }
   });
   it("returns file process data", async () => {
     expect.assertions(2);
-    const file = fs.readdirSync("./testFiles/good/file_1.png");
+    const file = fs.readFileSync("./testFiles/good/file_1.png");
 
     const { data } = await axios.post(API_URL + "signed-url", {
       fileType: ".png",
     });
 
+    console.log("Returning data", data);
     // Upload file
-    const result = await axios.put(data.preSignedUrl, file);
+    await axios.put(data.preSignedUrl, file);
 
-    const { fileId } = result.data;
+    const { fileId } = data;
+    await new Promise((r) => setTimeout(r, 5000));
 
     const final = await axios.get(API_URL + `results?fileId=${fileId}`);
     expect(final.status).toBe(200);
