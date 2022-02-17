@@ -26,15 +26,18 @@ const NoteCard = ({ note, selectNote, selectedNote }) => {
 				minH="13vh"
 				minW="45vh"
 				bg={bg}
-
-				// _hover={{
-				// 	background: 'theme.background',
-				// 	color: 'black',
-				// 	borderColor: 'theme.text',
-				// }}
+				borderRadius="20px"
+				_hover={{
+					background:
+						note === selectedNote
+							? 'theme.selected'
+							: 'theme.background',
+					color: 'black',
+					borderColor: 'theme.text',
+				}}
 			>
 				{/* <Center w="100%" h="100%"> */}
-				<Box marginLeft="40px" marginTop="25px">
+				<Box marginLeft="40px" marginRight="40px" marginTop="20px">
 					<Text
 						style={{ fontWeight: 800 }}
 						fontSize="1xl"
@@ -43,7 +46,10 @@ const NoteCard = ({ note, selectNote, selectedNote }) => {
 						{note.title}
 					</Text>
 					<Text marginLeft="20px" fontSize="1xl" color={fontColor}>
-						{note.content.slice(0, 30)} ...
+						{note.list
+							? note.content[0].slice(0, 30)
+							: note.content.slice(0, 30)}{' '}
+						...
 					</Text>
 				</Box>
 				{/* </Center> */}

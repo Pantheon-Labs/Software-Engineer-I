@@ -25,7 +25,7 @@ const data = [
 		id: 3,
 		title: 'Birds Spotted Recently',
 		list: true,
-		content: ['1. Blue Jay', '2. Winter Wren', '3. House Finch'],
+		content: [' Blue Jay', 'Winter Wren', 'House Finch'],
 	},
 	{
 		id: 4,
@@ -35,9 +35,12 @@ const data = [
 	},
 	{
 		id: 5,
-		title: 'List of wines I have enjoyed lately...',
+		title: 'List of wines to buy...',
 		list: true,
-		content: 'Ask Jim about that bottle from the other night.',
+		content: [
+			'Ask Jim about that bottle from the other night',
+			'get on board with this whole "natural wine" thing, go find some',
+		],
 	},
 	{
 		id: 6,

@@ -1,7 +1,15 @@
-import { Box, Divider, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Divider,
+	ListIcon,
+	ListItem,
+	Text,
+	UnorderedList,
+} from '@chakra-ui/react';
 
 const SelectedNoteContainer = ({ note }) => {
 	console.log(note);
+
 	return (
 		<>
 			<Box
@@ -13,11 +21,19 @@ const SelectedNoteContainer = ({ note }) => {
 				bg="theme.paper"
 			>
 				<Box style={{ padding: '40px' }}>
-					<Text fontSize="3xl" color="black" marginBottom="20px">
+					<Text fontSize="4xl" color="black" marginBottom="20px">
 						{note.title}
 					</Text>
-					<Text marginLeft="20px" color="black">
-						{note.content}
+					<Text marginLeft="20px" color="black" fontSize={'2xl'}>
+						{note.list
+							? note.content.map((item) => {
+									return (
+										<UnorderedList>
+											<ListItem>{item}</ListItem>
+										</UnorderedList>
+									);
+							  })
+							: note.content}
 					</Text>
 				</Box>
 			</Box>
