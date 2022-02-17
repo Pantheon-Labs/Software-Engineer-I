@@ -1,22 +1,31 @@
 import React from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Image } from "react-bootstrap";
+import { connect } from "react-redux";
 
 // Single Star styles
 const styles = {
   modal: {
-    positionTop: "20%",
+    paddingTop: "20%",
+  },
+  starImage: {
+    height: "5rem",
+    width: "4rem",
+    borderRadius: "10%",
+    objectFit: "cover",
+    objectPosition: "50% 0",
   },
 };
 
 /*
  * Single star component as modal to display when search is clicked
  */
-export default class SingleStar extends React.Component {
+class SingleStar extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
+    const { singleStar } = this.props;
     return (
       <Modal
         style={styles.modal}
@@ -24,9 +33,19 @@ export default class SingleStar extends React.Component {
         onHide={this.props.handleClose}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Just one star</Modal.Title>
+          <Modal.Title>{singleStar.name}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+        <Modal.Body>
+          <Image
+            style={styles.starImage}
+            alt={`Image of ${singleStar.name}`}
+            src={`https://image.tmdb.org/t/p/w200/${singleStar.profile_path}`}
+            onError={(evt) => {
+              evt.target.onError = null;
+              evt.target.src = "./default.png";
+            }}
+          />
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.handleClose}>
             Close
@@ -36,3 +55,11 @@ export default class SingleStar extends React.Component {
     );
   }
 }
+
+const mapState = (state) => {
+  return {
+    singleStar: state.singleStar.singleStar,
+  };
+};
+
+export default connect(mapState)(SingleStar);

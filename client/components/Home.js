@@ -143,10 +143,12 @@ class Home extends React.Component {
           <SearchResults handleClick={this.handleClick} />
         )}
 
-        <SingleStar
-          handleClose={this.handleClose}
-          show={this.state.showSingleStar}
-        />
+        {this.props.singleStar && (
+          <SingleStar
+            handleClose={this.handleClose}
+            show={this.state.showSingleStar}
+          />
+        )}
       </Container>
     );
   }
