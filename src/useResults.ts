@@ -15,13 +15,15 @@ export default function useResults(API_URL: string, fileId: string) {
 
   // 1. item wasn't added to dynamo yet
   // 2. item added, but results haven't returned
-  const dynamoloading =
+  const loading =
     shouldFetch &&
-    (data?.message?.includes("not found") || data?.labels === undefined);
+    (data?.message?.includes("not found") ||
+      data?.message?.includes("not added yet"));
 
+  console.log("Data:", data, "Error:", error);
   return {
     results: data,
-    isResultsLoading: dynamoloading && !error,
+    isResultsLoading: !error && loading,
     isResultsError: error,
   };
 }

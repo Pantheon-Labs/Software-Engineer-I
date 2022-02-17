@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { GetCommandInput, GetCommand } from "@aws-sdk/lib-dynamodb";
 import { ddbClient } from "../awsClients/ddbClient";
@@ -40,15 +41,22 @@ export const main = async (
 
     const result = await ddbClient.send(new GetCommand(params));
 
-    // If the labels haven't been added we just return not found
-    //  as that is handled as a loading state.. TODO bad practice lol
-    // eventually consistent distributed systems yada yada. IDC.
-    if (!result.Item || !result.Item?.labels) {
+    // If the process hasn't started
+    if (!result.Item) {
       console.log("Missing data!", result);
       return {
         statusCode: 404,
         body: JSON.stringify({
           message: `File '${fileId}' not found`,
+        }),
+      };
+    }
+
+    if (!result.Item?.labels) {
+      return {
+        statusCode: 202,
+        body: JSON.stringify({
+          message: `Labels not added yet`,
         }),
       };
     }
@@ -61,20 +69,32 @@ export const main = async (
     console.log("Parsed item", parsedItem, JSON.stringify(parsedItem));
     // TODO move this to another lambda function after the results
     // Removes some boilerplate and duplicate info
-    let finalResult = {};
-    // @ts-ignore
+    let finalResult = [];
     parsedItem.labels.map((item) =>
-      item.map(
-        // @ts-ignore
-        (subItem) => {
-          // @ts-ignore
-          finalResult[subItem["Name"]] = {
-            Confidence: subItem["Confidence"],
-            ...subItem["translationResults"],
-          };
-          return null;
+      item.map((subItem) => {
+        let exists = finalResult.find((obj) => obj?.label === subItem["Name"]);
+        console.log("Exists result", exists);
+        if (!exists) {
+          // Create the item
+          finalResult.push({
+            label: subItem["Name"],
+            confidence: subItem["Confidence"],
+            translations: [],
+          });
+
+          console.log("Final result after push", finalResult);
         }
-      )
+
+        let shouldExist = finalResult.find(
+          (obj) => obj?.label === subItem["Name"]
+        );
+
+        console.log("Adding translations", shouldExist);
+        // Add the new language translations
+        shouldExist.translations.push({ ...subItem["translationResults"] });
+
+        return null;
+      })
     );
     return {
       statusCode: 200,

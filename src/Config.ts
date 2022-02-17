@@ -10,12 +10,12 @@ export const MAX_LABELS = 5;
 export enum BASE_LANGUAGE_CODES {
   SPANISH = "es",
   RUSSIAN = "ru",
-  JAPANESE = "ja",
+  JAPANESE = "ja", // Needs conversion for FE flag
   FRENCH = "fr",
 }
 
 export enum LANGUAGE_CODES {
-  SPANISH = "es-MX",
+  SPANISH = "es-MX", // Needs conversion for FE flag
   RUSSIAN = "ru-RU",
   JAPANESE = "ja-JP",
   FRENCH = "fr-FR",

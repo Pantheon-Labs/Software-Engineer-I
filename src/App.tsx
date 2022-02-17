@@ -1,20 +1,31 @@
 import {
+  Box,
   Flex,
   FormControl,
   FormHelperText,
   Grid,
   GridItem,
   Input,
+  VStack,
   Link,
+  Text,
+  Stack,
   List,
   ListItem,
+  SimpleGrid,
+  Image,
 } from "@chakra-ui/react";
+
+import { Heading } from "@chakra-ui/react";
+
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { ALLOWED_FILE_TYPES } from "./Config";
 import { useRef, useState, useEffect } from "react";
 import { Button, Icon, InputGroup, Container, Center } from "@chakra-ui/react";
 import axios from "axios";
 import useResults from "./useResults";
+import { AnyPrincipal } from "@aws-cdk/aws-iam";
+import { GiSpeaker } from "react-icons/gi";
 // @ts-ignore
 
 const handleError = (
@@ -92,8 +103,8 @@ const App = () => {
 
   const fileInputRef = useRef();
 
-  const Image = fileURL !== "" && (
-    <img alt="Your uploaded file" src={fileURL} />
+  const UserImage = fileURL !== "" && (
+    <Image mt={2} alt="Your uploaded file" src={fileURL} />
   );
 
   const Results = isResultsError ? (
@@ -101,62 +112,90 @@ const App = () => {
   ) : isResultsLoading ? (
     <p>Loading results...</p>
   ) : (
-    <Grid templateColumns="repeat(3, 1fr)" gap={6}>
-      {results?.labels.map((item: any) => (
-        <GridItem mt={4} w="100%" h="10" bg="gray.50">
-          <h5>Beans</h5>
-          <p></p>
-        </GridItem>
-      ))}
-    </Grid>
+    results &&
+    results.map((result: any) => (
+      <VStack border="2px" borderColor="gray.600" rounded={"lg"} p={6}>
+        <Text fontSize={"2xl"} fontWeight={"bold"}>
+          {result.label} - {result.confidence.toFixed(2)}%
+        </Text>
+        {result?.translations.map((detail: any) => (
+          <Box key={detail.TargetLanguageCode}>
+            <img
+              alt={`${detail.TargetLanguageCode} flag`}
+              // The flag codes are slightly different than the codes for translate / polly
+              src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                detail.TargetLanguageCode === "es-MX"
+                  ? "MX"
+                  : detail.TargetLanguageCode === "ja"
+                  ? "JP"
+                  : detail.TargetLanguageCode.toUpperCase()
+              }.svg`}
+            />
+            <Button leftIcon={<Icon w={8} h={8} as={GiSpeaker} />}>
+              {detail.TranslatedText}
+            </Button>
+          </Box>
+        ))}
+      </VStack>
+    ))
   );
 
   return (
     <>
-      <Center w="100%" h="100%">
-        <Flex align="center" justify="center" w="50%" h="30%" m={20}>
-          <FormControl border="1px" borderColor="gray.200" p={8}>
-            <Button
-              isLoading={uploadStatus}
-              loadingText="Uploading..."
-              onClick={() => fileInputRef?.current.click()}
+      <Flex
+        align="center"
+        justify="center"
+        border="2px"
+        rounded={"lg"}
+        borderColor="gray.600"
+        h="100%"
+        w="25%"
+        m={20}
+        p={8}
+      >
+        <FormControl align="center" justify="center">
+          <Button
+            isLoading={uploadStatus}
+            loadingText="Uploading..."
+            onClick={() => fileInputRef?.current.click()}
+          >
+            Upload an image
+          </Button>
+          <Input
+            ref={fileInputRef}
+            type="file"
+            multiple={false}
+            _hover={{
+              bg: "#dddfe2",
+              transform: "scale(0.98)",
+              borderColor: "#bec3c9",
+            }}
+            hidden
+            size="lg"
+            border="2px"
+            borderColor="red.200"
+            //@ts-ignore
+            onInput={(e) => validateFile(e)}
+            accept={ALLOWED_FILE_TYPES.join(", ")}
+          />
+          <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
+          {results && !isResultsError && !isResultsLoading ? (
+            <Link
+              mb={12}
+              color="blue.500"
+              href={API_URL + "/results?fileId=" + fileId}
+              isExternal
             >
-              Upload an image
-            </Button>
-            <Input
-              ref={fileInputRef}
-              type="file"
-              multiple={false}
-              _hover={{
-                bg: "#dddfe2",
-                transform: "scale(0.98)",
-                borderColor: "#bec3c9",
-              }}
-              hidden
-              size="lg"
-              border="2px"
-              borderColor="red.200"
-              //@ts-ignore
-              onInput={(e) => validateFile(e)}
-              accept={ALLOWED_FILE_TYPES.join(", ")}
-            />
-            <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
-            {results && !isResultsError && !isResultsLoading ? (
-              <Link
-                mb={8}
-                color="blue.500"
-                href={API_URL + "/results?fileId=" + fileId}
-                isExternal
-              >
-                View API results <ExternalLinkIcon mx="2px" />
-              </Link>
-            ) : null}
+              View API result <ExternalLinkIcon mx="2px" />
+            </Link>
+          ) : null}
 
-            {Image}
-            {Results}
-          </FormControl>
-        </Flex>{" "}
-      </Center>
+          {UserImage}
+        </FormControl>
+      </Flex>
+      <Flex align="center" justify="center" h="100%" w="50%" m={20} p={8}>
+        {Results}
+      </Flex>
     </>
   );
 };
