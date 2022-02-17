@@ -28,11 +28,12 @@ import * as path from "path";
 import { DynamoAttributeValue } from "@aws-cdk/aws-stepfunctions-tasks";
 import { JsonPath } from "@aws-cdk/aws-stepfunctions";
 import {
-  LANGUAGE_CODES,
+  TRANSLATE_LANGUAGE_CODES,
   MAX_LABELS,
   TRANSLATION_SETTINGS,
   WAF_SETTINGS,
-} from "../Config";
+} from "../src/Config";
+import { HttpMethods } from "@aws-cdk/aws-s3";
 
 const resultDotEnv = dotenv.config({
   path: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
@@ -70,9 +71,16 @@ export class CdkStack extends cdk.Stack {
       `${process.env.NODE_ENV}-pantheon-assets`,
       {
         enforceSSL: true,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
         bucketName: `${process.env.NODE_ENV}-pantheon-assets`,
         versioned: true,
+        cors: [
+          {
+            allowedHeaders: ["*"],
+            allowedMethods: [HttpMethods.GET, HttpMethods.PUT],
+            allowedOrigins: ["*"],
+            exposedHeaders: [],
+          },
+        ],
       }
     );
 
@@ -167,11 +175,25 @@ export class CdkStack extends cdk.Stack {
           BUCKET_NAME: BUCKET.bucketName,
           NODE_ENV: process.env.NODE_ENV as string,
         },
-        description: `Generates signed URLs to upload into the ${BUCKET.bucketName} BUCKET`,
+        description: `Generates signed URLs to upload into the ${BUCKET.bucketName} bucket`,
         entry: path.join(__dirname, `/../functions/generate-signed-url.ts`),
       }
     );
 
+    const getResultsFunction = new NodejsFunction(
+      this,
+      `${process.env.NODE_ENV}-get-results-function`,
+      {
+        functionName: `${process.env.NODE_ENV}-get-results-function`,
+        ...LAMBDA_CONFIG,
+        environment: {
+          TABLE_NAME: TABLE.tableName,
+          NODE_ENV: process.env.NODE_ENV as string,
+        },
+        description: `Retrieves the info (labels & translations) for a file`,
+        entry: path.join(__dirname, `/../functions/get-results.ts`),
+      }
+    );
     // Acts as a general debugger and tests if WAF is working
     const healthCheckFunction = new NodejsFunction(
       this,
@@ -248,6 +270,18 @@ export class CdkStack extends cdk.Stack {
       ),
     });
 
+    API.addRoutes({
+      path: "/results",
+      methods: [HttpMethod.GET],
+      integration: new HttpLambdaIntegration(
+        `${process.env.NODE_ENV}-get-results-integration`,
+        getResultsFunction,
+        {
+          payloadFormatVersion: PayloadFormatVersion.VERSION_2_0,
+        }
+      ),
+    });
+
     /**
      * STEPS FOR STATE MACHINE
      */
@@ -286,29 +320,6 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results",
     });
 
-    const UPDATE_PROCESS_WITH_LABEL_RESULTS = new tasks.DynamoPutItem(
-      this,
-      "UpdateProcessWithLabelReults",
-      {
-        table: TABLE,
-        item: {
-          PK: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$.detail.key")
-          ),
-          SK: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$.detail.key")
-          ),
-          updatedAt: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$$.State.EnteredTime")
-          ),
-          labels: DynamoAttributeValue.fromString(
-            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
-          ),
-        },
-        resultPath: JsonPath.DISCARD,
-      }
-    );
-
     const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
       this,
       "TranslateToSpanish",
@@ -316,7 +327,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.SPANISH,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.SPANISH,
         },
       }
     );
@@ -327,7 +338,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.RUSSIAN,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.RUSSIAN,
         },
       }
     );
@@ -339,7 +350,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.JAPANESE,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.JAPANESE,
         },
       }
     );
@@ -351,7 +362,7 @@ export class CdkStack extends cdk.Stack {
         ...TRANSLATION_SETTINGS,
         parameters: {
           ...TRANSLATION_SETTINGS.parameters,
-          TargetLanguageCode: LANGUAGE_CODES.FRENCH,
+          TargetLanguageCode: TRANSLATE_LANGUAGE_CODES.FRENCH,
         },
       }
     );
@@ -372,7 +383,7 @@ export class CdkStack extends cdk.Stack {
     const CREATE_AUDO_LOOP = new sfn.Map(this, "CREATE_AUDO_LOOP", {
       maxConcurrency: 1,
       itemsPath: sfn.JsonPath.stringAt("$"),
-      resultPath: "$[0].beans",
+      resultPath: "$[0].audio",
     });
 
     const UPDATE_PROCESS_WITH_TRANSLATION_RESULTS = new tasks.DynamoPutItem(
@@ -418,16 +429,14 @@ export class CdkStack extends cdk.Stack {
     // Step function to process the tasks
     const STATE_MACHINE_DEFINITION = START_PROCESS.next(
       DETECT_LABELS.next(
-        UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
-          TRANSLATION_LOOP.iterator(ALL_TRANSLATE_TASKS)
-            .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
-            .next(
-              GET_AUDIO_LABELS.iterator(
-                CREATE_AUDO_LOOP.iterator(CREATE_AUDIO_FILE)
-              )
+        TRANSLATION_LOOP.iterator(ALL_TRANSLATE_TASKS)
+          .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
+          .next(
+            GET_AUDIO_LABELS.iterator(
+              CREATE_AUDO_LOOP.iterator(CREATE_AUDIO_FILE)
             )
-            .next(SUCCESS)
-        )
+          )
+          .next(SUCCESS)
       )
     );
 
@@ -475,9 +484,13 @@ export class CdkStack extends cdk.Stack {
     });
 
     generateSignedUrlFunction.role?.attachInlinePolicy(
-      new iam.Policy(this, "presigned-url-put-object-policy", {
-        statements: [putPresignedURLPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-presigned-url-put-object-policy`,
+        {
+          statements: [putPresignedURLPolicy],
+        }
+      )
     );
 
     const pollySynthSpeechPolicy = new iam.PolicyStatement({
@@ -486,9 +499,13 @@ export class CdkStack extends cdk.Stack {
     });
 
     audioProcessor.role?.attachInlinePolicy(
-      new iam.Policy(this, "polly-create-audio-async-policy", {
-        statements: [pollySynthSpeechPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-polly-create-audio-async-policy`,
+        {
+          statements: [pollySynthSpeechPolicy],
+        }
+      )
     );
 
     const deleteLargeObjPolicy = new iam.PolicyStatement({
@@ -497,16 +514,22 @@ export class CdkStack extends cdk.Stack {
     });
 
     fileUploadProcessor.role?.attachInlinePolicy(
-      new iam.Policy(this, "delete-large-object-policy", {
-        statements: [deleteLargeObjPolicy],
-      })
+      new iam.Policy(
+        this,
+        `${process.env.NODE_ENV}-delete-large-object-policy`,
+        {
+          statements: [deleteLargeObjPolicy],
+        }
+      )
     );
 
-    // TODO some permissions might be too broad
+    // TODO these general permissions are wayyy too broad :(
     TABLE.grantWriteData(StateMachine);
+    TABLE.grantReadData(getResultsFunction);
     BUCKET.grantRead(StateMachine, "images/*");
     BUS.grantPutEventsTo(fileUploadProcessor);
     BUCKET.grantReadWrite(audioProcessor);
+    BUCKET.grantPutAcl(audioProcessor);
 
     /**
      * OUTPUTS

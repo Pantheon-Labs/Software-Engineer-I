@@ -3,7 +3,7 @@ import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import { s3Client } from "../awsClients/s3Client";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { customAlphabet } from "nanoid";
-import { ALLOWED_FILE_TYPES, NANOID_ALPHABET } from "../Config";
+import { ALLOWED_FILE_TYPES, NANOID_ALPHABET } from "../src/Config";
 
 const nanoid = customAlphabet(NANOID_ALPHABET);
 
@@ -13,6 +13,7 @@ export const main = async (
   console.log(event);
 
   if (!event?.body) {
+    console.log("No body");
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -23,10 +24,14 @@ export const main = async (
   const body = JSON.parse(event.body);
 
   if (!body?.fileType) {
+    console.log("No file type");
+
     return {
       statusCode: 400,
       body: JSON.stringify({
-        message: `Missing 'fileType', must be one of ${ALLOWED_FILE_TYPES}`,
+        message: `Missing 'fileType', must be one of ${ALLOWED_FILE_TYPES.join(
+          ", "
+        )}`,
       }),
     };
   }
@@ -34,6 +39,7 @@ export const main = async (
   const { fileType } = body;
 
   if (!ALLOWED_FILE_TYPES.includes(fileType)) {
+    console.log("Wrong file type");
     return {
       statusCode: 400,
       body: JSON.stringify({
@@ -41,12 +47,16 @@ export const main = async (
       }),
     };
   }
+
+  const fileId = `images/${nanoid(50)}${fileType}`;
   const bucketParams: PutObjectCommandInput = {
     Bucket: process.env.BUCKET_NAME,
-    Key: `images/${nanoid(40)}${fileType}`,
+    Key: fileId,
   };
 
   try {
+    console.log("Attempting to generate signed url");
+
     const preSignedUrl = await getSignedUrl(
       s3Client,
       new PutObjectCommand(bucketParams),
@@ -54,20 +64,22 @@ export const main = async (
         expiresIn: 3600,
       }
     );
+    console.log("URL Generated! Returning", preSignedUrl);
     return {
       statusCode: 201,
       body: JSON.stringify({
         message: "Saul Goodman!",
         preSignedUrl,
+        fileId,
       }),
     };
     // TODO types
-  } catch (err) {
-    console.log("Error creating presigned URL", err);
+  } catch (error) {
+    console.log("Error creating presigned URL", error);
     return {
       statusCode: 500, // TODO correct error code from sdk
       body: JSON.stringify({
-        error: err,
+        error,
       }),
     };
   }
