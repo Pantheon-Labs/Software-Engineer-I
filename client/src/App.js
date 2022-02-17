@@ -1,13 +1,28 @@
-import logo from './logo.svg';
+import {
+	Box,
+	Center,
+	Container,
+	Flex,
+	Grid,
+	Square,
+	Text,
+	theme,
+} from '@chakra-ui/react';
 import './App.css';
 
 function App() {
 	return (
-		<div className="App">
-			<header className="App-header">
-				<h1>Setting up basic structure</h1>
-			</header>
-		</div>
+		<Grid minH="100vh">
+			<Flex color="white">
+				<Box w="50vh" bg="theme.primary">
+					<Text>Box 1</Text>
+				</Box>
+
+				<Box flex="1" bg="theme.background">
+					<Text>Box 3</Text>
+				</Box>
+			</Flex>
+		</Grid>
 	);
 }
 
