@@ -7,5 +7,5 @@ If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
 
 <!-- Delete this line and everything above it -->
 
-# `Your App Name Here`
+# `About me`
 Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
