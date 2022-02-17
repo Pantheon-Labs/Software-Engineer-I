@@ -7,6 +7,7 @@ import {
   GridItem,
   Input,
   VStack,
+  HStack,
   Link,
   Text,
   Stack,
@@ -14,6 +15,7 @@ import {
   ListItem,
   SimpleGrid,
   Image,
+  Divider,
 } from "@chakra-ui/react";
 
 import { Heading } from "@chakra-ui/react";
@@ -114,87 +116,105 @@ const App = () => {
   ) : (
     results &&
     results.map((result: any) => (
-      <VStack border="2px" borderColor="gray.600" rounded={"lg"} p={6}>
-        <Text fontSize={"2xl"} fontWeight={"bold"}>
-          {result.label} - {result.confidence.toFixed(2)}%
-        </Text>
-        {result?.translations.map((detail: any) => (
-          <Box key={detail.TargetLanguageCode}>
-            <img
-              alt={`${detail.TargetLanguageCode} flag`}
-              // The flag codes are slightly different than the codes for translate / polly
-              src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
-                detail.TargetLanguageCode === "es-MX"
-                  ? "MX"
-                  : detail.TargetLanguageCode === "ja"
-                  ? "JP"
-                  : detail.TargetLanguageCode.toUpperCase()
-              }.svg`}
-            />
-            <Button leftIcon={<Icon w={8} h={8} as={GiSpeaker} />}>
-              {detail.TranslatedText}
-            </Button>
-          </Box>
-        ))}
-      </VStack>
+      <>
+        <HStack rounded={"lg"} p={6} h="100%" w="100%">
+          <VStack mr="10">
+            <Text fontSize={"3xl"} fontWeight={"bold"}>
+              {result.label}
+            </Text>
+            <Text>{result.confidence.toFixed(2)}%</Text>
+          </VStack>
+          <HStack w="100%" align="end" justifyContent="space-between">
+            {result?.translations.map((detail: any) => (
+              <Box key={detail.TargetLanguageCode}>
+                <img
+                  alt={`${detail.TargetLanguageCode} flag`}
+                  // The flag codes are slightly different than the codes for translate / polly
+                  src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${
+                    detail.TargetLanguageCode === "es-MX"
+                      ? "MX"
+                      : detail.TargetLanguageCode === "ja"
+                      ? "JP"
+                      : detail.TargetLanguageCode.toUpperCase()
+                  }.svg`}
+                />
+                <Button leftIcon={<Icon w={8} h={8} as={GiSpeaker} />}>
+                  {detail.TranslatedText}
+                </Button>
+              </Box>
+            ))}
+          </HStack>
+        </HStack>
+        {results.indexOf(result) !== results.length - 1 && <Divider />}
+      </>
     ))
   );
 
   return (
     <>
-      <Flex
-        align="center"
-        justify="center"
-        border="2px"
-        rounded={"lg"}
-        borderColor="gray.600"
-        h="100%"
-        w="25%"
-        m={20}
-        p={8}
-      >
-        <FormControl align="center" justify="center">
-          <Button
-            isLoading={uploadStatus}
-            loadingText="Uploading..."
-            onClick={() => fileInputRef?.current.click()}
-          >
-            Upload an image
-          </Button>
-          <Input
-            ref={fileInputRef}
-            type="file"
-            multiple={false}
-            _hover={{
-              bg: "#dddfe2",
-              transform: "scale(0.98)",
-              borderColor: "#bec3c9",
-            }}
-            hidden
-            size="lg"
-            border="2px"
-            borderColor="red.200"
-            //@ts-ignore
-            onInput={(e) => validateFile(e)}
-            accept={ALLOWED_FILE_TYPES.join(", ")}
-          />
-          <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
-          {results && !isResultsError && !isResultsLoading ? (
-            <Link
-              mb={12}
-              color="blue.500"
-              href={API_URL + "/results?fileId=" + fileId}
-              isExternal
+      <Flex>
+        <Flex
+          align="center"
+          justify="center"
+          border="2px"
+          rounded={"lg"}
+          borderColor="gray.600"
+          h="100%"
+          w="25%"
+          m={20}
+          p={8}
+        >
+          <FormControl align="center" justify="center">
+            <Button
+              isLoading={uploadStatus}
+              loadingText="Uploading..."
+              onClick={() => fileInputRef?.current.click()}
             >
-              View API result <ExternalLinkIcon mx="2px" />
-            </Link>
-          ) : null}
+              Upload an image
+            </Button>
+            <Input
+              ref={fileInputRef}
+              type="file"
+              multiple={false}
+              _hover={{
+                bg: "#dddfe2",
+                transform: "scale(0.98)",
+                borderColor: "#bec3c9",
+              }}
+              hidden
+              size="lg"
+              border="2px"
+              borderColor="red.200"
+              //@ts-ignore
+              onInput={(e) => validateFile(e)}
+              accept={ALLOWED_FILE_TYPES.join(", ")}
+            />
+            <FormHelperText mb={2}>Max file size is 1mb</FormHelperText>
+            {results && !isResultsError && !isResultsLoading ? (
+              <Link
+                mb={12}
+                color="blue.500"
+                href={API_URL + "/results?fileId=" + fileId}
+                isExternal
+              >
+                View API result <ExternalLinkIcon mx="2px" />
+              </Link>
+            ) : null}
 
-          {UserImage}
-        </FormControl>
-      </Flex>
-      <Flex align="center" justify="center" h="100%" w="50%" m={20} p={8}>
-        {Results}
+            {UserImage}
+          </FormControl>
+        </Flex>
+        <Flex
+          border="2px"
+          align="start"
+          justify="start"
+          h="100%"
+          w="50%"
+          m={20}
+          p={2}
+        >
+          <VStack w="100%">{Results}</VStack>
+        </Flex>
       </Flex>
     </>
   );
