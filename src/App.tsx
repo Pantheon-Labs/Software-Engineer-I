@@ -1,16 +1,15 @@
 import {
-  Box,
   Flex,
   FormControl,
-  FormErrorMessage,
   FormHelperText,
-  FormLabel,
   Input,
+  Link,
+  List,
+  ListItem,
 } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { FiFile } from "react-icons/fi";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { ALLOWED_FILE_TYPES } from "./Config";
-import { ReactNode, useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Button, Icon, InputGroup, Container, Center } from "@chakra-ui/react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import axios from "axios";
@@ -25,23 +24,53 @@ const handleError = (
 };
 
 const App = () => {
+  // TODO set at build time
+  const API_URL = "https://o403ptj373.execute-api.us-east-1.amazonaws.com";
   const [helperText, setHelperText] = useState("Max file size is 1mb");
   const [fileURL, setFileURL] = useState("");
+  const [fileId, setFileId] = useState("");
+  const [labels, setLabels] = useState({
+    PK: "",
+    SK: "",
+    updatedAt: "",
+    labels: [],
+  });
+
+  // TODO use swr
+  useEffect(() => {
+    async function fetchData() {
+      if (fileId !== "" && fileId) {
+        try {
+          const result = await axios.get(API_URL + `/results?fileId=${fileId}`);
+
+          setLabels(JSON.parse(result.data));
+        } catch (error: any) {
+          // 404 could mean it hasn't processed yet so we need to poll again
+          if (error.response.status !== 404) {
+            console.error(error);
+            alert(
+              `An error ocurred retrieving file data, check console for more info`
+            );
+          }
+        }
+      }
+      return;
+    }
+
+    fetchData();
+  }, [fileId]);
 
   const getSignedUrl = async (file: File) => {
     try {
-      const { data } = await axios.post(
-        "https://o403ptj373.execute-api.us-east-1.amazonaws.com/signed-url",
-        {
-          fileType: "." + file.type.split("/")[1],
-        }
-      );
+      const { data } = await axios.post(API_URL + "/signed-url", {
+        fileType: "." + file.type.split("/")[1],
+      });
       console.log(data);
 
       try {
-        const result = await axios.put(data.preSignedUrl, file);
+        await axios.put(data.preSignedUrl, file);
         setHelperText("Uploaded!");
-        localStorage.setItem("fileId", result.data.fileId);
+        setFileId(data.fileId);
       } catch (error) {
         console.error(error);
         alert(
@@ -85,6 +114,19 @@ const App = () => {
 
   const fileInputRef = useRef();
 
+  const Labels =
+    labels?.labels.length > 0 ? (
+      <List>
+        {labels?.labels.map((item) => (
+          <ListItem>{JSON.stringify(item)}</ListItem>
+        ))}
+      </List>
+    ) : null;
+
+  const Image = fileURL !== "" && (
+    <img alt="Your uploaded file" src={fileURL} />
+  );
+
   return (
     <>
       <Center w="100%" h="100%">
@@ -110,8 +152,20 @@ const App = () => {
               onInput={(e) => validateFile(e)}
               accept={ALLOWED_FILE_TYPES.join(", ")}
             />
-            <FormHelperText mb={8}>{helperText}</FormHelperText>
-            {fileURL !== "" && <img alt="Your image" src={fileURL} />}
+            <FormHelperText mb={2}>{helperText}</FormHelperText>
+            {fileId !== "" && fileId ? (
+              <Link
+                mb={8}
+                color="blue.500"
+                href={API_URL + "/results?fileId=" + fileId}
+                isExternal
+              >
+                View API results <ExternalLinkIcon mx="2px" />
+              </Link>
+            ) : null}
+
+            {Image}
+            {Labels}
           </FormControl>
         </Flex>{" "}
       </Center>
