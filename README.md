@@ -1,11 +1,23 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
+# Sam's Notes Application (that doubles as an "About Me")
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
+## How go we get this thing going?
 
+-   open up two terminals
+-   `cd` into the `client` in one and the `server` in the other
 
-</br></br></br></br>
+In both the `server` terminal and the `client` terminal, run the following commands:
 
-<!-- Delete this line and everything above it -->
+```
+npm install
+npm start
+```
 
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+This will spin up the `server` on `localhost:5000` and the `client` on `localhost:3000`
+
+When the React App loads, provided the server is running, you should be greated with my Notes application and a selection of "notes".
+
+The application will initially show you the last note, which is the _intro_. Please click around the notes to see their content and learn a little about me (local storage will remember which note you clicked on last so feel free to reload the page).
+
+I hope you enjoy my work!
+
+❤️‍🔥
