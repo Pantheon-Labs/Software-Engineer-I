@@ -363,8 +363,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
       showSingleStar: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
-    _this.handleShow = _this.handleShow.bind(_assertThisInitialized(_this));
     _this.handleClose = _this.handleClose.bind(_assertThisInitialized(_this));
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.search = _this.search.bind(_assertThisInitialized(_this));
     return _this;
   } // Get popular searches after the component mounts
@@ -380,11 +380,13 @@ var Home = /*#__PURE__*/function (_React$Component) {
     key: "handleChange",
     value: function handleChange(evt) {
       this.setState(_defineProperty({}, evt.target.name, evt.target.value));
-    } // Handle if single star modal is showing or not
+    } // Handle click if user clicks on star
 
   }, {
-    key: "handleShow",
-    value: function handleShow() {
+    key: "handleClick",
+    value: function handleClick(star) {
+      this.props.getStar(star.id); // Open SingleStar modal
+
       this.setState({
         showSingleStar: true
       });
@@ -416,6 +418,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         id: "main-container",
         style: styles.mainContainer,
@@ -436,7 +440,10 @@ var Home = /*#__PURE__*/function (_React$Component) {
       }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
-          style: styles.starFigure
+          style: styles.starFigure,
+          onClick: function onClick() {
+            return _this2.handleClick(star);
+          }
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
           style: styles.starImage,
           alt: "Profile image of ".concat(star.name),
@@ -449,7 +456,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
           className: "text-center"
         }, star.name));
       })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        handleShow: this.handleShow
+        handleClick: this.handleClick
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SingleStar__WEBPACK_IMPORTED_MODULE_3__["default"], {
         handleClose: this.handleClose,
         show: this.state.showSingleStar
@@ -463,7 +470,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
 var mapState = function mapState(state) {
   return {
     popularPeople: state.data.popularPeople,
-    searchResults: state.singleStar.searchResults
+    searchResults: state.singleStar.searchResults,
+    singleStar: state.singleStar.singleStar
   };
 };
 
@@ -474,6 +482,9 @@ var mapDispatch = function mapDispatch(dispatch) {
     },
     searchStar: function searchStar(starName) {
       return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_6__["searchStar"])(starName));
+    },
+    getStar: function getStar(starId) {
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_6__["getStar"])(starId));
     }
   };
 };
@@ -636,33 +647,22 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(SearchResults);
 
   function SearchResults(props) {
-    var _this;
-
     _classCallCheck(this, SearchResults);
 
-    _this = _super.call(this, props);
-    _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
-    return _this;
-  } // Function for when search results are clicked
-
+    return _super.call(this, props);
+  }
 
   _createClass(SearchResults, [{
-    key: "onClick",
-    value: function onClick(star) {
-      this.props.handleShow();
-      console.log("clicked on ".concat(star.name));
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this = this;
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"], null, this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"].Item, {
           key: star.id,
           action: true,
           onClick: function onClick() {
-            return _this2.onClick(star);
+            return _this.props.handleClick(star);
           }
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
           className: "d-flex justify-content-start",
@@ -757,12 +757,12 @@ var SingleStar = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
-        style: style.modal,
+        style: styles.modal,
         show: this.props.show,
         onHide: this.props.handleClose
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
         closeButton: true
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, "Modal heading")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, "Woohoo, you're reading this text in a modal!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, "Just one star")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, "Woohoo, you're reading this text in a modal!"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
         variant: "secondary",
         onClick: this.props.handleClose
       }, "Close")));
@@ -1615,7 +1615,7 @@ var getStar = function getStar(starId) {
 
             case 3:
               res = _context2.sent;
-              dispatch(gotStar(res));
+              dispatch(gotStar(res.data));
               _context2.next = 10;
               break;
 

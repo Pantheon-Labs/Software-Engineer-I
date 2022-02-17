@@ -19,12 +19,12 @@ export default class SingleStar extends React.Component {
   render() {
     return (
       <Modal
-        style={style.modal}
+        style={styles.modal}
         show={this.props.show}
         onHide={this.props.handleClose}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Just one star</Modal.Title>
         </Modal.Header>
         <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
         <Modal.Footer>

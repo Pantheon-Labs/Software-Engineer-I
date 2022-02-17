@@ -33,13 +33,6 @@ const styles = {
 class SearchResults extends React.Component {
   constructor(props) {
     super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  // Function for when search results are clicked
-  onClick(star) {
-    this.props.handleShow();
-    console.log(`clicked on ${star.name}`);
   }
 
   render() {
@@ -51,7 +44,7 @@ class SearchResults extends React.Component {
               <ListGroup.Item
                 key={star.id}
                 action
-                onClick={() => this.onClick(star)}
+                onClick={() => this.props.handleClick(star)}
               >
                 <Container
                   className="d-flex justify-content-start"

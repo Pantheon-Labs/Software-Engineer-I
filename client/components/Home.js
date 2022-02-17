@@ -10,7 +10,7 @@ import SearchResults from "./SearchResults";
 import SingleStar from "./SingleStar";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
-import { searchStar } from "../store/singleStar";
+import { searchStar, getStar } from "../store/singleStar";
 
 // Styles for homepage
 const styles = {
@@ -44,8 +44,8 @@ class Home extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.search = this.search.bind(this);
   }
 
@@ -61,8 +61,11 @@ class Home extends React.Component {
     });
   }
 
-  // Handle if single star modal is showing or not
-  handleShow() {
+  // Handle click if user clicks on star
+  handleClick(star) {
+    this.props.getStar(star.id);
+
+    // Open SingleStar modal
     this.setState({ showSingleStar: true });
   }
 
@@ -113,7 +116,11 @@ class Home extends React.Component {
             <h3>Trending Searches</h3>
             {this.props.popularPeople.slice(0, 4).map((star) => {
               return (
-                <Figure key={star.id} style={styles.starFigure}>
+                <Figure
+                  key={star.id}
+                  style={styles.starFigure}
+                  onClick={() => this.handleClick(star)}
+                >
                   <Figure.Image
                     style={styles.starImage}
                     alt={`Profile image of ${star.name}`}
@@ -133,7 +140,7 @@ class Home extends React.Component {
         )}
 
         {this.props.searchResults.length > 0 && (
-          <SearchResults handleShow={this.handleShow} />
+          <SearchResults handleClick={this.handleClick} />
         )}
 
         <SingleStar
@@ -149,6 +156,7 @@ const mapState = (state) => {
   return {
     popularPeople: state.data.popularPeople,
     searchResults: state.singleStar.searchResults,
+    singleStar: state.singleStar.singleStar,
   };
 };
 
@@ -156,6 +164,7 @@ const mapDispatch = (dispatch) => {
   return {
     getPopular: () => dispatch(getPopular()),
     searchStar: (starName) => dispatch(searchStar(starName)),
+    getStar: (starId) => dispatch(getStar(starId)),
   };
 };
 

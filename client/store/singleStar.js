@@ -64,7 +64,7 @@ export const getStar = (starId) => {
         params: { starId },
       });
 
-      dispatch(gotStar(res));
+      dispatch(gotStar(res.data));
     } catch (err) {
       throw err;
     }
