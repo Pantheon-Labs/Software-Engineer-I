@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Home from  "./components/Home"
 import Navbar from "./components/Navbar";
 import Events from "./components/Events"
@@ -23,11 +23,13 @@ function App() {
     <div className = "App">
       <ChakraProvider>
         <Navbar/>
-        <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/events" element={<Events events = {todayArray}/>} />
-            <Route path="/extras" element={<Extras/>} />
-        </Routes>
+        <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<Home/>} />
+              <Route path="/events" element={<Events events = {todayArray}/>} />
+              <Route path="/extras" element={<Extras/>} />
+          </Routes>
+        </BrowserRouter>
       </ChakraProvider>
     </div>
   );
