@@ -321,29 +321,6 @@ export class CdkStack extends cdk.Stack {
       resultPath: "$.results",
     });
 
-    const UPDATE_PROCESS_WITH_LABEL_RESULTS = new tasks.DynamoPutItem(
-      this,
-      "UpdateProcessWithLabelReults",
-      {
-        table: TABLE,
-        item: {
-          PK: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$.detail.key")
-          ),
-          SK: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$.detail.key")
-          ),
-          updatedAt: DynamoAttributeValue.fromString(
-            sfn.JsonPath.stringAt("$$.State.EnteredTime")
-          ),
-          labels: DynamoAttributeValue.fromString(
-            sfn.JsonPath.jsonToString(sfn.JsonPath.stringAt("$.results.labels"))
-          ),
-        },
-        resultPath: JsonPath.DISCARD,
-      }
-    );
-
     const TRANSLATE_TO_SPANISH = new tasks.CallAwsService(
       this,
       "TranslateToSpanish",
@@ -453,16 +430,14 @@ export class CdkStack extends cdk.Stack {
     // Step function to process the tasks
     const STATE_MACHINE_DEFINITION = START_PROCESS.next(
       DETECT_LABELS.next(
-        UPDATE_PROCESS_WITH_LABEL_RESULTS.next(
-          TRANSLATION_LOOP.iterator(ALL_TRANSLATE_TASKS)
-            .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
-            .next(
-              GET_AUDIO_LABELS.iterator(
-                CREATE_AUDO_LOOP.iterator(CREATE_AUDIO_FILE)
-              )
+        TRANSLATION_LOOP.iterator(ALL_TRANSLATE_TASKS)
+          .next(UPDATE_PROCESS_WITH_TRANSLATION_RESULTS)
+          .next(
+            GET_AUDIO_LABELS.iterator(
+              CREATE_AUDO_LOOP.iterator(CREATE_AUDIO_FILE)
             )
-            .next(SUCCESS)
-        )
+          )
+          .next(SUCCESS)
       )
     );
 

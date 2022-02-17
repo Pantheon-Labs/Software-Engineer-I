@@ -99,16 +99,15 @@ const App = () => {
   ) : isResultsLoading ? (
     <p>Loading results...</p>
   ) : (
-    JSON.stringify(results?.labels)
+    <div>
+      <ul>
+        {results?.labels.map((item: any) => (
+          <li>{JSON.stringify(item)}</li>
+        ))}
+      </ul>
+    </div>
   );
 
-  // <div>
-  //   <ul>
-  //     {JSON.parse(results?.labels).map((item: any) => (
-  //       <li>{JSON.stringify(item)}</li>
-  //     ))}
-  //   </ul>
-  // </div>
   return (
     <>
       <Center w="100%" h="100%">

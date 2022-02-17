@@ -49,9 +49,15 @@ export const main = async (
         }),
       };
     }
+
+    // So we don't have to do it in the FE
+    const cleanedItem = {
+      ...result.Item,
+      labels: JSON.parse(result.Item.labels),
+    };
     return {
       statusCode: 200,
-      body: JSON.stringify(result.Item),
+      body: JSON.stringify(cleanedItem),
     };
   } catch (err) {
     console.log("Error creating presigned URL", err);
