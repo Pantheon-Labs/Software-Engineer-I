@@ -14,7 +14,28 @@ body {
 
 .App {
   text-align: center;
-  /* background: rgb(131, 156, 155); */
+}
+
+.text {
+  text-align: left;
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+}
+
+.boxdiv {
+  display: flex;
+  justify-content: center;
+}
+.box{
+  border: 10px solid #060a11dc;
+  border-radius: 2px;
+  background-color: rgb(224, 240, 240);
+  margin-bottom: 50px; 
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  padding: 20px;
 }
 
 .title{
@@ -28,8 +49,6 @@ body {
   font-family:'Courier New', Courier, monospace;
   background: #aca479;
   padding: 20px;
-  /* border: 8px solid #929aa7dc; */
-  /* border-radius: 5px; */
 }
 
 .links{
@@ -45,7 +64,7 @@ nav ul li a{
 }
 
 a:hover{
-  background: rgb(161, 161, 151);
+  background: rgb(148, 201, 214);
 }
 
 a:active {

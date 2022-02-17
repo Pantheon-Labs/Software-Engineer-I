@@ -16,7 +16,6 @@ function App() {
   }, [])
 
   let today = new Date()
-  let tomorrow = new Date
   let dayDate = today.toISOString().split('T', 1)[0]
   let todayArray = events.filter(function (e) { return e.startdate === dayDate })
       
