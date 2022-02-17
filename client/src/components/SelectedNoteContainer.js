@@ -1,11 +1,13 @@
 import {
 	Box,
 	Divider,
-	ListIcon,
+	HStack,
+	Link,
 	ListItem,
 	Text,
 	UnorderedList,
 } from '@chakra-ui/react';
+import Links from './Links';
 
 const SelectedNoteContainer = ({ note }) => {
 	console.log(note);
@@ -35,6 +37,8 @@ const SelectedNoteContainer = ({ note }) => {
 							  })
 							: note.content}
 					</Text>
+					<Divider />
+					{note.title.includes('Sam Bencivengo') && <Links />}
 				</Box>
 			</Box>
 		</>

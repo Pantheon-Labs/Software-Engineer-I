@@ -16,11 +16,17 @@ const NoteCardContainer = ({ notes, selectNote, selectedNote }) => {
 				<VStack spacing={null}>
 					<Box w="50vh" h="10vh" bg="theme.primary">
 						<Center w="100%" h="100%">
-							<Text as="em" color="black" fontSize="3xl">
+							<Text
+								as="em"
+								color="black"
+								fontWeight="600"
+								fontSize="3xl"
+							>
 								Sam's Notes
 							</Text>
 						</Center>
 					</Box>
+					<Divider />
 					{notes.data.map((note) => {
 						return (
 							<>
@@ -30,7 +36,6 @@ const NoteCardContainer = ({ notes, selectNote, selectedNote }) => {
 									key={note.id}
 									note={note}
 								/>
-								<StackDivider />
 							</>
 						);
 					})}

@@ -12,8 +12,16 @@ function App() {
 			const res = await fetch(url);
 			const data = await res.json();
 			setNotes(data);
-			setSelectedNote(data.data[5]);
-			console.log(data);
+			if (localStorage['selectedNote']) {
+				const savedNote = localStorage.getItem('selectedNote');
+				const found = data.data.find((note) => {
+					return note.id === parseInt(savedNote);
+				});
+
+				setSelectedNote(found);
+			} else {
+				setSelectedNote(data.data[5]);
+			}
 			return data;
 		} catch (error) {
 			console.log(error);
@@ -30,6 +38,7 @@ function App() {
 
 	const selectNote = (note) => {
 		setSelectedNote(note);
+		localStorage.setItem('selectedNote', note.id);
 	};
 	return (
 		<Grid minH="100vh">
