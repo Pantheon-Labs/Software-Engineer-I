@@ -2,7 +2,7 @@ import Topbar from "./components/topbar/Topbar";
 import Intro from "./components/intro/Intro"
 import Portfolio from "./components/portfolio/Portfolio"
 import Work from "./components/work/Work"
-import Testimonials from "./components/testimonials/Testimonials"
+
 import "./app.scss"
 
 function App() {
@@ -14,7 +14,6 @@ function App() {
       <Intro />
       <Portfolio/>
       <Work/>
-      <Testimonials/>
     </div>
 
 
