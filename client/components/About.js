@@ -25,6 +25,7 @@ class About extends React.Component {
           dash of horoscope to your tabloids, or throw in some household names
           to your birth chart reading.
           <br></br>
+          <br></br>
           This app uses the TMDB api to search for actors. You can find out more
           about the api <a href="https://developers.themoviedb.org/3">here</a>.
         </p>

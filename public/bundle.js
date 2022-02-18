@@ -187,7 +187,7 @@ var About = /*#__PURE__*/function (_React$Component) {
         style: styles.mainContainer
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         style: styles.header
-      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs is leaning into two of the guiltiest of guilty pleasures: celebrities gossip and astrology. The ability to search for a celebrity and get a list of stars and their star signs can help add a dash of horoscope to your tabloids, or throw in some household names to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to search for actors. You can find out more about the api ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs is leaning into two of the guiltiest of guilty pleasures: celebrities gossip and astrology. The ability to search for a celebrity and get a list of stars and their star signs can help add a dash of horoscope to your tabloids, or throw in some household names to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to search for actors. You can find out more about the api ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://developers.themoviedb.org/3"
       }, "here"), "."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         style: styles.signature
@@ -348,6 +348,9 @@ var styles = {
   header: {
     marginBottom: "1.5rem"
   },
+  subheading: {
+    fontWeight: "lighter"
+  },
   mainContainer: {
     paddingTop: "4rem",
     paddingBottom: "5rem"
@@ -502,9 +505,11 @@ var Home = /*#__PURE__*/function (_React$Component) {
         id: "main-container",
         style: styles.mainContainer,
         className: "text-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: styles.header
-      }, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        style: styles.subheading
+      }, "search for actors ", "&", " their zodiac")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
         name: "searchInput",
@@ -983,7 +988,7 @@ var SingleStar = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
         style: styles.starImage,
         alt: "Image of ".concat(singleStar.name),
-        src: "https://image.tmdb.org/t/p/w200/".concat(singleStar.profile_path),
+        src: "https://image.tmdb.org/t/p/w400/".concat(singleStar.profile_path),
         onError: function onError(evt) {
           evt.target.onError = null;
           evt.target.src = "./default.png";

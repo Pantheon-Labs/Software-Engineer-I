@@ -19,6 +19,9 @@ const styles = {
   header: {
     marginBottom: "1.5rem",
   },
+  subheading: {
+    fontWeight: "lighter",
+  },
   mainContainer: {
     paddingTop: "4rem",
     paddingBottom: "5rem",
@@ -98,7 +101,12 @@ class Home extends React.Component {
         style={styles.mainContainer}
         className="text-center"
       >
-        <h1 style={styles.header}>Star Signs</h1>
+        <div style={styles.header}>
+          <h1>Star Signs</h1>
+          <h2 style={styles.subheading}>
+            search for actors {"&"} their zodiac
+          </h2>
+        </div>
         <InputGroup className="mb-3">
           <FormControl
             name="searchInput"

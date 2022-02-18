@@ -43,7 +43,7 @@ class SingleStar extends React.Component {
           <Image
             style={styles.starImage}
             alt={`Image of ${singleStar.name}`}
-            src={`https://image.tmdb.org/t/p/w200/${singleStar.profile_path}`}
+            src={`https://image.tmdb.org/t/p/w400/${singleStar.profile_path}`}
             onError={(evt) => {
               evt.target.onError = null;
               evt.target.src = "./default.png";
