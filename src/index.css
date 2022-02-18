@@ -22,6 +22,13 @@ body {
   font-weight: bold;
 }
 
+.fronttext {
+  text-align: center;
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-weight: bold;
+}
 .supportbutton {
   margin-top: 50px;
   margin-bottom: 30px;

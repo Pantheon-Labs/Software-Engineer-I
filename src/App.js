@@ -31,9 +31,9 @@ function App() {
         <Navbar/>
         <ChakraProvider>
           <Routes>
-              <Route path="/" element={<Home/>} />
-              <Route path="/news" element={<News arts = {arts} world = {world} science = {science} us = {us} home = {home}/>} />
-              <Route path="/events" element={<Events events = {todayArray}/>} />
+              <Route path="/Software-Engineer-I/" element={<Home/>} />
+              <Route path="/Software-Engineer-I/news" element={<News arts = {arts} world = {world} science = {science} us = {us} home = {home}/>} />
+              <Route path="/Software-Engineer-I/events" element={<Events events = {todayArray}/>} />
           </Routes>
         </ChakraProvider>
       </BrowserRouter>
