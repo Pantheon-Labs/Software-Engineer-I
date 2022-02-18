@@ -4,8 +4,8 @@ function Events({events}) {
     console.log(events[0])
     return (
         <>
-            {events.filter((x) => x.image !== "").map((x) => (
-                <Event event = {x} />
+            {events.filter((x) => x.image !== "").map((x, y) => (
+                <Event event = {x} key = {y} />
             ))} 
         </>
     )

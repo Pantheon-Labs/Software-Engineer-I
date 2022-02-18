@@ -22,8 +22,8 @@ function App() {
   return (
     <div className = "App">
       <ChakraProvider>
-        <Navbar/>
         <BrowserRouter>
+          <Navbar/>
           <Routes>
               <Route path="/" element={<Home/>} />
               <Route path="/events" element={<Events events = {todayArray}/>} />
