@@ -1,8 +1,6 @@
 import React from "react";
 import {
   Container,
-  Card,
-  Figure,
   InputGroup,
   Button,
   FormControl,
@@ -10,6 +8,7 @@ import {
 } from "react-bootstrap";
 import SearchResults from "./SearchResults";
 import SingleStar from "./SingleStar";
+import PopularStars from "./PopularStars";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
 import { searchStar, getStar, clearStar } from "../store/singleStar";
@@ -19,25 +18,6 @@ const styles = {
   mainContainer: {
     paddingTop: "4rem",
     paddingBottom: "5rem",
-  },
-  starImage: {
-    height: "5rem",
-    width: "4rem",
-    borderRadius: "10%",
-    objectFit: "cover",
-    objectPosition: "50% 0",
-  },
-  popularCard: {
-    paddingTop: "1rem",
-  },
-  starFigure: {
-    padding: "0 0.25rem 0 0.25rem",
-  },
-  caption: {
-    width: "5.5rem",
-    height: "2.5rem",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
   },
 };
 
@@ -131,36 +111,7 @@ class Home extends React.Component {
         </InputGroup>
 
         {this.props.popularPeople && this.state.status === "waiting" && (
-          <Card style={styles.popularCard}>
-            <Card.Title>Trending Searches</Card.Title>
-            <Card.Body>
-              {this.props.popularPeople.slice(0, 4).map((star) => {
-                return (
-                  <Figure
-                    key={star.id}
-                    style={styles.starFigure}
-                    onClick={() => this.handleClick(star)}
-                  >
-                    <Figure.Image
-                      style={styles.starImage}
-                      alt={`Profile image of ${star.name}`}
-                      src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                      onError={(evt) => {
-                        evt.target.onError = null;
-                        evt.target.src = "/default.png";
-                      }}
-                    />
-                    <Figure.Caption
-                      className="text-center"
-                      style={styles.caption}
-                    >
-                      {star.name}
-                    </Figure.Caption>
-                  </Figure>
-                );
-              })}
-            </Card.Body>
-          </Card>
+          <PopularStars handleClick={this.handleClick} />
         )}
 
         {this.state.status === "loading" && (
