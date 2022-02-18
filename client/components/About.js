@@ -19,11 +19,11 @@ class About extends React.Component {
       <Container style={styles.mainContainer}>
         <h1 style={styles.header}>About Star Signs</h1>
         <p>
-          Star Signs is leaning into two of the guiltiest of guilty pleasures:
-          celebrities gossip and astrology. The ability to search for a
-          celebrity and get a list of stars and their star signs can help add a
-          dash of horoscope to your tabloids, or throw in some household names
-          to your birth chart reading.
+          Star Signs leans into two of the guiltiest of guilty pleasures:
+          <strong> celebrity gossip and astrology.</strong> The ability to
+          search for an and immediately get their star sign has the potential to
+          a dash of horoscope to your tabloids, or throw in a household name to
+          your birth chart reading.
           <br></br>
           <br></br>
           This app uses the TMDB api to search for actors. You can find out more
