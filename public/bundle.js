@@ -332,9 +332,15 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
  // Styles for homepage
 
 var styles = {
+  header: {
+    marginBottom: "1.5rem"
+  },
   mainContainer: {
     paddingTop: "4rem",
     paddingBottom: "5rem"
+  },
+  loading: {
+    marginTop: "3rem"
   }
 };
 /*
@@ -483,7 +489,9 @@ var Home = /*#__PURE__*/function (_React$Component) {
         id: "main-container",
         style: styles.mainContainer,
         className: "text-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        style: styles.header
+      }, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
         name: "searchInput",
@@ -500,12 +508,17 @@ var Home = /*#__PURE__*/function (_React$Component) {
         handleClick: this.handleClick
       }), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: styles.loading
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
-        animation: "grow"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "visually-hidden"
+      }, "Searching..."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow",
+        role: "status"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
-        animation: "grow"
+        animation: "grow",
+        role: "status"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
-        animation: "grow"
+        animation: "grow",
+        role: "status"
       })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], {
         handleClick: this.handleClick
       }), this.props.singleStar && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SingleStar__WEBPACK_IMPORTED_MODULE_3__["default"], {

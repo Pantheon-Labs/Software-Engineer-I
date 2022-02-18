@@ -15,9 +15,15 @@ import { searchStar, getStar, clearStar } from "../store/singleStar";
 
 // Styles for homepage
 const styles = {
+  header: {
+    marginBottom: "1.5rem",
+  },
   mainContainer: {
     paddingTop: "4rem",
     paddingBottom: "5rem",
+  },
+  loading: {
+    marginTop: "3rem",
   },
 };
 
@@ -91,7 +97,7 @@ class Home extends React.Component {
         style={styles.mainContainer}
         className="text-center"
       >
-        <h1>Home</h1>
+        <h1 style={styles.header}>Home</h1>
         <InputGroup className="mb-3">
           <FormControl
             name="searchInput"
@@ -116,9 +122,10 @@ class Home extends React.Component {
 
         {this.state.status === "loading" && (
           <div style={styles.loading}>
-            <Spinner animation="grow" />
-            <Spinner animation="grow" />
-            <Spinner animation="grow" />
+            <div className="visually-hidden">Searching...</div>
+            <Spinner animation="grow" role="status" />
+            <Spinner animation="grow" role="status" />
+            <Spinner animation="grow" role="status" />
           </div>
         )}
 
