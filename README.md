@@ -7,6 +7,8 @@
 
 On a file upload to the input field, a request for a presigned URL is made. The URL is returned, along with a custom ID for the file you are going to upload. This is done to prevent files with duplicate names being overwritten. User uploads the file to S3 directly which triggers a lambda function. It checks the file size and if it's over 1mb, it deletes it.
 
+Note 1: We're not actually checking for appropriate file types, just size.. even with signed POSTs, [there are ways to get around it](https://zaccharles.medium.com/s3-uploads-proxies-vs-presigned-urls-vs-presigned-posts-9661e2b37932). Just.. upload an image (.jpeg, .jpg, .png) pls :)
+
 The function pushes valid files into EventBridge, which triggers a step function workflow. This workflow does a few things:
 
 1. Detect labels in the image
@@ -15,7 +17,7 @@ The function pushes valid files into EventBridge, which triggers a step function
 4. Create audio files for each translation
 5. Add those files to the same S3 bucket under an `/audio` prefix.
 
-Note: Since labels are often similar across many images (human, face, person), audio files ARE NOT generated if the audio file already exists. This is checked with the `HeadObjectCommand` in the `audio-processor` function.
+Note 2: Since labels are often similar across many images (human, face, person), audio files ARE NOT generated if the audio file already exists. This is checked with the `HeadObjectCommand` in the `audio-processor` function.
 
 The frontend pulls from the table to get the results. Added Cloudfront and WAF to the API to prevent spam.
 
