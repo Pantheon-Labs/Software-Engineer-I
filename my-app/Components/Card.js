@@ -2,9 +2,10 @@ import { Image } from '@chakra-ui/react';
 
 function Card({ id, name, traits, image }) {
     return (
-        <div name="characters">
-            <div key={id} className='card'>{name}</div>
-            <Image src={image} alt={name} />
+        <div className="card">
+            <div key={id}>
+                <Image src={image} alt={name} />
+            </div>
         </div>
     )
 }

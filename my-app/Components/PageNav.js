@@ -1,33 +1,37 @@
+import { Button, ButtonGroup } from "@chakra-ui/react";
+
 const PageNav = ({ nav, setCharacterUrl }) => {
-    
+
     let previousUrl = nav.prev;
     let nextUrl = nav.next;
 
     return (
         <>
             <div className="tab">
-                <button
-                    id="default"
-                    data-tab="previous"
-                    className="navTab active"
-                    onClick={() => setCharacterUrl(previousUrl)}
+                <ButtonGroup>
+                    <Button
+                        id="default"
+                        data-tab="previous"
+                        className="navTab active"
+                        onClick={() => setCharacterUrl(previousUrl)}
                 >
-                    Previous
-                </button>
-                <button
-                    data-tab="info"
-                    className="navTab"
-                    onClick="openTab(event, 'info')"
+                        Previous
+                    </Button>
+                    <Button
+                        data-tab="info"
+                        className="navTab"
+                        onClick="openTab(event, 'info')"
                 >
-                    Info
-                </button>
-                <button
-                    data-tab="next"
-                    className="navTab"
-                    onClick={() => setCharacterUrl(nextUrl)}
+                        Info
+                    </Button>
+                    <Button
+                        data-tab="next"
+                        className="navTab"
+                        onClick={() => setCharacterUrl(nextUrl)}
                 >
-                    Next
-                </button>
+                        Next
+                    </Button>
+                </ButtonGroup>
             </div>
         </>
     )

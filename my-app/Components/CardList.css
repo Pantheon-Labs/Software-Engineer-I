@@ -1,0 +1,18 @@
+.cardList {
+    cursor: pointer;
+    display: flex;
+    overflow: scroll;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid white;
+    max-height: 100vh;
+    max-width: 800px;
+}
+
+.cardList::-webkit-scrollbar {
+    display: none;
+}
+
+.card {
+    min-width: 5em;
+}
