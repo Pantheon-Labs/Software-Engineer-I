@@ -23,6 +23,12 @@
     }
     .right {
         flex: 0.4;
+        background-color: lightblue;
+
+        .wrapper {
+            margin-top: 200px;
+            margin-left: 150px;
+        }
         
     }
     
