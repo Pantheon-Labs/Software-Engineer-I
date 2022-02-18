@@ -2,7 +2,6 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import News from  "./components/News"
 import Navbar from "./components/Navbar";
 import Events from "./components/Events"
-import Extras from "./components/Extras"
 import Home from "./components/Home";
 import { ChakraProvider } from '@chakra-ui/react'
 import React, { useState, useEffect } from "react";
@@ -28,17 +27,16 @@ function App() {
       
   return (
     <div className = "App">
-      <ChakraProvider>
-        <BrowserRouter>
-          <Navbar/>
+      <BrowserRouter>
+        <Navbar/>
+        <ChakraProvider>
           <Routes>
               <Route path="/" element={<Home/>} />
               <Route path="/news" element={<News arts = {arts} world = {world} science = {science} us = {us} home = {home}/>} />
               <Route path="/events" element={<Events events = {todayArray}/>} />
-              <Route path="/extras" element={<Extras/>} />
           </Routes>
-        </BrowserRouter>
-      </ChakraProvider>
+        </ChakraProvider>
+      </BrowserRouter>
     </div>
   );
 }

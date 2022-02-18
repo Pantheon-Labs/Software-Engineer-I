@@ -28,7 +28,7 @@ body {
 }
 .text {
   text-align: left;
-  font-size: 25px;
+  font-size: 20px;
   font-family: "Times New Roman", Times, serif;
   font-style: italic;
   font-weight: bold;
@@ -55,12 +55,12 @@ body {
 
 .newsdiv {
   background-image: url("https://i.pinimg.com/originals/8e/a1/19/8ea1198d59d3321f0a429edbfd913b51.jpg");
-  background-repeat: repeat-y;
+  background-repeat: repeat;
 }
 
 .eventsdiv {
   background-image: url("https://theknickerbocker.com/wp-content/uploads/2018/04/Central-Park-Conservatory-Gardens-Secret-Park-NYC.jpg");
-  background-repeat: repeat-y;
+  background-repeat: repeat;
 }
 
 .boxdiv {
