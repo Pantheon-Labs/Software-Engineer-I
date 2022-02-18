@@ -1,9 +1,7 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import axios from "axios";
 import { useEffect, useState } from 'react';
-import Card from '../Components/Card';
 import PageNav from '../Components/PageNav';
 import CardList from '../Components/CardList';
 
