@@ -1,10 +1,12 @@
 import React from "react";
 import {
   Container,
+  Card,
   Figure,
   InputGroup,
   Button,
   FormControl,
+  Spinner,
 } from "react-bootstrap";
 import SearchResults from "./SearchResults";
 import SingleStar from "./SingleStar";
@@ -15,7 +17,7 @@ import { searchStar, getStar, clearStar } from "../store/singleStar";
 // Styles for homepage
 const styles = {
   mainContainer: {
-    paddingTop: "5rem",
+    paddingTop: "4rem",
     paddingBottom: "5rem",
   },
   starImage: {
@@ -25,8 +27,17 @@ const styles = {
     objectFit: "cover",
     objectPosition: "50% 0",
   },
+  popularCard: {
+    paddingTop: "1rem",
+  },
   starFigure: {
     padding: "0 0.25rem 0 0.25rem",
+  },
+  caption: {
+    width: "5.5rem",
+    height: "2.5rem",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
   },
 };
 
@@ -79,14 +90,17 @@ class Home extends React.Component {
     this.props.clearStar();
   }
 
-  // Search function on input
-  search(evt) {
+  // Search function on input, changes status to loading and loaded
+  async search(evt) {
     evt.preventDefault();
 
-    this.setState({ status: "loading" });
-    this.props.searchStar(this.state.searchInput);
-    this.setState({ status: "loaded" });
-
+    try {
+      this.setState({ status: "loading" });
+      await this.props.searchStar(this.state.searchInput);
+      this.setState({ status: "loaded" });
+    } catch {
+      this.setState({ status: "error" });
+    }
     this.setState({ searchInput: "" });
   }
 
@@ -117,31 +131,44 @@ class Home extends React.Component {
         </InputGroup>
 
         {this.props.popularPeople && this.state.status === "waiting" && (
-          <Container>
-            <h3>Trending Searches</h3>
-            {this.props.popularPeople.slice(0, 4).map((star) => {
-              return (
-                <Figure
-                  key={star.id}
-                  style={styles.starFigure}
-                  onClick={() => this.handleClick(star)}
-                >
-                  <Figure.Image
-                    style={styles.starImage}
-                    alt={`Profile image of ${star.name}`}
-                    src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                    onError={(evt) => {
-                      evt.target.onError = null;
-                      evt.target.src = "/default.png";
-                    }}
-                  />
-                  <Figure.Caption className="text-center">
-                    {star.name}
-                  </Figure.Caption>
-                </Figure>
-              );
-            })}
-          </Container>
+          <Card style={styles.popularCard}>
+            <Card.Title>Trending Searches</Card.Title>
+            <Card.Body>
+              {this.props.popularPeople.slice(0, 4).map((star) => {
+                return (
+                  <Figure
+                    key={star.id}
+                    style={styles.starFigure}
+                    onClick={() => this.handleClick(star)}
+                  >
+                    <Figure.Image
+                      style={styles.starImage}
+                      alt={`Profile image of ${star.name}`}
+                      src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
+                      onError={(evt) => {
+                        evt.target.onError = null;
+                        evt.target.src = "/default.png";
+                      }}
+                    />
+                    <Figure.Caption
+                      className="text-center"
+                      style={styles.caption}
+                    >
+                      {star.name}
+                    </Figure.Caption>
+                  </Figure>
+                );
+              })}
+            </Card.Body>
+          </Card>
+        )}
+
+        {this.state.status === "loading" && (
+          <div style={styles.loading}>
+            <Spinner animation="grow" />
+            <Spinner animation="grow" />
+            <Spinner animation="grow" />
+          </div>
         )}
 
         {this.props.searchResults.length > 0 && (

@@ -331,7 +331,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var styles = {
   mainContainer: {
-    paddingTop: "5rem",
+    paddingTop: "4rem",
     paddingBottom: "5rem"
   },
   starImage: {
@@ -341,8 +341,17 @@ var styles = {
     objectFit: "cover",
     objectPosition: "50% 0"
   },
+  popularCard: {
+    paddingTop: "1rem"
+  },
   starFigure: {
     padding: "0 0.25rem 0 0.25rem"
+  },
+  caption: {
+    width: "5.5rem",
+    height: "2.5rem",
+    overflow: "hidden",
+    textOverflow: "ellipsis"
   }
 };
 /*
@@ -433,23 +442,57 @@ var Home = /*#__PURE__*/function (_React$Component) {
         showSingleStar: false
       });
       this.props.clearStar();
-    } // Search function on input
+    } // Search function on input, changes status to loading and loaded
 
   }, {
     key: "search",
-    value: function search(evt) {
-      evt.preventDefault();
-      this.setState({
-        status: "loading"
-      });
-      this.props.searchStar(this.state.searchInput);
-      this.setState({
-        status: "loaded"
-      });
-      this.setState({
-        searchInput: ""
-      });
-    }
+    value: function () {
+      var _search = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(evt) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                evt.preventDefault();
+                _context2.prev = 1;
+                this.setState({
+                  status: "loading"
+                });
+                _context2.next = 5;
+                return this.props.searchStar(this.state.searchInput);
+
+              case 5:
+                this.setState({
+                  status: "loaded"
+                });
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](1);
+                this.setState({
+                  status: "error"
+                });
+
+              case 11:
+                this.setState({
+                  searchInput: ""
+                });
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 8]]);
+      }));
+
+      function search(_x2) {
+        return _search.apply(this, arguments);
+      }
+
+      return search;
+    }()
   }, {
     key: "render",
     value: function render() {
@@ -472,7 +515,9 @@ var Home = /*#__PURE__*/function (_React$Component) {
         onClick: this.search,
         variant: "outline-secondary",
         id: "button-addon2"
-      }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
+      }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"], {
+        style: styles.popularCard
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, null, this.props.popularPeople.slice(0, 4).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
           style: styles.starFigure,
@@ -488,8 +533,17 @@ var Home = /*#__PURE__*/function (_React$Component) {
             evt.target.src = "/default.png";
           }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
-          className: "text-center"
+          className: "text-center",
+          style: styles.caption
         }, star.name));
+      }))), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: styles.loading
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow"
       })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], {
         handleClick: this.handleClick
       }), this.props.singleStar && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SingleStar__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -592,7 +646,7 @@ var Navigation = /*#__PURE__*/function (_React$Component) {
         sticky: "top"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Brand, {
         href: "/"
-      }, "Actor Search"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
+      }, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
         "aria-controls": "basic-navbar-nav"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Collapse, {
         id: "basic-navbar-nav"
@@ -746,6 +800,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _signs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../signs */ "./client/signs.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -770,6 +825,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
  // Single Star styles
 
 var styles = {
@@ -777,8 +833,8 @@ var styles = {
     paddingTop: "20%"
   },
   starImage: {
-    height: "5rem",
-    width: "4rem",
+    height: "10rem",
+    width: "8rem",
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0"
@@ -809,7 +865,9 @@ var SingleStar = /*#__PURE__*/function (_React$Component) {
         onHide: this.props.handleClose
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
         closeButton: true
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, singleStar.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, singleStar.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, {
+        className: "text-center"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
         style: styles.starImage,
         alt: "Image of ".concat(singleStar.name),
         src: "https://image.tmdb.org/t/p/w200/".concat(singleStar.profile_path),
@@ -817,7 +875,9 @@ var SingleStar = /*#__PURE__*/function (_React$Component) {
           evt.target.onError = null;
           evt.target.src = "./default.png";
         }
-      })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      }), singleStar.birthday ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, singleStar.name, " is a", " " + _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][singleStar.birthday[5] + singleStar.birthday[6]][singleStar.birthday[8] + singleStar.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "We can't find ", singleStar.name, "'s birthday! If you know it, you could help us out and add it to the", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://www.themoviedb.org/contribute?language=en-US"
+      }, "database"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
         variant: "secondary",
         onClick: this.props.handleClose
       }, "Close")));
