@@ -67,7 +67,7 @@ export const WAF_SETTINGS = {
       priority: 0,
       statement: {
         rateBasedStatement: {
-          limit: 300, // In a 5 minute period
+          limit: 600, // In a 5 minute period
           aggregateKeyType: "IP",
         },
       },

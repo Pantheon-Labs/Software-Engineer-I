@@ -157,7 +157,7 @@ const App = () => {
 
   return (
     <>
-      <Flex align="center" justify="center">
+      <Flex align="start" justify="center">
         <Flex
           align="center"
           justify="center"
@@ -175,7 +175,7 @@ const App = () => {
               loadingText="Uploading..."
               onClick={() => fileInputRef?.current.click()}
             >
-              Upload an image
+              Upload a picture
             </Button>
             <Input
               ref={fileInputRef}

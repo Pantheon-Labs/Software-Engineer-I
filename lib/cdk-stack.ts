@@ -5,6 +5,8 @@ import * as waf from "@aws-cdk/aws-wafv2";
 import * as cf from "@aws-cdk/aws-cloudfront";
 import * as origins from "@aws-cdk/aws-cloudfront-origins";
 import * as tasks from "@aws-cdk/aws-stepfunctions-tasks";
+import { SPADeploy } from "cdk-spa-deploy";
+
 import {
   CorsHttpMethod,
   HttpApi,
@@ -530,6 +532,18 @@ export class CdkStack extends cdk.Stack {
     BUS.grantPutEventsTo(fileUploadProcessor);
     BUCKET.grantReadWrite(audioProcessor);
     BUCKET.grantPutAcl(audioProcessor);
+
+    /**
+     * FRONTEND
+     */
+
+    new SPADeploy(
+      this,
+      `${process.env.NODE_ENV}-website-deploy`
+    ).createBasicSite({
+      indexDoc: "index.html",
+      websiteFolder: "./build",
+    });
 
     /**
      * OUTPUTS
