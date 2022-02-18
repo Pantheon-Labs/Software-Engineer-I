@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Image, ListGroup } from "react-bootstrap";
+import { Container, Image, ListGroup, Alert } from "react-bootstrap";
 import { connect } from "react-redux";
 import { astrology } from "../signs";
 
@@ -38,7 +38,7 @@ class SearchResults extends React.Component {
   render() {
     return (
       <ListGroup>
-        {this.props.searchResults.length > 0 &&
+        {this.props.searchResults.length > 0 ? (
           this.props.searchResults.map((star) => {
             return (
               <ListGroup.Item
@@ -76,7 +76,14 @@ class SearchResults extends React.Component {
                 </Container>
               </ListGroup.Item>
             );
-          })}
+          })
+        ) : (
+          <ListGroup.Item>
+            <Alert variant="warning">
+              No results found. <br></br> Check your spelling?
+            </Alert>
+          </ListGroup.Item>
+        )}
       </ListGroup>
     );
   }

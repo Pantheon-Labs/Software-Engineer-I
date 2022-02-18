@@ -62,11 +62,12 @@ class SingleStar extends React.Component {
               </p>
             ) : (
               <p>
-                We can't find {singleStar.name}'s birthday! If you know it, you
-                could help us out and add it to the{" "}
+                We can't find {singleStar.name}'s sign! If you know it, you
+                could help us out by adding their birthday to the{" "}
                 <a href="https://www.themoviedb.org/contribute?language=en-US">
                   database
                 </a>
+                !
               </p>
             )}
           </div>
