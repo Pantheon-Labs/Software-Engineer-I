@@ -9,11 +9,14 @@ const styles = {
     paddingTop: "20%",
   },
   starImage: {
-    height: "10rem",
-    width: "8rem",
+    height: "12.5rem",
+    width: "10rem",
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0",
+  },
+  text: {
+    paddingTop: "1rem",
   },
 };
 
@@ -46,23 +49,27 @@ class SingleStar extends React.Component {
               evt.target.src = "./default.png";
             }}
           />
-          {singleStar.birthday ? (
-            <p>
-              {singleStar.name} is a
-              {" " +
-                astrology[singleStar.birthday[5] + singleStar.birthday[6]][
-                  singleStar.birthday[8] + singleStar.birthday[9]
-                ]}
-            </p>
-          ) : (
-            <p>
-              We can't find {singleStar.name}'s birthday! If you know it, you
-              could help us out and add it to the{" "}
-              <a href="https://www.themoviedb.org/contribute?language=en-US">
-                database
-              </a>
-            </p>
-          )}
+          <div style={styles.text}>
+            {singleStar.birthday ? (
+              <p>
+                {singleStar.name} is a{" "}
+                <strong>
+                  {" " +
+                    astrology[singleStar.birthday[5] + singleStar.birthday[6]][
+                      singleStar.birthday[8] + singleStar.birthday[9]
+                    ]}{" "}
+                </strong>
+              </p>
+            ) : (
+              <p>
+                We can't find {singleStar.name}'s birthday! If you know it, you
+                could help us out and add it to the{" "}
+                <a href="https://www.themoviedb.org/contribute?language=en-US">
+                  database
+                </a>
+              </p>
+            )}
+          </div>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={this.props.handleClose}>

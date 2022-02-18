@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Image, ListGroup } from "react-bootstrap";
+import { Container, Image, ListGroup } from "react-bootstrap";
 import { connect } from "react-redux";
 import { astrology } from "../signs";
 
@@ -60,7 +60,7 @@ class SearchResults extends React.Component {
                     }}
                   />
                   <span style={styles.resultText}>
-                    <p>{star.name}</p>
+                    <h3>{star.name}</h3>
                     {star.birthday[9] ? (
                       <p>
                         {

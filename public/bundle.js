@@ -862,7 +862,7 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
           }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
           style: styles.resultText
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, star.name), star.birthday[9] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][star.birthday[5] + star.birthday[6]][star.birthday[8] + star.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Unkown"))));
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, star.name), star.birthday[9] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][star.birthday[5] + star.birthday[6]][star.birthday[8] + star.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Unkown"))));
       }));
     }
   }]);
@@ -926,11 +926,14 @@ var styles = {
     paddingTop: "20%"
   },
   starImage: {
-    height: "10rem",
-    width: "8rem",
+    height: "12.5rem",
+    width: "10rem",
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0"
+  },
+  text: {
+    paddingTop: "1rem"
   }
 };
 /*
@@ -968,9 +971,11 @@ var SingleStar = /*#__PURE__*/function (_React$Component) {
           evt.target.onError = null;
           evt.target.src = "./default.png";
         }
-      }), singleStar.birthday ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, singleStar.name, " is a", " " + _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][singleStar.birthday[5] + singleStar.birthday[6]][singleStar.birthday[8] + singleStar.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "We can't find ", singleStar.name, "'s birthday! If you know it, you could help us out and add it to the", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: styles.text
+      }, singleStar.birthday ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, singleStar.name, " is a", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " " + _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][singleStar.birthday[5] + singleStar.birthday[6]][singleStar.birthday[8] + singleStar.birthday[9]], " ")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "We can't find ", singleStar.name, "'s birthday! If you know it, you could help us out and add it to the", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://www.themoviedb.org/contribute?language=en-US"
-      }, "database"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      }, "database")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
         variant: "secondary",
         onClick: this.props.handleClose
       }, "Close")));
