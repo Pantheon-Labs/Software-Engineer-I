@@ -21,6 +21,11 @@ body {
   font-style: italic;
   font-weight: bold;
 }
+
+.supportbutton {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
 .text {
   text-align: left;
   font-size: 25px;
