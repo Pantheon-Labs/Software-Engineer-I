@@ -5,6 +5,7 @@ import {
   Button,
   FormControl,
   Spinner,
+  Alert,
 } from "react-bootstrap";
 import SearchResults from "./SearchResults";
 import SingleStar from "./SingleStar";
@@ -129,8 +130,14 @@ class Home extends React.Component {
           </div>
         )}
 
-        {this.props.searchResults.length > 0 && (
+        {this.state.status === "loaded" && (
           <SearchResults handleClick={this.handleClick} />
+        )}
+
+        {this.state.status === "error" && (
+          <Alert variant="danger">
+            There was an error completing your search!
+          </Alert>
         )}
 
         {this.props.singleStar && (
