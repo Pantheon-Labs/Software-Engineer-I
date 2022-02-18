@@ -54,7 +54,7 @@ export const main = async (
 
     if (!result.Item?.labels) {
       return {
-        statusCode: 202,
+        statusCode: 500, // Returnin an error so SWR keeps polling
         body: JSON.stringify({
           message: `Labels not added yet`,
         }),

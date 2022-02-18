@@ -60,7 +60,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "npx cross-env NODE_ENV=development cdk deploy  --outputs-file ./cdk-outputs.json && jest",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-dev": "npm run build && npx cross-env NODE_ENV=development cdk deploy"
   },
   "eslintConfig": {
     "extends": [
