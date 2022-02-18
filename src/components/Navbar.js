@@ -7,7 +7,8 @@ function Navbar() {
             <nav className = "tabs">
                 <ul className = "nav">
                     <li className = 'links'><Link to="/">Home</Link></li>
-                    <li className = 'links'><Link to="/events">Events</Link></li>
+                    <li className = 'links'><Link to="/news">News</Link></li>
+                    <li className = 'links'><Link to="/events">Park Events</Link></li>
                     <li className = 'links'><Link to="/extras">Extras</Link></li>
                 </ul>
             </nav>

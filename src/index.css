@@ -18,6 +18,7 @@ body {
   text-align: left;
   font-size: 25px;
   font-family: "Times New Roman", Times, serif;
+  font-style: italic;
   font-weight: bold;
 }
 
@@ -36,8 +37,18 @@ body {
 
 .newstabs {
   font-family:"Times New Roman", Courier, monospace;
-  padding: 30px;
-  background: rgb(153, 223, 223);
+  padding: 10px;
+  background: rgb(240, 250, 250);
+}
+
+.newsdiv {
+  background-image: url("https://i.pinimg.com/originals/8e/a1/19/8ea1198d59d3321f0a429edbfd913b51.jpg");
+  background-repeat: repeat-y;
+}
+
+.eventsdiv {
+  background-image: url("https://theknickerbocker.com/wp-content/uploads/2018/04/Central-Park-Conservatory-Gardens-Secret-Park-NYC.jpg");
+  background-repeat: repeat-y;
 }
 
 .boxdiv {
@@ -47,7 +58,7 @@ body {
 .box{
   border: 5px solid #060a11dc;
   border-radius: 150px;
-  background-color: rgb(224, 240, 240);
+  background-image: url("https://d31sxl6qgne2yj.cloudfront.net/wordpress/wp-content/uploads/20190930143120/Generic-Light-WoodGrain-22.jpg");
   margin-bottom: 50px; 
   font-size: 25px;
   font-family: "Times New Roman", Times, serif;
@@ -62,9 +73,9 @@ body {
   margin-bottom: 20px;
 }
 .image {
-  width: 70%;
   border-radius: 20px;
-  height: 70%;
+  display: flex;
+  justify-content: center;
 }
 .links{
   display: inline-block;
