@@ -5,6 +5,7 @@
     color: black;
     top: 0;
     position: fixed;
+    text-align: center;
 
     .wrapper {
         padding: 10px 30px;
@@ -22,8 +23,14 @@
             }
         }
         
+
         
 
     }
+    h1{
+        text-align: center;
+    }
+
+ 
 
 }

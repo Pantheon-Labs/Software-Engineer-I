@@ -16,11 +16,13 @@ export default function intro() {
               <br></br>
               <br></br>
               <h1>Hobbies!</h1>
-              <p> I go to music festivals, hikes, <br></br> and i especially love sleeping.</p>
+              <p> I go to music festivals, hikes, <br></br> and I especially love sleeping.</p>
+              <br></br>
+              <br></br>
+              <h1> Speciality </h1>
+              <p> Front-end developer, Node.JS, React, HTML, <br></br> CSS, JS </p>
             </div>
-                  <a href="portfolio">
-                    <img src="a" alt="" />
-                  </a>
+                 
         </div>
     </div>
   )
