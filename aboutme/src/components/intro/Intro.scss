@@ -1,3 +1,29 @@
 .intro {
-    background-color: lightgray;
+    display: flex;
+    height: 100vh;
+
+    .left {
+        flex: 0.6;
+        background-color: lightgoldenrodyellow;
+
+        .imgContainer {
+            width: 400px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px;
+            
+
+            img {
+                width: 100%;
+            }
+        }
+        
+    }
+    .right {
+        flex: 0.4;
+        
+    }
+    
 }
