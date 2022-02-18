@@ -641,7 +641,7 @@ var Navigation = /*#__PURE__*/function (_React$Component) {
         sticky: "top"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Brand, {
         href: "/"
-      }, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
+      }, "\u272E", " Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
         "aria-controls": "basic-navbar-nav"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Collapse, {
         id: "basic-navbar-nav"
@@ -703,8 +703,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var styles = {
   starImage: {
-    height: "5rem",
-    width: "4rem",
+    height: "5.5rem",
+    width: "4.4rem",
+    marginTop: "0.5rem",
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0"
@@ -713,13 +714,15 @@ var styles = {
     paddingTop: "1rem"
   },
   starFigure: {
-    padding: "0 0.25rem 0 0.25rem"
+    padding: "0 0.25rem 0 0.25rem",
+    borderRadius: "10%"
   },
   caption: {
     width: "5.5rem",
+    marginRight: "0.25rem",
+    marginLeft: "0.25rem",
     height: "2.5rem",
-    overflow: "hidden",
-    textOverflow: "ellipsis"
+    overflow: "hidden"
   }
 };
 /*
@@ -750,7 +753,8 @@ var PopularStars = /*#__PURE__*/function (_React$Component) {
           style: styles.starFigure,
           onClick: function onClick() {
             return _this.props.handleClick(star);
-          }
+          },
+          className: "figure"
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
           style: styles.starImage,
           alt: "Profile image of ".concat(star.name),

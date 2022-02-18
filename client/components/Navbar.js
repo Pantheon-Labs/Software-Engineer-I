@@ -10,7 +10,7 @@ export default class Navigation extends React.Component {
       <div>
         <Navbar bg="light" expand="lg" sticky="top">
           <Container>
-            <Navbar.Brand href="/">Star Signs</Navbar.Brand>
+            <Navbar.Brand href="/">{"\u272e"} Star Signs</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="me-auto">

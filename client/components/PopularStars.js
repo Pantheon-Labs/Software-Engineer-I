@@ -4,8 +4,9 @@ import { connect } from "react-redux";
 // Styles for Popular Stars
 const styles = {
   starImage: {
-    height: "5rem",
-    width: "4rem",
+    height: "5.5rem",
+    width: "4.4rem",
+    marginTop: "0.5rem",
     borderRadius: "10%",
     objectFit: "cover",
     objectPosition: "50% 0",
@@ -15,12 +16,14 @@ const styles = {
   },
   starFigure: {
     padding: "0 0.25rem 0 0.25rem",
+    borderRadius: "10%",
   },
   caption: {
     width: "5.5rem",
+    marginRight: "0.25rem",
+    marginLeft: "0.25rem",
     height: "2.5rem",
     overflow: "hidden",
-    textOverflow: "ellipsis",
   },
 };
 
@@ -44,6 +47,7 @@ class PopularStars extends React.Component {
                 key={star.id}
                 style={styles.starFigure}
                 onClick={() => this.props.handleClick(star)}
+                className="figure"
               >
                 <Figure.Image
                   style={styles.starImage}
