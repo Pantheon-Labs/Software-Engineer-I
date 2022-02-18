@@ -24,7 +24,7 @@ const styles = {
     borderRadius: "10%",
   },
   caption: {
-    width: "5.75rem",
+    width: "5.5rem",
     marginRight: "0.25rem",
     marginLeft: "0.25rem",
     height: "2.5rem",
