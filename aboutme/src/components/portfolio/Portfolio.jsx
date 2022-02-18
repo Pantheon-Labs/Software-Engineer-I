@@ -8,34 +8,37 @@ export default function portfolio() {
               <li className='active'>Featured</li>
               <li>React </li>
               <li>Fundamentals of CS</li>
-              <li>Featured</li>
             </ul>
 
             <div className="container">
                 <div className='item'>
+                <a href="https://github.com/kenliii/thegame">
                   <img 
-                  src=""
+                  src="images/yourself.png"
                   alt=""
                   />
-                  <h3>Tamagachi Project</h3>
+                </a>
                 </div>
                 </div>
             <div className="container">
                 <div className='item'>
+                <a href="https://github.com/kenliii/project-two/tree/master">
                   <img 
-                  src=""
+                  src="images/airbnb.png"
                   alt=""
                   />
-                  <h3>Exotic Animals</h3>
+               </a>
                 </div>
                 </div>
             <div className="container">
                 <div className='item'>
+                <a href="https://github.com/kenliii/explore">
                   <img 
-                  src=""
+                  src="images/real.png"
                   alt=""
                   />
-                  <h3>Tamagachi Project</h3>
+                </a>
+                  
                 </div>    
             </div>
     </div>

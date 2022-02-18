@@ -7,14 +7,20 @@
     position: fixed;
     text-align: center;
 
+    h1{
+        margin-left: 120px;
+    }
+
+
+
     .wrapper {
         padding: 10px 30px;
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-
         .left{
+            
             .click {
                 font-size: 50px;
                 font-weight: 500;
@@ -22,15 +28,5 @@
                 color: inherit;
             }
         }
-        
-
-        
-
     }
-    h1{
-        text-align: center;
-    }
-
- 
-
 }

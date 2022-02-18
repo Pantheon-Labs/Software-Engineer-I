@@ -2,9 +2,20 @@
     display: flex;
     height: 95vh;
 
+    h1{
+        display: fixed;
+        margin-right: 50px;
+    }
+    p{
+        display: fixed;
+        margin-right: 60px;
+    }
+
     .left {
         flex: 0.6;
         background-color: lightgoldenrodyellow;
+
+       
 
         .imgContainer {
             width: 400px;
@@ -13,6 +24,7 @@
             align-items: center;
             justify-content: center;
             padding: 100px;
+            margin-left: 60px;
             
 
             img {
