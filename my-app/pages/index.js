@@ -5,17 +5,14 @@ import axios from "axios";
 import { useEffect, useState } from 'react';
 import Card from '../Components/Card';
 import PageNav from '../Components/PageNav';
+import CardList from '../Components/CardList';
 
 export default function Home() {
 	const [characters, setCharacters] = useState([]);
 	const [pageInfo, setPageInfo] = useState([]);
+	const [selectedCard, setSelectedCard] = useState([]);
 
-	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?name=Rick");
-
-	var options = {
-		method: 'GET',
-		url: 'https://rickandmortyapi.com/api/character/?name=Rick',
-	};
+	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/");
 
 	useEffect(() => {
 		const requestData = async () => {
@@ -32,15 +29,11 @@ export default function Home() {
 						console.log("Didn't fail " + res.data);
 					}
 				});
-
-			//setCharacterUrl(axiosData.data.info.next)
 		}
 		return requestData();
 	}, [characterUrl]);
 
-	let char = characters[0]
 	console.log("characters from " + characters);
-	console.log("characters from " + char);
 
 	return (
 		<div className={styles.container}>
@@ -51,20 +44,14 @@ export default function Home() {
 			</Head>
 
 			<main className={styles.main}>
-				<PageNav nav={pageInfo} setCharacterUrl={setCharacterUrl} />
-				{/*characters.length > 0 && (
-					characters.map((keyName, i) => {
-						console.log(`keyName=${keyName} id=${i}`);
-						`<div key=${i}>${characters[i].name}</div>`
-					}
-					//)
-				)*/}
-				<Card character={characters} />
+				{pageInfo && (
+					<>
+						<PageNav nav={pageInfo} setCharacterUrl={setCharacterUrl} />
 
-				<div className={styles.grid}>
-					{//characters}
-					}
-				</div>
+						<CardList character={characters} setSelectedCard={setSelectedCard} />
+					</>
+				)
+				}
 			</main>
 
 			<footer className={styles.footer}>

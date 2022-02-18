@@ -1,16 +1,10 @@
 import { Image } from '@chakra-ui/react';
 
-function Card({ character }) {
-    console.log(character);
+function Card({ id, name, traits, image }) {
     return (
         <div name="characters">
-            {character.map((name, id) => (
-                <>
-                    <div key={character[id].id}>{character[id].name}</div>
-                    <Image src={character[id].image} alt={character[id].name}/>                    
-                </>
-                )
-            )}
+            <div key={id} className='card'>{name}</div>
+            <Image src={image} alt={name} />
         </div>
     )
 }
