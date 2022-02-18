@@ -97,7 +97,7 @@ class Home extends React.Component {
         style={styles.mainContainer}
         className="text-center"
       >
-        <h1 style={styles.header}>Home</h1>
+        <h1 style={styles.header}>Star Signs</h1>
         <InputGroup className="mb-3">
           <FormControl
             name="searchInput"
