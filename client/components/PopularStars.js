@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 // Styles for Popular Stars
 const styles = {
   starImage: {
-    height: "5.5rem",
-    width: "4.4rem",
+    height: "6rem",
+    width: "4.8rem",
     marginTop: "0.5rem",
     borderRadius: "10%",
     objectFit: "cover",
@@ -20,11 +20,11 @@ const styles = {
     justifyContent: "center",
   },
   starFigure: {
-    padding: "0 0.25rem 0 0.25rem",
+    padding: "0 0.5rem 0 0.5rem",
     borderRadius: "10%",
   },
   caption: {
-    width: "5.5rem",
+    width: "5.75rem",
     marginRight: "0.25rem",
     marginLeft: "0.25rem",
     height: "2.5rem",
@@ -46,7 +46,7 @@ class PopularStars extends React.Component {
       <Card style={styles.popularCard}>
         <Card.Title>Trending Searches</Card.Title>
         <Card.Body style={styles.cardBody}>
-          {this.props.popularPeople.slice(0, 4).map((star) => {
+          {this.props.popularPeople.slice(0, 3).map((star) => {
             return (
               <Figure
                 key={star.id}

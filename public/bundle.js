@@ -703,8 +703,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 var styles = {
   starImage: {
-    height: "5.5rem",
-    width: "4.4rem",
+    height: "6rem",
+    width: "4.8rem",
     marginTop: "0.5rem",
     borderRadius: "10%",
     objectFit: "cover",
@@ -719,11 +719,11 @@ var styles = {
     justifyContent: "center"
   },
   starFigure: {
-    padding: "0 0.25rem 0 0.25rem",
+    padding: "0 0.5rem 0 0.5rem",
     borderRadius: "10%"
   },
   caption: {
-    width: "5.5rem",
+    width: "5.75rem",
     marginRight: "0.25rem",
     marginLeft: "0.25rem",
     height: "2.5rem",
@@ -754,7 +754,7 @@ var PopularStars = /*#__PURE__*/function (_React$Component) {
         style: styles.popularCard
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, {
         style: styles.cardBody
-      }, this.props.popularPeople.slice(0, 4).map(function (star) {
+      }, this.props.popularPeople.slice(0, 3).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
           style: styles.starFigure,
