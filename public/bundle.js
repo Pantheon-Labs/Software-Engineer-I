@@ -159,6 +159,13 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 var styles = {
   mainContainer: {
     padding: "5rem"
+  },
+  header: {
+    paddingBottom: "0.5rem"
+  },
+  signature: {
+    marginTop: "2rem",
+    fontWeight: "lighter"
   }
 };
 
@@ -178,7 +185,13 @@ var About = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "About"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Created in 2021"));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        style: styles.header
+      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs is leaning into two of the guiltiest of guilty pleasures: celebrities gossip and astrology. The ability to search for a celebrity and get a list of stars and their star signs can help add a dash of horoscope to your tabloids, or throw in some household names to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to search for actors. You can find out more about the api ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://developers.themoviedb.org/3"
+      }, "here"), "."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        style: styles.signature
+      }, "Created in 2022 by Elijah Meshnick"));
     }
   }]);
 
