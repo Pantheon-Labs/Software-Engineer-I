@@ -1,6 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react';
-import '../Components/CardList.css'
-//import '../styles/globals.css'
+import '../styles/global.css';
 
 function MyApp({ Component, pageProps }) {
 	return (

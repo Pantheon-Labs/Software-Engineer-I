@@ -1,6 +1,6 @@
 import { Image } from '@chakra-ui/react';
 
-function Card({ id, name, traits, image }) {
+function Card({ id, name, image }) {
     return (
         <div className="card">
             <div key={id}>
