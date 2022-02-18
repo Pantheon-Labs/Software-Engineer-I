@@ -713,6 +713,11 @@ var styles = {
   popularCard: {
     paddingTop: "1rem"
   },
+  cardBody: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "center"
+  },
   starFigure: {
     padding: "0 0.25rem 0 0.25rem",
     borderRadius: "10%"
@@ -747,7 +752,9 @@ var PopularStars = /*#__PURE__*/function (_React$Component) {
 
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"], {
         style: styles.popularCard
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, null, this.props.popularPeople.slice(0, 4).map(function (star) {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, {
+        style: styles.cardBody
+      }, this.props.popularPeople.slice(0, 4).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
           style: styles.starFigure,

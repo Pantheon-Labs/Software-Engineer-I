@@ -14,6 +14,11 @@ const styles = {
   popularCard: {
     paddingTop: "1rem",
   },
+  cardBody: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "center",
+  },
   starFigure: {
     padding: "0 0.25rem 0 0.25rem",
     borderRadius: "10%",
@@ -40,7 +45,7 @@ class PopularStars extends React.Component {
     return (
       <Card style={styles.popularCard}>
         <Card.Title>Trending Searches</Card.Title>
-        <Card.Body>
+        <Card.Body style={styles.cardBody}>
           {this.props.popularPeople.slice(0, 4).map((star) => {
             return (
               <Figure
