@@ -18,6 +18,7 @@ function Home() {
             <img src = "https://static01.nyt.com/images/2019/05/29/realestate/00skyline-south4/88ce0191bfc249b6aae1b472158cccc4-superJumbo.jpg"/>
             <p className = "fronttext">This website is a work in progress and includes some news and NYC park events.</p>
             <p className = "fronttext">Check it out and let me know what you think</p>
+            <img className = "pizzarat" src = "https://c.tenor.com/2LTMamfmuDYAAAAC/pizza-rat.gif"/>
             <Button onClick={onOpen} colorScheme='blue' size='lg' className = "supportbutton">Support Me!</Button>
             <Modal isOpen={isOpen} onClose={onClose} >
                 <ModalOverlay />
