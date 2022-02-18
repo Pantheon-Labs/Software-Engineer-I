@@ -4,15 +4,15 @@ function Event({event}) {
   
     return (
       <div className = "boxdiv">
-        <Box maxW='lg' className = "box">
+        <Box maxW='xlg' className = "box" boxShadow='dark-lg'>
           <Badge px='2' colorScheme='teal'>
               New Event
           </Badge>  
-          <Image src={event.image} alt={"a"} /> 
-          <div className = "text">          
-            <h1>
-              {event.title}
-            </h1>              
+          <h1 className = "articletitle">
+            {event.title}
+          </h1>
+          <Image src={event.image} alt={"a"} className = "image"/> 
+          <div className = "text">                        
             <div dangerouslySetInnerHTML={{ __html: event.description }} />
           </div>                       
         </Box>

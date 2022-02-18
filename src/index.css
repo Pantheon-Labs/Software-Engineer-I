@@ -8,34 +8,17 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; 
-    /* background: rgb(160, 160, 144); */
-    background: rgb(103, 158, 196);
 }
 
 .App {
   text-align: center;
+  background: rgb(252, 252, 252);
 }
-
 .text {
   text-align: left;
   font-size: 25px;
   font-family: "Times New Roman", Times, serif;
   font-weight: bold;
-}
-
-.boxdiv {
-  display: flex;
-  justify-content: center;
-}
-.box{
-  border: 10px solid #060a11dc;
-  border-radius: 2px;
-  background-color: rgb(224, 240, 240);
-  margin-bottom: 50px; 
-  font-size: 25px;
-  font-family: "Times New Roman", Times, serif;
-  font-weight: bold;
-  padding: 20px;
 }
 
 .title{
@@ -51,6 +34,38 @@ body {
   padding: 20px;
 }
 
+.newstabs {
+  font-family:"Times New Roman", Courier, monospace;
+  padding: 30px;
+  background: rgb(153, 223, 223);
+}
+
+.boxdiv {
+  display: flex;
+  justify-content: center;
+}
+.box{
+  border: 5px solid #060a11dc;
+  border-radius: 150px;
+  background-color: rgb(224, 240, 240);
+  margin-bottom: 50px; 
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  padding: 80px;
+  width: 80%;
+}
+
+.articletitle {
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+.image {
+  width: 70%;
+  border-radius: 20px;
+  height: 70%;
+}
 .links{
   display: inline-block;
   margin: 0 25px;
