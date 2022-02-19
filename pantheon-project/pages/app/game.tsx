@@ -97,6 +97,11 @@ const Game: NextPage = () => {
             </Heading>
         </SimpleGrid>
 
+        <SimpleGrid  columns={2} spacing = {150}>
+            <Text textAlign={'center'}>Your Choice</Text>
+            <Text textAlign={'center'}>Computers Choice</Text>
+        </SimpleGrid>
+
         <SimpleGrid columns={2} spacing = {20}>
                 <Image boxSize='200px' src={`/${userChoice}.png`} alt=''></Image>
                 <Image boxSize='200px' src={`/${computerChoice}.png`} alt=''></Image>
