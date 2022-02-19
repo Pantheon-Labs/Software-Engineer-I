@@ -3,9 +3,22 @@
     overflow-y: "scroll";
 }
 
+.logo{
+    max-width: 20em;   
+}
+
+.mainContent {
+    display: flex;
+    background-color: cornsilk;
+}
 .buttonGroupContainer{
     display: contents;
 }
+
+.cardHighlight{
+    background-color: #000;
+}
+
 .cardList {
     cursor: pointer;
     display: flex;

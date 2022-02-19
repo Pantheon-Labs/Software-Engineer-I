@@ -1,4 +1,4 @@
-import { Image } from '@chakra-ui/react';
+import { Image, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
 
 function Main({ character, selectedCard, page }) {
@@ -39,14 +39,14 @@ function Main({ character, selectedCard, page }) {
                         </div>
                         <div className='info'>
                             <div className='cardDetails'>
-                                <div className='title'>{activeCard?.name}</div>
-                                <span className='itemNumber'>#{activeCard?.id}</span>
+                                <Text className='title' fontSize='4xl'>Name: {activeCard?.name}</Text>
+                                <Text className='itemNumber'>#{activeCard?.id}</Text>
                             </div>
                             <div className='character'>
                                 <div className='characterDetails'>
 
                                     <div className='cardNameAndHandle'>
-                                        <div className='characterAddress'>Birthplace: {activeCard["location"]?.name}</div>
+                                        <Text className='characterAddress'>Birthplace: {activeCard["location"]?.name}</Text>
                                         <div className='characterHandle'></div>
                                     </div>
                                     <div className='characterLink'>

@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import PageNav from '../Components/PageNav';
 import CardList from '../Components/CardList';
 import Main from '../Components/Main';
+//import logo from '../pages/assets/Rick_and_Morty_logo.png';
+import { Image } from '@chakra-ui/react';
 
 export default function Home() {
 	const [characters, setCharacters] = useState([]);
@@ -110,6 +112,7 @@ export default function Home() {
 
 				{pageInfo && (
 					<>
+						<Image src="../assets/Rick_and_Morty_logo.png" className="logo" alt="Rick and Morty Logo" />
 						<PageNav nav={pageInfo} page={page} setCharacterUrl={setCharacterUrl} setRickUrl={setRickUrl} setMortyUrl={setMortyUrl} />
 						<Main
 							character={characters}
