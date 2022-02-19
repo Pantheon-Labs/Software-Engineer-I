@@ -117,7 +117,7 @@ const Game: NextPage = () => {
         <Text>Turn Results: {turnResult}</Text>
 
         <Button colorScheme='red' onClick={()=> reset()}>Reset the game</Button>
-        <Button as="a" colorScheme="blue" href="/app/nextPage">Next Page</Button>
+        <Button as="a" colorScheme="blue" href="/app/reasoning">Next Page</Button>
 
       </VStack>
   )
