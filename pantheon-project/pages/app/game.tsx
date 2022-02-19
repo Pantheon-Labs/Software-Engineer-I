@@ -1,5 +1,5 @@
 import { VStack, Heading, Text, Image, Button, Box, SimpleGrid, Center } from '@chakra-ui/react';
-import { NextPage } from 'next'
+import { NextPage } from 'next';
 import React, {useState, useEffect} from 'react';
 
 const Game: NextPage = () => {
@@ -53,7 +53,7 @@ const Game: NextPage = () => {
     useEffect(() =>{
         const updatedAverage = Math.floor((userPoints/(machinePoints + userPoints)) * 100);
         setAverage(updatedAverage);
-    },[userPoints, machinePoints])
+    },[userPoints, machinePoints]);
 
   return (
 
