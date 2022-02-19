@@ -33,7 +33,7 @@ function Main({ character, selectedCard, page }) {
                 {activeCard && (
                     <>
                         <div className='cardHighlight'>
-                            <div className='cardContainer'>
+                            <div className='cardContainer swingimage'>
                                 <Image className='selectedCard' src={activeCard?.image} alt={activeCard?.name} />
                             </div>
                         </div>
