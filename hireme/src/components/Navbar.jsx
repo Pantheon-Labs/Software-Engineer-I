@@ -1,21 +1,23 @@
-import { Box, Button, Icon, Stack } from "@chakra-ui/react";
+import { Box, Button, Icon, Stack, Link } from "@chakra-ui/react";
 import { GiBiceps } from "react-icons/gi";
 import { AiOutlineHome } from "react-icons/ai";
 import { GoPerson } from "react-icons/go";
 import { TiMessage } from "react-icons/ti";
 import { FaPoll } from "react-icons/fa";
+import { CgDanger } from "react-icons/cg";
+import "./Navbar.css";
 
 function Navbar() {
   return (
-    <>
+    <div className="nav">
       <header>
         <Box
           d="flex"
           alignItems="center"
           justifyContent="space-between"
-          position="sticky"
           bg="black"
           height="80px"
+          width="100%"
         >
           <Box>
             <Button
@@ -76,11 +78,27 @@ function Navbar() {
               >
                 Poll
               </Button>
+              <Button
+                height="40px"
+                width="120px"
+                pr={3}
+                colorScheme="orange"
+                fontSize="sm"
+                variant="outline"
+                leftIcon={<Icon as={CgDanger} />}
+              >
+                <Link
+                  href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                  textDecoration="none"
+                >
+                  Do Not Click{" "}
+                </Link>
+              </Button>
             </Stack>
           </Box>
         </Box>
       </header>
-    </>
+    </div>
   );
 }
 export default Navbar;
