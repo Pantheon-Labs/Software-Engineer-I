@@ -11,8 +11,8 @@ export default function Home() {
 	const [pageInfo, setPageInfo] = useState([]);
 	const [selectedCard, setSelectedCard] = useState([]);
 
-	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?page=3");
-	const [page, setPage] = useState(0);
+	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?page=1");
+	const [page, setPage] = useState(1);
 
 	useEffect(() => {
 		const requestData = async () => {
@@ -66,7 +66,7 @@ export default function Home() {
 			</main>
 
 			<footer className={styles.footer}>
-
+				This RickNMortyAPI viewer is not affiliated with the RickNMortyAPI or the RickNMorty series or any of its creators. This is only being provided as a free compliment to the RickNMorty API to give a demonstration of its usage.
 			</footer>
 		</div>
 	)
