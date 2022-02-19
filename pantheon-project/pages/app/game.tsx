@@ -4,11 +4,11 @@ import React, {useState, useEffect} from 'react';
 
 const Game: NextPage = () => {
 
-    const [userChoice, setMyChoice] = useState('rock');
-    const [computerChoice, setComputerChoice] = useState('rock');
+    const [userChoice, setMyChoice] = useState('');
+    const [computerChoice, setComputerChoice] = useState('');
     const [clicked, setClick] = useState(0);
     const [userPoints, setUserPoints] = useState(0);
-    const [machinePoints, setMachinePoints] = useState(0);
+    const [computerPoints, setComputerPoints] = useState(0);
     const [turnResult, setTurnResult] = useState('make a move!');
     const [playerAverage, setAverage] = useState(0);
 
@@ -37,23 +37,23 @@ const Game: NextPage = () => {
             setTurnResult('User point!');
         }
         if(comboMoves === 'paperscissors' || comboMoves === 'scissorsrock' || comboMoves === 'rockpaper'){
-            const updatedComputerPoints = machinePoints + 1;
-            setMachinePoints(updatedComputerPoints);
+            const updatedComputerPoints = computerPoints + 1;
+            setComputerPoints(updatedComputerPoints);
             setTurnResult('Machine point :(');
         }
         if(comboMoves === 'scissorsscissors' || comboMoves === 'rockrock' || comboMoves === 'paperpaper'){
             setTurnResult('Tie');
         }
 
-        const updatedAverage = Math.floor((userPoints/(machinePoints + userPoints)) * 100);
+        const updatedAverage = Math.floor((userPoints/(computerPoints + userPoints)) * 100);
         setAverage(updatedAverage);
 
     },[clicked]);
 
     useEffect(() =>{
-        const updatedAverage = Math.floor((userPoints/(machinePoints + userPoints)) * 100);
+        const updatedAverage = Math.floor((userPoints/(computerPoints + userPoints)) * 100);
         setAverage(updatedAverage);
-    },[userPoints, machinePoints]);
+    },[userPoints, computerPoints]);
 
   return (
 
@@ -84,7 +84,7 @@ const Game: NextPage = () => {
             </Box>
             <Box height={'45'}>
                 <Heading textAlign={'center'}>
-                    {machinePoints}
+                    {computerPoints}
                 </Heading>
             </Box>
         </SimpleGrid>
@@ -103,8 +103,8 @@ const Game: NextPage = () => {
         </SimpleGrid>
 
         <SimpleGrid columns={2} spacing = {20}>
-                <Image boxSize='200px' src={`/${userChoice}.png`} alt=''></Image>
-                <Image boxSize='200px' src={`/${computerChoice}.png`} alt=''></Image>
+                <Image boxSize='200px' src={`/${userChoice}.png`} fallbackSrc='https://via.placeholder.com/200' alt=''></Image>
+                <Image boxSize='200px' src={`/${computerChoice}.png`} fallbackSrc='https://via.placeholder.com/200' alt=''></Image>
         </SimpleGrid>
 
         <SimpleGrid columns={3} spacing = {20}>

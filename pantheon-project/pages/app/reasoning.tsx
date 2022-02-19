@@ -1,4 +1,4 @@
-import { VStack, Heading, Text, Box } from '@chakra-ui/react';
+import { VStack, Heading, Text, Box, Divider, HStack, Button, Spacer } from '@chakra-ui/react';
 import { NextPage } from 'next'
 
 const Reasoning: NextPage = () => {
@@ -7,10 +7,20 @@ const Reasoning: NextPage = () => {
     <VStack>
 
       <Box bg='brown' w='70%' px={'3'} py={'8'}>
-        <Heading alignItems={'center'} size="4xl" color='white'>
+        <Heading alignItems={'center'} size="3xl" color='white'>
           Why do I want to join your team?
         </Heading>
       </Box>
+
+      <Divider w='70%' borderColor={'white'} />
+      <HStack spacing='10'>
+        <Button as="a" colorScheme="blue" href="/">Home</Button>
+        <Spacer />
+        <Button as="a" colorScheme="blue" href="/app/game">Rock Paper Scisscors</Button>
+        <Spacer />
+        <Button as="a" colorScheme="blue" href="/app/reasoning">Reasoning</Button>
+      </HStack>
+      <Divider w='70%' borderColor={'white'} />
 
       <Box bg='gray.500' w='70%'  px={'3'} py={'3'}>
         <Heading color='white' fontSize="4xl">
@@ -22,7 +32,9 @@ const Reasoning: NextPage = () => {
           </Text>
       </Box>
 
-      <Box bg='blue' w='70%'  px={'3'} py={'3'}>
+      <Divider w='50%' borderColor={'white'} />
+
+      <Box bg='blue.300' w='70%'  px={'3'} py={'3'}>
         <Heading color='white' fontSize="4xl">
           Reason 2: 
         </Heading>
@@ -31,6 +43,8 @@ const Reasoning: NextPage = () => {
           For every developer there is always something new to learn, as a junior developer there are far more unknowns to explore everyday.
           </Text>
       </Box>
+
+      <Divider w='50%' borderColor={'white'} />
 
       <Box bg='gray.500' w='70%'  px={'3'} py={'3'}>
         <Heading color='white' fontSize="4xl">
