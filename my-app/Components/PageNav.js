@@ -1,6 +1,6 @@
 import { Button, ButtonGroup } from "@chakra-ui/react";
 
-const PageNav = ({ nav, setCharacterUrl }) => {
+const PageNav = ({ nav, page, setCharacterUrl }) => {
 
     let previousUrl = nav.prev;
     let nextUrl = nav.next;
@@ -17,13 +17,9 @@ const PageNav = ({ nav, setCharacterUrl }) => {
                 >
                         Previous
                     </Button>
-                    <Button
-                        data-tab="info"
-                        className="navTab"
-                        onClick="openTab(event, 'info')"
-                >
-                        Info
-                    </Button>
+                    <div className="pageInfo">
+                        Page {page} of {nav.pages}
+                    </div>
                     <Button
                         data-tab="next"
                         className="navTab"

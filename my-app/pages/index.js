@@ -12,7 +12,7 @@ export default function Home() {
 	const [selectedCard, setSelectedCard] = useState([]);
 
 	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?page=3");
-	//const [page, setPage] = useState(0);
+	const [page, setPage] = useState(0);
 
 	useEffect(() => {
 		const requestData = async () => {
@@ -20,8 +20,10 @@ export default function Home() {
 				.then(function (res) {
 					setCharacters(res.data.results);
 					setPageInfo(res.data.info)
-					/*let urlParams = new URLSearchParams(characterUrl);
-					setPage(urlParams.get('page'));*/
+					let urlParams = new URLSearchParams(characterUrl);
+					let query=urlParams.get("https://rickandmortyapi.com/api/character/?page");
+					console.log("page ="+query+" characterUrl ="+characterUrl);
+					setPage(query);
 					console.log("Success " + res.data);
 				})
 				.catch(function (res) {
@@ -49,11 +51,12 @@ export default function Home() {
 
 				{pageInfo && (
 					<>
-						<PageNav nav={pageInfo} setCharacterUrl={setCharacterUrl} />
+						<PageNav nav={pageInfo} page={page} setCharacterUrl={setCharacterUrl} />
 						<Main 
 							character={characters} 
 							selectedCard={selectedCard}
-							page={pageInfo.pages}
+							pageInfo={pageInfo.pages}
+							page={page}
 						/>
 						
 						<CardList character={characters} setSelectedCard={setSelectedCard} />
