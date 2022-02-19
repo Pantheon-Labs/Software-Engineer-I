@@ -10,9 +10,57 @@ export default function Home() {
 	const [characters, setCharacters] = useState([]);
 	const [pageInfo, setPageInfo] = useState([]);
 	const [selectedCard, setSelectedCard] = useState([]);
+	const [rickUrl, setRickUrl] = useState("https://rickandmortyapi.com/api/character/?name=Rick&page=1");
+	const [mortyUrl, setMortyUrl] = useState("https://rickandmortyapi.com/api/character/?name=Morty&page=1");
 
 	const [characterUrl, setCharacterUrl] = useState("https://rickandmortyapi.com/api/character/?page=1");
 	const [page, setPage] = useState(1);
+
+	useEffect(() => {
+		const requestData = async () => {
+			const axiosData = await axios.get(rickUrl)
+				.then(function (res) {
+					setCharacters(res.data.results);
+					setPageInfo(res.data.info)
+					let urlParams = new URLSearchParams(rickUrl);
+					let query = urlParams.get("https://rickandmortyapi.com/api/character/?name=Rick&page");
+					console.log("page =" + query + " rickUrl =" + rickUrl);
+					setPage(query);
+					console.log("Success " + res.data);
+				})
+				.catch(function (res) {
+					if (res instanceof Error) {
+						console.log("Failed " + res.message);
+					} else {
+						console.log("Didn't fail " + res.data);
+					}
+				});
+		}
+		return requestData();
+	}, [rickUrl]);
+
+	useEffect(() => {
+		const requestData = async () => {
+			const axiosData = await axios.get(mortyUrl)
+				.then(function (res) {
+					setCharacters(res.data.results);
+					setPageInfo(res.data.info)
+					let urlParams = new URLSearchParams(mortyUrl);
+					let query = urlParams.get("https://rickandmortyapi.com/api/character/?name=Morty&page");
+					console.log("page =" + query + " mortyUrl =" + mortyUrl);
+					setPage(query);
+					console.log("Success " + res.data);
+				})
+				.catch(function (res) {
+					if (res instanceof Error) {
+						console.log("Failed " + res.message);
+					} else {
+						console.log("Didn't fail " + res.data);
+					}
+				});
+		}
+		return requestData();
+	}, [mortyUrl]);
 
 	useEffect(() => {
 		const requestData = async () => {
@@ -21,9 +69,20 @@ export default function Home() {
 					setCharacters(res.data.results);
 					setPageInfo(res.data.info)
 					let urlParams = new URLSearchParams(characterUrl);
-					let query=urlParams.get("https://rickandmortyapi.com/api/character/?page");
-					console.log("page ="+query+" characterUrl ="+characterUrl);
-					setPage(query);
+					let queryPage = urlParams.get("https://rickandmortyapi.com/api/character/?page");
+					console.log("page =" + query + " characterUrl =" + characterUrl);
+					setPage(queryPage);
+					let queryName = urlParams.get("https://rickandmortyapi.com/api/character/?name");
+
+					switch (queryName) {
+						case 'Rick':
+							return console.log("Rick");
+						case 'Morty':
+							return console.log('Morty');
+						default:
+							return console.log('page');
+					}
+
 					console.log("Success " + res.data);
 				})
 				.catch(function (res) {
@@ -51,14 +110,14 @@ export default function Home() {
 
 				{pageInfo && (
 					<>
-						<PageNav nav={pageInfo} page={page} setCharacterUrl={setCharacterUrl} />
-						<Main 
-							character={characters} 
+						<PageNav nav={pageInfo} page={page} setCharacterUrl={setCharacterUrl} setRickUrl={setRickUrl} setMortyUrl={setMortyUrl} />
+						<Main
+							character={characters}
 							selectedCard={selectedCard}
 							pageInfo={pageInfo.pages}
 							page={page}
 						/>
-						
+
 						<CardList character={characters} setSelectedCard={setSelectedCard} />
 					</>
 				)
@@ -67,6 +126,7 @@ export default function Home() {
 
 			<footer className={styles.footer}>
 				This RickNMortyAPI viewer is not affiliated with the RickNMortyAPI or the RickNMorty series or any of its creators. This is only being provided as a free compliment to the RickNMorty API to give a demonstration of its usage.
+				Provided for demo purposes only
 			</footer>
 		</div>
 	)

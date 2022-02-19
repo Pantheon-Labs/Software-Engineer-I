@@ -3,6 +3,9 @@
     overflow-y: "scroll";
 }
 
+.buttonGroupContainer{
+    display: contents;
+}
 .cardList {
     cursor: pointer;
     display: flex;
