@@ -1,4 +1,5 @@
 import "./Intro.scss"
+import React from "react"
 
 export default function intro() {
   return (
@@ -16,7 +17,7 @@ export default function intro() {
               <br></br>
               <br></br>
               <h1>Hobbies!</h1>
-              <p> I go to music festivals, hikes, <br></br> and I especially love sleeping.</p>
+              <p> I go to music festivals, travel, hikes, <br></br> and I especially love sleeping.</p>
               <br></br>
               <br></br>
               <h1> Speciality </h1>

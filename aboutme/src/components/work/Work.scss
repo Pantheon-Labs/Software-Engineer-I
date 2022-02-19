@@ -1,4 +1,12 @@
 .work {
     background-color: lightblue;
     height: 30vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .container {
+       flex-direction: inline;
+
+    }
 }
