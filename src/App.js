@@ -9,10 +9,10 @@ import useQuery from "./hooks/useQuery"
 
 function App() {
   const [events, setEvents] = useState([])
-  const { data: world } = useQuery('https://api.nytimes.com/svc/topstories/v2/world.json?api-key=YkWaNj24icDnkRr35VtclKozbOiwwANN')
-  const { data: us } = useQuery('https://api.nytimes.com/svc/topstories/v2/us.json?api-key=YkWaNj24icDnkRr35VtclKozbOiwwANN')
-  const { data: science } = useQuery('https://api.nytimes.com/svc/topstories/v2/science.json?api-key=YkWaNj24icDnkRr35VtclKozbOiwwANN')
-  const { data: home } = useQuery('https://api.nytimes.com/svc/topstories/v2/home.json?api-key=YkWaNj24icDnkRr35VtclKozbOiwwANN')
+  const { data: world } = useQuery('https://api.nytimes.com/svc/topstories/v2/world.json?api-key=H1WDgSac6k8LJZ05EOe7V5LNkOVTOCuB')
+  const { data: us } = useQuery('https://api.nytimes.com/svc/topstories/v2/us.json?api-key=j2MfZUndabh7HqgP5tOHjsVsQ3UkcQ4u')
+  const { data: science } = useQuery('https://api.nytimes.com/svc/topstories/v2/science.json?api-key=ER0ONn0V0Z9vqD4RZLie6PLoCmX9D870')
+  const { data: home } = useQuery('https://api.nytimes.com/svc/topstories/v2/home.json?api-key=qvgjjw1XI7AqGf0HzcCg0llvfWpzql2p ')
   const { data: arts } = useQuery('https://api.nytimes.com/svc/topstories/v2/arts.json?api-key=YkWaNj24icDnkRr35VtclKozbOiwwANN')
 
   useEffect(() => {
