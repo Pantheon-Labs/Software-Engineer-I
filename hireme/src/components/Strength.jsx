@@ -61,7 +61,7 @@ export default function Strength() {
     },
     {
       title: "Ball God",
-      text: "I played basketball since I was in middle school and needless to say I'm a ball god. My best move is in and out crossover.",
+      text: "I played basketball since I was in middle school and taking ankles left and right. My best move is in and out crossover.",
       image: "https://i.redd.it/ua6oywsx85a31.jpg",
     },
     {

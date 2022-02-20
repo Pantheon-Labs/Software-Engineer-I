@@ -76,7 +76,7 @@ function Navbar() {
                 </LinkOverlay>
               </LinkBox>
               <LinkBox>
-                <LinkOverlay href="test">
+                <LinkOverlay href="#test">
                   <Button
                     height="40px"
                     width="110px"
