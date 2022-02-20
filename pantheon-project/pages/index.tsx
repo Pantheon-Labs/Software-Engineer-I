@@ -1,21 +1,31 @@
 import { VStack, Heading, Text, Button } from '@chakra-ui/react';
 import { NextPage } from 'next'
+import { motion } from 'framer-motion'
 
 const Home: NextPage = () => {
+
+  const MotionButton = motion(Button);
+
   return (
 
-    <VStack alignItems="center">
-      <Heading size="4xl" pt='23'>
+    <VStack alignItems="center" py='10'>
+
+      <Heading size="4xl" textShadow='4px 4px #FFA500' pt='23' fontFamily={'mono'}>
         Welcome to My App! 
       </Heading>
-      <Text fontSize="3xl" w='80%' pt='50' textAlign={'center'}>
-        I created a little game to help refresh my React skills, and get better with formatting using Chakra-ui!
+
+      <Text as='u' fontSize="3xl" w='80%' pt='50' textAlign={'center'} fontFamily={'mono'} >
+        Prepare to battle!
       </Text>
-      <Text fontSize="2xl">In order to move onto the next page, please click the button below!</Text>
-      <Button as="a" colorScheme="blue" href="/app/game">
-        Go to Game
-      </Button>
+
+      <VStack py='75'>
+        <MotionButton as="a" size='lg' colorScheme="blue" href="/app/game" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.8 }}>
+          Click me!
+        </MotionButton>
+      </VStack>
+
     </VStack>
+    
   )
 }
 
