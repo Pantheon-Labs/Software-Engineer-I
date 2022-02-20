@@ -46,7 +46,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://i.ibb.co/H7pPW5H/Screen-Shot-2022-02-20-at-4-56-33-AM.png)
+[![Product Name Screen Shot][https://i.ibb.co/H7pPW5H/Screen-Shot-2022-02-20-at-4-56-33-AM.png]]()
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
