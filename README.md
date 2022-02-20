@@ -1,11 +1,40 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
+# `Rock, Tendies, Scissors`
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
+## Getting started!
 
+- First clone the project.
 
-</br></br></br></br>
+- Then cd into the 'pantheon-project' file
 
-<!-- Delete this line and everything above it -->
+- Run one of the following commands based on your preference
 
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+```
+yarn install
+    or
+npm install
+```
+
+- Once that is complete start the server with the following command
+
+```
+yarn dev
+    or
+npm dev
+```
+
+Enjoy!!!
+
+## Tech used
+
+Next.js
+React
+Chakra-ui
+Framer Motion
+
+## Reasoning
+
+I built an application for you to review and have fun with. My main focus was to use react hooks with the game. I felt that wasn't enough, to add some personality I researched ways to make the application pop more which is when I came accoss Framer Motion. This was a solution to help get things moving and put some personality into the app!
+
+Hope you enjoy!!
+
+PS: Make sure you reach 5 points before the computer, for a secret button!
