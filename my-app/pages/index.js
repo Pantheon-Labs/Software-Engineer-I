@@ -72,7 +72,7 @@ export default function Home() {
 					setPageInfo(res.data.info)
 					let urlParams = new URLSearchParams(characterUrl);
 					let queryPage = urlParams.get("https://rickandmortyapi.com/api/character/?page");
-					console.log("page =" + query + " characterUrl =" + characterUrl);
+					console.log("page =" + queryPage + " characterUrl =" + characterUrl);
 					setPage(queryPage);
 					let queryName = urlParams.get("https://rickandmortyapi.com/api/character/?name");
 
@@ -128,7 +128,7 @@ export default function Home() {
 			</main>
 
 			<footer className={styles.footer}>
-				This RickNMortyAPI viewer is not affiliated with the RickNMortyAPI or the RickNMorty series or any of its creators. This is only being provided as a free compliment to the RickNMorty API to give a demonstration of its usage.
+				This RickNMortyAPI viewer is not affiliated with the RickNMortyAPI, the RickNMorty series or any of their creators and affiliates. This is only being provided as a free compliment to the RickNMorty API to give a demonstration of its usage.
 				Provided for demo purposes only
 			</footer>
 		</div>

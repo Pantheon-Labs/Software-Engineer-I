@@ -39,7 +39,7 @@ function Main({ character, selectedCard, page }) {
                         </div>
                         <div className='info'>
                             <div className='cardDetails'>
-                                <Text className='title' fontSize='4xl'>Name: {activeCard?.name}</Text>
+                                <Text className='title' fontSize='2xl'>Name: {activeCard?.name}</Text>
                                 <Text className='itemNumber'>#{activeCard?.id}</Text>
                             </div>
                             <div className='character'>
