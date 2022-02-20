@@ -14,7 +14,7 @@ yarn install
 npm install
 ```
 
-- Once that is complete start the server with the following command
+- Once that is complete start the server with one of the following command
 
 ```
 yarn dev
@@ -26,10 +26,10 @@ Enjoy!!!
 
 ## Tech used
 
-Next.js
-React
-Chakra-ui
-Framer Motion
+- Next.js
+- React
+- Chakra-ui
+- Framer Motion
 
 ## Reasoning
 
