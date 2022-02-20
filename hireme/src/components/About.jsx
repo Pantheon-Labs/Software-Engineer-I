@@ -13,14 +13,9 @@ import {
 
 export default function About() {
   return (
-    <div>
+    <div id="about">
       <Container maxW={"5xl"} py={12} h="100vh">
-        <SimpleGrid
-          columns={{ base: 1, md: 2 }}
-          spacing={10}
-          id="about"
-          mt="100px"
-        >
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={10} mt="100px">
           <Stack spacing={4}>
             <Text
               textTransform={"uppercase"}
@@ -49,7 +44,7 @@ export default function About() {
               help people and I believe I can do that at Pantheon Labs.
               Furthermore, the position is remote so I can work at home and
               because of this assignment, Pantheon Labs made me feel like is a
-              very chill company.
+              very chill company. Plus the benefits are lit 🔥🔥🔥🔥.
             </Text>
             <Stack
               spacing={4}
