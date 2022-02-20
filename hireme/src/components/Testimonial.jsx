@@ -7,7 +7,6 @@ import {
   Stack,
   Container,
   Avatar,
-  useColorModeValue,
 } from "@chakra-ui/react";
 
 function Testimonial() {
