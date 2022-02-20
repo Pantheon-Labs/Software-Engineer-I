@@ -11,6 +11,7 @@ const Game: NextPage = () => {
     const [computerPoints, setComputerPoints] = useState(0);
     const [turnResult, setTurnResult] = useState('make a move!');
     const [playerAverage, setAverage] = useState(0);
+    const [winner, setWinner] = useState(false);
 
     const choices = ['rock', 'paper', 'scissors'];
 
@@ -35,6 +36,9 @@ const Game: NextPage = () => {
             const updatedUserPoints = userPoints + 1;
             setUserPoints(updatedUserPoints);
             setTurnResult('User point!');
+            if(userPoints >= 4 && computerPoints < 5){
+                setWinner(true);
+             }
         }
         if(comboMoves === 'paperscissors' || comboMoves === 'scissorsrock' || comboMoves === 'rockpaper'){
             const updatedComputerPoints = computerPoints + 1;
@@ -118,6 +122,10 @@ const Game: NextPage = () => {
 
         <Button colorScheme='red' onClick={()=> reset()}>Reset the game</Button>
         <Button as="a" colorScheme="blue" href="/app/reasoning">Next Page</Button>
+
+        { winner && 
+            <Button as="a" colorScheme='yellow' href="/app/winner" >Golden Button!!!</Button>
+        }
 
       </VStack>
   )
