@@ -57,8 +57,8 @@ function Testimonial() {
           direction={{ base: "column", md: "row" }}
           spacing={{ base: 10, md: 4, lg: 10 }}
         >
-          {people.map((p) => (
-            <Box className="one" maxW={"275px"}>
+          {people.map((p, index) => (
+            <Box key={index} className="one" maxW={"275px"}>
               <Stack
                 bgColor="white.200"
                 boxShadow={"lg"}

@@ -43,7 +43,7 @@ export default function Strength() {
   // This can be static or loaded from a server
   const cards = [
     {
-      title: "Boring Skills (Programming)",
+      title: "Programming Skills",
       text: "I know Python,C++, JavaScript,HTML,CSS and some TypeScript. I love to programm because I like to solve problems. I'm willing to learn new languages and technology because I like to learn new things.",
       image:
         "https://www.memesmonkey.com/images/memesmonkey/a5/a5cbb543b42a3fe0d3b70d64f36a212a.jpeg",
@@ -65,8 +65,8 @@ export default function Strength() {
       image: "https://i.redd.it/ua6oywsx85a31.jpg",
     },
     {
-      title: "Humor",
-      text: "I can be funny sometime 😂😂😂",
+      title: "Meme Master",
+      text: "I seen enough memes to know what meme to use for which situation.",
       image:
         "https://www.atriumstaff.com/wp-content/uploads/2017/08/cover-photo.jpg",
     },
