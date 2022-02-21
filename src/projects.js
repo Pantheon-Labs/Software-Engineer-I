@@ -21,6 +21,6 @@ export const projects = [
                     description:
                               "A fully functional e-marketplace to purchase flowers for any occasion",
                     image: "./project-3.gif",
-                    link: "https://google.com",
+                    link: "https://floral-arts-marketplace.herokuapp.com/",
           }
 ];
