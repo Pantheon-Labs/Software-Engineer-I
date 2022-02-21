@@ -18,6 +18,12 @@ To build and run:
 npm run start-dev
 ```
 
+To test:
+
+```
+npm test
+```
+
 ## TMDB Api
 
 This application uses the TMDB api to access information about stars.
