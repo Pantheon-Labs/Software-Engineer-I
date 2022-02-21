@@ -6,10 +6,10 @@ class Navbar extends Component {
     render() {
         return(
             <div>
-                <Link className='link' to="/">About Me</Link>
-                <Link className='link' to="/strengths">My strengths</Link>
-                <Link className='link' to="/passions">My passions</Link>
-                <Link className='link' to="/whyme">Why I want to Join you</Link>
+                <Link className='link' to="/">About Me</Link> |   
+                <Link className='link' to="/strengths">My strengths</Link> |   
+                <Link className='link' to="/passions">My passions</Link> |  
+                <Link className='link' to="/whyme">Why I want to join you</Link>
             </div>
         )
     }
