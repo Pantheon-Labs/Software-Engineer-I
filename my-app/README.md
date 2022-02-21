@@ -10,6 +10,6 @@ The api is a little tricky, out of hundreds of characters and locations, they do
 
 Part 2 backend shenanigans, it took a whole day to get postgres setup on WSL2, which Ubuntu is supposed to come with, I guess not this version.
 
-    To run backend server 'cd my-db' from initial folder. If you're new to Postgres, create a new user, I called mine testuser0, give it password. I store my passwords in a process.env file. In my files the once you have a user that will authenticate it automatically sets up a default structure for all data and drops all data once you restart it, to stop this remove force: true from line 11 of server.js
+    To run backend server 'cd my-db' from initial folder. If you're new to Postgres, create a new user, I called mine testuser0, give it password. I store my jwtSecret in a .process.env file. Once you have a user that will authenticate, it automatically sets up a default structure for the db and drops all data once you restart it, to stop this remove 'force: true' from line 11 of server.js
 
 The attempt here is to allow login and allow people to favorite their favorite characters, this portion isn't complete yet.
