@@ -8,8 +8,8 @@ function App() {
         <h1>
           Hi I'm Abraham
         </h1>
-        <Home/>
       </header>
+      <Home/>
     </div>
   );
 }
