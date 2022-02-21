@@ -26,7 +26,7 @@ class About extends React.Component {
           your birth chart reading.
           <br></br>
           <br></br>
-          This app uses the TMDB api to get information about actuors. You can
+          This app uses the TMDB api to get information about actors. You can
           learn more about the api{" "}
           <a href="https://developers.themoviedb.org/3">here</a>.
         </p>
