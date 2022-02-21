@@ -187,7 +187,7 @@ var About = /*#__PURE__*/function (_React$Component) {
         style: styles.mainContainer
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
         style: styles.header
-      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs leans into two of the guiltiest of guilty pleasures:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " celebrity gossip and astrology."), " The ability to search for an and immediately get their star sign has the potential to a dash of horoscope to your tabloids, or throw in a household name to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to search for actors. You can find out more about the api ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs leans into two of the guiltiest of guilty pleasures:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " celebrity gossip and astrology."), " The ability to search for an and immediately get their star sign has the potential to a dash of horoscope to your tabloids, or throw in a household name to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to get information about actuors. You can learn more about the api", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
         href: "https://developers.themoviedb.org/3"
       }, "here"), "."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         style: styles.signature
@@ -754,7 +754,7 @@ var PopularStars = /*#__PURE__*/function (_React$Component) {
         style: styles.popularCard
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, {
         style: styles.cardBody
-      }, this.props.popularPeople.slice(0, 3).map(function (star) {
+      }, this.props.popularPeople.slice(0, 4).map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
           key: star.id,
           style: styles.starFigure,
@@ -1570,7 +1570,7 @@ var astrology = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopular", function() { return getPopular; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopular", function() { return getPopular; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -1634,39 +1634,7 @@ var getPopular = function getPopular() {
       return _ref.apply(this, arguments);
     };
   }();
-};
-
-var getImagePath = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(api, id) {
-    var res;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return api.get("https://api.themoviedb.org/3/person/".concat(id, "/images"), {
-              params: {
-                api_key: process.env.TMDB_KEY
-              }
-            });
-
-          case 2:
-            res = _context2.sent;
-            return _context2.abrupt("return", res.data.profiles[0].file_path);
-
-          case 4:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-
-  return function getImagePath(_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-}(); // State contains list of popular people
-
+}; // State contains list of popular people
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1682,7 +1650,6 @@ var getImagePath = /*#__PURE__*/function () {
       return state;
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
