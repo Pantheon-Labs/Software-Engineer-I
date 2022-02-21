@@ -2,9 +2,11 @@
 
 Node.js web application to search for celebrities to find their astrological sign.
 
+Check out the [deployed app!](https://star-star-signs.herokuapp.com)
+
 ## Set up
 
-To install:
+First install dependencies:
 
 ```
 npm install
@@ -14,6 +16,12 @@ To build and run:
 
 ```
 npm run start-dev
+```
+
+To test:
+
+```
+npm test
 ```
 
 ## TMDB Api
