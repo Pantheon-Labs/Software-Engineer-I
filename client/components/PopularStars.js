@@ -46,7 +46,7 @@ class PopularStars extends React.Component {
       <Card style={styles.popularCard}>
         <Card.Title>Trending Searches</Card.Title>
         <Card.Body style={styles.cardBody}>
-          {this.props.popularPeople.slice(0, 3).map((star) => {
+          {this.props.popularPeople.slice(0, 4).map((star) => {
             return (
               <Figure
                 key={star.id}
