@@ -4,8 +4,8 @@ import { Component } from "react";
 class PinaColada extends Component {
     render() {
         return (
-            <div>
-
+            <div className="PinaColada">
+                <h2>Piña Colada</h2>
             </div>
         )
     }
