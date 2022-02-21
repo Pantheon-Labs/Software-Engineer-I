@@ -8,6 +8,7 @@ import {
 import Strengths from './Strengths';
 import Passions from './Passions';
 import Why from './Why';
+import PinaColada from './PinaColada';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
         <Route path="/strengths" element={<Strengths/>}/>
         <Route path="/passions" element={<Passions/>} />
         <Route path="/why" element={<Why/>} />
-        <Route path="/pina-colada" />
+        <Route path="/pina-colada" element={<PinaColada/>}/>
       </Routes>
     </div>
   );
