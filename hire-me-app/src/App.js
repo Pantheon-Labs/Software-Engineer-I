@@ -5,6 +5,7 @@ import {
   Routes,
   Route
 } from "react-router-dom"
+import Strengths from './Strengths';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       </header>
       <Routes>
         <Route path="/" element={<Home/>}/>
-        <Route path="/strengths" />
+        <Route path="/strengths" element={<Strengths/>}/>
         <Route path="/passions" />
         <Route path="/whyme" />
       </Routes>
