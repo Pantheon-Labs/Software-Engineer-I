@@ -1,6 +1,7 @@
 import React from "react";
 import {
   Container,
+  Form,
   InputGroup,
   Button,
   FormControl,
@@ -107,23 +108,25 @@ class Home extends React.Component {
             search for actors {"&"} their zodiac
           </h2>
         </div>
-        <InputGroup className="mb-3">
-          <FormControl
-            name="searchInput"
-            value={this.state.searchInput}
-            onChange={this.handleChange}
-            placeholder="Enter Name"
-            aria-label="Star to search"
-            aria-describedby="basic-addon2"
-          />
-          <Button
-            onClick={this.search}
-            variant="outline-secondary"
-            id="button-addon2"
-          >
-            Search
-          </Button>
-        </InputGroup>
+        <Form onSubmit={this.search}>
+          <InputGroup className="mb-3">
+            <FormControl
+              name="searchInput"
+              value={this.state.searchInput}
+              onChange={this.handleChange}
+              placeholder="Enter Name"
+              aria-label="Star to search"
+              aria-describedby="basic-addon2"
+            />
+            <Button
+              type="submit"
+              variant="outline-secondary"
+              id="button-addon2"
+            >
+              Search
+            </Button>
+          </InputGroup>
+        </Form>
 
         {this.props.popularPeople && this.state.status === "waiting" && (
           <PopularStars handleClick={this.handleClick} />
