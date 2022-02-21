@@ -1,5 +1,10 @@
 import './App.css';
 import Home from './Home';
+import Navbar from './Navbar';
+import {
+  Routes,
+  Route
+} from "react-router-dom"
 
 function App() {
   return (
@@ -8,8 +13,14 @@ function App() {
         <h1>
           Hi I'm Abraham
         </h1>
+        <Navbar/>
       </header>
-      <Home/>
+      <Routes>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/strengths" />
+        <Route path="/passions" />
+        <Route path="/whyme" />
+      </Routes>
     </div>
   );
 }
