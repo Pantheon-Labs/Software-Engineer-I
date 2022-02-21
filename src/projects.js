@@ -4,7 +4,7 @@ export const projects = [
                     subtitle: "MERN Stack",
                     description:
                               "A single page React app designed to help anyone choose what drink to order a bar",
-                    image: "./public/bas-best-old-fashioned.jpg",
+                    image: "./bas-best-old-fashioned.jpg",
                     link: "https://what-to-drink-1.herokuapp.com/",
           }
 ];
