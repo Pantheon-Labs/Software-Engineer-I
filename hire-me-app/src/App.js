@@ -23,6 +23,7 @@ function App() {
         <Route path="/strengths" element={<Strengths/>}/>
         <Route path="/passions" element={<Passions/>} />
         <Route path="/why" element={<Why/>} />
+        <Route path="/pina-colada" />
       </Routes>
     </div>
   );
