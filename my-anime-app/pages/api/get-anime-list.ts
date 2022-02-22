@@ -1,40 +1,14 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 require('dotenv').config()
+import Anime from '../../types/Anime'
 
-type Anime = {
-    "anilist_id": number,
-    "mal_id": number,
-    "format": number,
-    "status": number,
-    "titles": {
-        "en": string,
-        "jp": string,
-        "it": string
-    },
-    "descriptions": {
-        "en": string,
-        "it": string
-    },
-    "start_date": string,
-    "end_date": string,
-    "season_period": number,
-    "season_year": number,
-    "episodes_count": number,
-    "episode_duration": number,
-    "cover_image": string,
-    "cover_color": string,
-    "banner_image": string,
-    "genres": Array<string>,
-    "score": number,
-    "id": number
-}
 
 type Data = {
     name: string
 }
 
-var anime = null
+var anime = []
 
 async function getAnime(): Promise<Array<any>> {
     const response = await fetch('https://api.aniapi.com/v1/anime', {
@@ -49,7 +23,7 @@ async function getAnime(): Promise<Array<any>> {
     const myJson = await response.json()
 
 
-    const animeList = myJson.data.documents.slice(10)
+    const animeList = myJson.data.documents.slice(0,10)
 
     return animeList
 }
@@ -69,7 +43,7 @@ export default async function handler(
         
         try {
             anime = await getAnime()
-            console.log(anime[0])
+            console.log(anime.length)
         }
         catch (error) {
             anime = []

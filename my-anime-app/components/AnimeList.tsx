@@ -4,9 +4,10 @@ import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from './Header'
+import Anime from '../types/Anime'
 
 const outerStyle = {
-    backgroundColor: "#FF8000",
+    backgroundColor: "white",
     minWidth: "100vw",
     minHeight: "100vh"
 } as const
@@ -20,21 +21,23 @@ const boxStyle = {
 } as const
 
 interface AnimeListProps {
-    animeList: Array<any>
+    animeJson: string
 }
 
-const AnimeList = ({animeList}: AnimeListProps) => {
+const AnimeList = ({animeJson}: AnimeListProps) => {
     let key = 0
+    debugger
+    let animeList: Array<Anime> = JSON.parse(animeJson)
     return (
         <Box style={outerStyle}>
             <Header />
             <Center>
                 <Flex style={flexStyle}>
-                    {animeList.map(
+                    {animeList?.map(
                         anime => {
                             return (
                                 <Link href={`/`} key={key++} style={boxStyle}>
-                                    {}
+                                    {anime.titles.en}
                                 </Link>
                             )
                         }
