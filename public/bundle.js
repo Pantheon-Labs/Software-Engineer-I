@@ -509,7 +509,9 @@ var Home = /*#__PURE__*/function (_React$Component) {
         style: styles.header
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
         style: styles.subheading
-      }, "search for actors ", "&", " their zodiac")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
+      }, "search for actors ", "&", " their zodiac")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"], {
+        onSubmit: this.search
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
         name: "searchInput",
@@ -519,10 +521,10 @@ var Home = /*#__PURE__*/function (_React$Component) {
         "aria-label": "Star to search",
         "aria-describedby": "basic-addon2"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        onClick: this.search,
+        type: "submit",
         variant: "outline-secondary",
         id: "button-addon2"
-      }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PopularStars__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      }, "Search"))), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PopularStars__WEBPACK_IMPORTED_MODULE_4__["default"], {
         handleClick: this.handleClick
       }), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: styles.loading
