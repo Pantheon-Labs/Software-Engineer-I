@@ -26,16 +26,6 @@ export const getPopular = () => {
   };
 };
 
-const getImagePath = async (api, id) => {
-  const res = await api.get(
-    `https://api.themoviedb.org/3/person/${id}/images`,
-    {
-      params: { api_key: process.env.TMDB_KEY },
-    }
-  );
-  return res.data.profiles[0].file_path;
-};
-
 // State contains list of popular people
 export default function (state = {}, action) {
   switch (action.type) {

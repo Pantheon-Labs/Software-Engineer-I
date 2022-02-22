@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Image, ListGroup } from "react-bootstrap";
+import { Container, Image, ListGroup, Alert } from "react-bootstrap";
 import { connect } from "react-redux";
 import { astrology } from "../signs";
 
@@ -33,24 +33,18 @@ const styles = {
 class SearchResults extends React.Component {
   constructor(props) {
     super(props);
-    this.onClick = this.onClick.bind(this);
-  }
-
-  // Function for when search results are clicked
-  onClick(star) {
-    console.log(`clicked on ${star.name}`);
   }
 
   render() {
     return (
       <ListGroup>
-        {this.props.searchResults.length > 0 &&
+        {this.props.searchResults.length > 0 ? (
           this.props.searchResults.map((star) => {
             return (
               <ListGroup.Item
                 key={star.id}
                 action
-                onClick={() => this.onClick(star)}
+                onClick={() => this.props.handleClick(star)}
               >
                 <Container
                   className="d-flex justify-content-start"
@@ -66,7 +60,7 @@ class SearchResults extends React.Component {
                     }}
                   />
                   <span style={styles.resultText}>
-                    <p>{star.name}</p>
+                    <h3>{star.name}</h3>
                     {star.birthday[9] ? (
                       <p>
                         {
@@ -82,7 +76,14 @@ class SearchResults extends React.Component {
                 </Container>
               </ListGroup.Item>
             );
-          })}
+          })
+        ) : (
+          <ListGroup.Item>
+            <Alert variant="warning">
+              No results found. <br></br> Check your spelling?
+            </Alert>
+          </ListGroup.Item>
+        )}
       </ListGroup>
     );
   }

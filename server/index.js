@@ -5,7 +5,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 // Use .env variables if not in production mode
-require("../secrets");
+if (process.env.NODE_ENV !== "production") {
+  require("../secrets");
+}
 
 // logging middleware
 app.use(morgan("dev"));

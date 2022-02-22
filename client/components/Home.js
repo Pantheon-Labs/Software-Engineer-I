@@ -1,31 +1,34 @@
 import React from "react";
 import {
   Container,
-  Figure,
+  Form,
   InputGroup,
   Button,
   FormControl,
+  Spinner,
+  Alert,
 } from "react-bootstrap";
 import SearchResults from "./SearchResults";
+import SingleStar from "./SingleStar";
+import PopularStars from "./PopularStars";
 import { connect } from "react-redux";
 import { getPopular } from "../store/data";
-import { searchStar } from "../store/singleStar";
+import { searchStar, getStar, clearStar } from "../store/singleStar";
 
 // Styles for homepage
 const styles = {
+  header: {
+    marginBottom: "1.5rem",
+  },
+  subheading: {
+    fontWeight: "lighter",
+  },
   mainContainer: {
-    paddingTop: "5rem",
+    paddingTop: "4rem",
     paddingBottom: "5rem",
   },
-  starImage: {
-    height: "5rem",
-    width: "4rem",
-    borderRadius: "10%",
-    objectFit: "cover",
-    objectPosition: "50% 0",
-  },
-  starFigure: {
-    padding: "0 0.25rem 0 0.25rem",
+  loading: {
+    marginTop: "3rem",
   },
 };
 
@@ -39,9 +42,12 @@ class Home extends React.Component {
     this.state = {
       searchInput: "",
       status: "waiting",
+      showSingleStar: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleClick = this.handleClick.bind(this);
     this.search = this.search.bind(this);
   }
 
@@ -57,14 +63,35 @@ class Home extends React.Component {
     });
   }
 
-  // Search function on input
-  search(evt) {
+  // Handle click if user clicks on star
+  async handleClick(star) {
+    try {
+      await this.props.getStar(star.id);
+
+      // Open SingleStar modal
+      this.setState({ showSingleStar: true });
+    } catch (err) {
+      this.setState(err);
+    }
+  }
+
+  // Handle closing single star modal
+  handleClose() {
+    this.setState({ showSingleStar: false });
+    this.props.clearStar();
+  }
+
+  // Search function on input, changes status to loading and loaded
+  async search(evt) {
     evt.preventDefault();
 
-    this.setState({ status: "loading" });
-    this.props.searchStar(this.state.searchInput);
-    this.setState({ status: "loaded" });
-
+    try {
+      this.setState({ status: "loading" });
+      await this.props.searchStar(this.state.searchInput);
+      this.setState({ status: "loaded" });
+    } catch {
+      this.setState({ status: "error" });
+    }
     this.setState({ searchInput: "" });
   }
 
@@ -75,50 +102,61 @@ class Home extends React.Component {
         style={styles.mainContainer}
         className="text-center"
       >
-        <h1>Home</h1>
-        <InputGroup className="mb-3">
-          <FormControl
-            name="searchInput"
-            value={this.state.searchInput}
-            onChange={this.handleChange}
-            placeholder="Enter Name"
-            aria-label="Star to search"
-            aria-describedby="basic-addon2"
-          />
-          <Button
-            onClick={this.search}
-            variant="outline-secondary"
-            id="button-addon2"
-          >
-            Search
-          </Button>
-        </InputGroup>
+        <div style={styles.header}>
+          <h1>Star Signs</h1>
+          <h2 style={styles.subheading}>
+            search for actors {"&"} their zodiac
+          </h2>
+        </div>
+        <Form onSubmit={this.search}>
+          <InputGroup className="mb-3">
+            <FormControl
+              name="searchInput"
+              value={this.state.searchInput}
+              onChange={this.handleChange}
+              placeholder="Enter Name"
+              aria-label="Star to search"
+              aria-describedby="basic-addon2"
+            />
+            <Button
+              type="submit"
+              variant="outline-secondary"
+              id="button-addon2"
+            >
+              Search
+            </Button>
+          </InputGroup>
+        </Form>
 
         {this.props.popularPeople && this.state.status === "waiting" && (
-          <Container>
-            <h3>Trending Searches</h3>
-            {this.props.popularPeople.slice(0, 4).map((star) => {
-              return (
-                <Figure key={star.id} style={styles.starFigure}>
-                  <Figure.Image
-                    style={styles.starImage}
-                    alt={`Profile image of ${star.name}`}
-                    src={`https://image.tmdb.org/t/p/w200/${star.profile_path}`}
-                    onError={(evt) => {
-                      evt.target.onError = null;
-                      evt.target.src = "/default.png";
-                    }}
-                  />
-                  <Figure.Caption className="text-center">
-                    {star.name}
-                  </Figure.Caption>
-                </Figure>
-              );
-            })}
-          </Container>
+          <PopularStars handleClick={this.handleClick} />
         )}
 
-        {this.props.searchResults.length > 0 && <SearchResults />}
+        {this.state.status === "loading" && (
+          <div style={styles.loading}>
+            <div className="visually-hidden">Searching...</div>
+            <Spinner animation="grow" role="status" />
+            <Spinner animation="grow" role="status" />
+            <Spinner animation="grow" role="status" />
+          </div>
+        )}
+
+        {this.state.status === "loaded" && (
+          <SearchResults handleClick={this.handleClick} />
+        )}
+
+        {this.state.status === "error" && (
+          <Alert variant="danger">
+            There was an error completing your search!
+          </Alert>
+        )}
+
+        {this.props.singleStar && (
+          <SingleStar
+            handleClose={this.handleClose}
+            show={this.state.showSingleStar}
+          />
+        )}
       </Container>
     );
   }
@@ -128,6 +166,7 @@ const mapState = (state) => {
   return {
     popularPeople: state.data.popularPeople,
     searchResults: state.singleStar.searchResults,
+    singleStar: state.singleStar.singleStar,
   };
 };
 
@@ -135,6 +174,8 @@ const mapDispatch = (dispatch) => {
   return {
     getPopular: () => dispatch(getPopular()),
     searchStar: (starName) => dispatch(searchStar(starName)),
+    getStar: (starId) => dispatch(getStar(starId)),
+    clearStar: () => dispatch(clearStar()),
   };
 };
 

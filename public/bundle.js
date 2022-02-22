@@ -159,6 +159,13 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 var styles = {
   mainContainer: {
     padding: "5rem"
+  },
+  header: {
+    paddingBottom: "0.5rem"
+  },
+  signature: {
+    marginTop: "2rem",
+    fontWeight: "lighter"
   }
 };
 
@@ -178,7 +185,13 @@ var About = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
         style: styles.mainContainer
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "About"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Created in 2021"));
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", {
+        style: styles.header
+      }, "About Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Star Signs leans into two of the guiltiest of guilty pleasures:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " celebrity gossip and astrology."), " Add a dash of horoscope to your tabloids, or throw in a household name to your birth chart reading.", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "This app uses the TMDB api to get information about actors. You can learn more about the api", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://developers.themoviedb.org/3"
+      }, "here"), "."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        style: styles.signature
+      }, "Created in 2022 by Elijah Meshnick"));
     }
   }]);
 
@@ -289,10 +302,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
 /* harmony import */ var _SearchResults__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SearchResults */ "./client/components/SearchResults.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
-/* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
+/* harmony import */ var _SingleStar__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SingleStar */ "./client/components/SingleStar.js");
+/* harmony import */ var _PopularStars__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./PopularStars */ "./client/components/PopularStars.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store_data__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../store/data */ "./client/store/data.js");
+/* harmony import */ var _store_singleStar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../store/singleStar */ "./client/store/singleStar.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -321,22 +340,23 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
+
  // Styles for homepage
 
 var styles = {
+  header: {
+    marginBottom: "1.5rem"
+  },
+  subheading: {
+    fontWeight: "lighter"
+  },
   mainContainer: {
-    paddingTop: "5rem",
+    paddingTop: "4rem",
     paddingBottom: "5rem"
   },
-  starImage: {
-    height: "5rem",
-    width: "4rem",
-    borderRadius: "10%",
-    objectFit: "cover",
-    objectPosition: "50% 0"
-  },
-  starFigure: {
-    padding: "0 0.25rem 0 0.25rem"
+  loading: {
+    marginTop: "3rem"
   }
 };
 /*
@@ -357,9 +377,12 @@ var Home = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.state = {
       searchInput: "",
-      status: "waiting"
+      status: "waiting",
+      showSingleStar: false
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_this));
+    _this.handleClose = _this.handleClose.bind(_assertThisInitialized(_this));
+    _this.handleClick = _this.handleClick.bind(_assertThisInitialized(_this));
     _this.search = _this.search.bind(_assertThisInitialized(_this));
     return _this;
   } // Get popular searches after the component mounts
@@ -375,23 +398,106 @@ var Home = /*#__PURE__*/function (_React$Component) {
     key: "handleChange",
     value: function handleChange(evt) {
       this.setState(_defineProperty({}, evt.target.name, evt.target.value));
-    } // Search function on input
+    } // Handle click if user clicks on star
+
+  }, {
+    key: "handleClick",
+    value: function () {
+      var _handleClick = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(star) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return this.props.getStar(star.id);
+
+              case 3:
+                // Open SingleStar modal
+                this.setState({
+                  showSingleStar: true
+                });
+                _context.next = 9;
+                break;
+
+              case 6:
+                _context.prev = 6;
+                _context.t0 = _context["catch"](0);
+                this.setState(_context.t0);
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 6]]);
+      }));
+
+      function handleClick(_x) {
+        return _handleClick.apply(this, arguments);
+      }
+
+      return handleClick;
+    }() // Handle closing single star modal
+
+  }, {
+    key: "handleClose",
+    value: function handleClose() {
+      this.setState({
+        showSingleStar: false
+      });
+      this.props.clearStar();
+    } // Search function on input, changes status to loading and loaded
 
   }, {
     key: "search",
-    value: function search(evt) {
-      evt.preventDefault();
-      this.setState({
-        status: "loading"
-      });
-      this.props.searchStar(this.state.searchInput);
-      this.setState({
-        status: "loaded"
-      });
-      this.setState({
-        searchInput: ""
-      });
-    }
+    value: function () {
+      var _search = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(evt) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                evt.preventDefault();
+                _context2.prev = 1;
+                this.setState({
+                  status: "loading"
+                });
+                _context2.next = 5;
+                return this.props.searchStar(this.state.searchInput);
+
+              case 5:
+                this.setState({
+                  status: "loaded"
+                });
+                _context2.next = 11;
+                break;
+
+              case 8:
+                _context2.prev = 8;
+                _context2.t0 = _context2["catch"](1);
+                this.setState({
+                  status: "error"
+                });
+
+              case 11:
+                this.setState({
+                  searchInput: ""
+                });
+
+              case 12:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this, [[1, 8]]);
+      }));
+
+      function search(_x2) {
+        return _search.apply(this, arguments);
+      }
+
+      return search;
+    }()
   }, {
     key: "render",
     value: function render() {
@@ -399,7 +505,13 @@ var Home = /*#__PURE__*/function (_React$Component) {
         id: "main-container",
         style: styles.mainContainer,
         className: "text-center"
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Home"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: styles.header
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", {
+        style: styles.subheading
+      }, "search for actors ", "&", " their zodiac")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Form"], {
+        onSubmit: this.search
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["InputGroup"], {
         className: "mb-3"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["FormControl"], {
         name: "searchInput",
@@ -409,25 +521,32 @@ var Home = /*#__PURE__*/function (_React$Component) {
         "aria-label": "Star to search",
         "aria-describedby": "basic-addon2"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        onClick: this.search,
+        type: "submit",
         variant: "outline-secondary",
         id: "button-addon2"
-      }, "Search")), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Trending Searches"), this.props.popularPeople.slice(0, 4).map(function (star) {
-        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
-          key: star.id,
-          style: styles.starFigure
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
-          style: styles.starImage,
-          alt: "Profile image of ".concat(star.name),
-          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path),
-          onError: function onError(evt) {
-            evt.target.onError = null;
-            evt.target.src = "/default.png";
-          }
-        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
-          className: "text-center"
-        }, star.name));
-      })), this.props.searchResults.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+      }, "Search"))), this.props.popularPeople && this.state.status === "waiting" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_PopularStars__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        handleClick: this.handleClick
+      }), this.state.status === "loading" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: styles.loading
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "visually-hidden"
+      }, "Searching..."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow",
+        role: "status"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow",
+        role: "status"
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Spinner"], {
+        animation: "grow",
+        role: "status"
+      })), this.state.status === "loaded" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SearchResults__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        handleClick: this.handleClick
+      }), this.state.status === "error" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
+        variant: "danger"
+      }, "There was an error completing your search!"), this.props.singleStar && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SingleStar__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        handleClose: this.handleClose,
+        show: this.state.showSingleStar
+      }));
     }
   }]);
 
@@ -437,22 +556,29 @@ var Home = /*#__PURE__*/function (_React$Component) {
 var mapState = function mapState(state) {
   return {
     popularPeople: state.data.popularPeople,
-    searchResults: state.singleStar.searchResults
+    searchResults: state.singleStar.searchResults,
+    singleStar: state.singleStar.singleStar
   };
 };
 
 var mapDispatch = function mapDispatch(dispatch) {
   return {
     getPopular: function getPopular() {
-      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_4__["getPopular"])());
+      return dispatch(Object(_store_data__WEBPACK_IMPORTED_MODULE_6__["getPopular"])());
     },
     searchStar: function searchStar(starName) {
-      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_5__["searchStar"])(starName));
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_7__["searchStar"])(starName));
+    },
+    getStar: function getStar(starId) {
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_7__["getStar"])(starId));
+    },
+    clearStar: function clearStar() {
+      return dispatch(Object(_store_singleStar__WEBPACK_IMPORTED_MODULE_7__["clearStar"])());
     }
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapState, mapDispatch)(Home));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapState, mapDispatch)(Home));
 
 /***/ }),
 
@@ -517,7 +643,7 @@ var Navigation = /*#__PURE__*/function (_React$Component) {
         sticky: "top"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Brand, {
         href: "/"
-      }, "Actor Search"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
+      }, "\u272E", " Star Signs"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Toggle, {
         "aria-controls": "basic-navbar-nav"
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Navbar"].Collapse, {
         id: "basic-navbar-nav"
@@ -535,6 +661,135 @@ var Navigation = /*#__PURE__*/function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 
+
+/***/ }),
+
+/***/ "./client/components/PopularStars.js":
+/*!*******************************************!*\
+  !*** ./client/components/PopularStars.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+ // Styles for Popular Stars
+
+var styles = {
+  starImage: {
+    height: "6rem",
+    width: "4.8rem",
+    marginTop: "0.5rem",
+    borderRadius: "10%",
+    objectFit: "cover",
+    objectPosition: "50% 0"
+  },
+  popularCard: {
+    paddingTop: "1rem"
+  },
+  cardBody: {
+    display: "flex",
+    flexFlow: "row wrap",
+    justifyContent: "center"
+  },
+  starFigure: {
+    padding: "0 0.5rem 0 0.5rem",
+    borderRadius: "10%"
+  },
+  caption: {
+    width: "5.5rem",
+    marginRight: "0.25rem",
+    marginLeft: "0.25rem",
+    height: "2.5rem",
+    overflow: "hidden"
+  }
+};
+/*
+ * Component to display the trending searches based on TMDB api
+ */
+
+var PopularStars = /*#__PURE__*/function (_React$Component) {
+  _inherits(PopularStars, _React$Component);
+
+  var _super = _createSuper(PopularStars);
+
+  function PopularStars(props) {
+    _classCallCheck(this, PopularStars);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(PopularStars, [{
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"], {
+        style: styles.popularCard
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Title, null, "Trending Searches"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Card"].Body, {
+        style: styles.cardBody
+      }, this.props.popularPeople.slice(0, 4).map(function (star) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"], {
+          key: star.id,
+          style: styles.starFigure,
+          onClick: function onClick() {
+            return _this.props.handleClick(star);
+          },
+          className: "figure"
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Image, {
+          style: styles.starImage,
+          alt: "Profile image of ".concat(star.name),
+          src: "https://image.tmdb.org/t/p/w200/".concat(star.profile_path),
+          onError: function onError(evt) {
+            evt.target.onError = null;
+            evt.target.src = "/default.png";
+          }
+        }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Figure"].Caption, {
+          className: "text-center",
+          style: styles.caption
+        }, star.name));
+      })));
+    }
+  }]);
+
+  return PopularStars;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapState = function mapState(state) {
+  return {
+    popularPeople: state.data.popularPeople
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapState)(PopularStars));
 
 /***/ }),
 
@@ -610,32 +865,22 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
   var _super = _createSuper(SearchResults);
 
   function SearchResults(props) {
-    var _this;
-
     _classCallCheck(this, SearchResults);
 
-    _this = _super.call(this, props);
-    _this.onClick = _this.onClick.bind(_assertThisInitialized(_this));
-    return _this;
-  } // Function for when search results are clicked
-
+    return _super.call(this, props);
+  }
 
   _createClass(SearchResults, [{
-    key: "onClick",
-    value: function onClick(star) {
-      console.log("clicked on ".concat(star.name));
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this = this;
 
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"], null, this.props.searchResults.length > 0 && this.props.searchResults.map(function (star) {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"], null, this.props.searchResults.length > 0 ? this.props.searchResults.map(function (star) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"].Item, {
           key: star.id,
           action: true,
           onClick: function onClick() {
-            return _this2.onClick(star);
+            return _this.props.handleClick(star);
           }
         }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
           className: "d-flex justify-content-start",
@@ -650,8 +895,10 @@ var SearchResults = /*#__PURE__*/function (_React$Component) {
           }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
           style: styles.resultText
-        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, star.name), star.birthday[9] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][star.birthday[5] + star.birthday[6]][star.birthday[8] + star.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Unkown"))));
-      }));
+        }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, star.name), star.birthday[9] ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][star.birthday[5] + star.birthday[6]][star.birthday[8] + star.birthday[9]]) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Unkown"))));
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["ListGroup"].Item, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Alert"], {
+        variant: "warning"
+      }, "No results found. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), " Check your spelling?")));
     }
   }]);
 
@@ -665,6 +912,121 @@ var mapState = function mapState(state) {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapState)(SearchResults));
+
+/***/ }),
+
+/***/ "./client/components/SingleStar.js":
+/*!*****************************************!*\
+  !*** ./client/components/SingleStar.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/esm/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _signs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../signs */ "./client/signs.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+ // Single Star styles
+
+var styles = {
+  modal: {
+    paddingTop: "20%"
+  },
+  starImage: {
+    height: "12.5rem",
+    width: "10rem",
+    borderRadius: "10%",
+    objectFit: "cover",
+    objectPosition: "50% 0"
+  },
+  text: {
+    paddingTop: "1rem"
+  }
+};
+/*
+ * Single star component as modal to display when search is clicked
+ */
+
+var SingleStar = /*#__PURE__*/function (_React$Component) {
+  _inherits(SingleStar, _React$Component);
+
+  var _super = _createSuper(SingleStar);
+
+  function SingleStar(props) {
+    _classCallCheck(this, SingleStar);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(SingleStar, [{
+    key: "render",
+    value: function render() {
+      var singleStar = this.props.singleStar;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
+        style: styles.modal,
+        show: this.props.show,
+        onHide: this.props.handleClose
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Header, {
+        closeButton: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Title, null, singleStar.name)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Body, {
+        className: "text-center"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Image"], {
+        style: styles.starImage,
+        alt: "Image of ".concat(singleStar.name),
+        src: "https://image.tmdb.org/t/p/w400/".concat(singleStar.profile_path),
+        onError: function onError(evt) {
+          evt.target.onError = null;
+          evt.target.src = "./default.png";
+        }
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: styles.text
+      }, singleStar.birthday ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, singleStar.name, " is a", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, " " + _signs__WEBPACK_IMPORTED_MODULE_3__["astrology"][singleStar.birthday[5] + singleStar.birthday[6]][singleStar.birthday[8] + singleStar.birthday[9]], " ")) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "We can't find ", singleStar.name, "'s sign! If you know it, you could help us out by adding their birthday to the", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        href: "https://www.themoviedb.org/contribute?language=en-US"
+      }, "database"), "!"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        variant: "secondary",
+        onClick: this.props.handleClose
+      }, "Close")));
+    }
+  }]);
+
+  return SingleStar;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+var mapState = function mapState(state) {
+  return {
+    singleStar: state.singleStar.singleStar
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapState)(SingleStar));
 
 /***/ }),
 
@@ -1210,7 +1572,7 @@ var astrology = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopular", function() { return getPopular; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getPopular", function() { return getPopular; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -1274,39 +1636,7 @@ var getPopular = function getPopular() {
       return _ref.apply(this, arguments);
     };
   }();
-};
-
-var getImagePath = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(api, id) {
-    var res;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            _context2.next = 2;
-            return api.get("https://api.themoviedb.org/3/person/".concat(id, "/images"), {
-              params: {
-                api_key: process.env.TMDB_KEY
-              }
-            });
-
-          case 2:
-            res = _context2.sent;
-            return _context2.abrupt("return", res.data.profiles[0].file_path);
-
-          case 4:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2);
-  }));
-
-  return function getImagePath(_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-}(); // State contains list of popular people
-
+}; // State contains list of popular people
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1322,7 +1652,6 @@ var getImagePath = /*#__PURE__*/function () {
       return state;
   }
 });
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../node_modules/process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -1370,14 +1699,14 @@ var store = Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(reducer, m
 /*!************************************!*\
   !*** ./client/store/singleStar.js ***!
   \************************************/
-/*! exports provided: searchStar, getStar, getBirthday, default */
+/*! exports provided: searchStar, getStar, clearStar, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "searchStar", function() { return searchStar; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStar", function() { return getStar; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getBirthday", function() { return getBirthday; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearStar", function() { return clearStar; });
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -1395,8 +1724,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
  * Action creators, thunks, and reducer for individual celebrities
  */
 
+var SEARCH_STAR = "SEARCH_STAR";
 var GET_STAR = "GET_STAR";
-var SEARCH_STAR = "SEARCH_STAR"; // Search for actor by name
+var CLEAR_STAR = "CLEAR_STAR"; // Search for actor by name
 
 var searchedStar = function searchedStar(searchResults) {
   return {
@@ -1410,6 +1740,13 @@ var gotStar = function gotStar(star) {
   return {
     type: GET_STAR,
     star: star
+  };
+}; // Action creator to clear star
+
+
+var clearedStar = function clearedStar() {
+  return {
+    type: CLEAR_STAR
   };
 }; // Thunk to search star by name
 
@@ -1437,59 +1774,114 @@ var searchStar = function searchStar(starName) {
 
             case 6:
               if (!(i < res.data.length)) {
-                _context.next = 14;
+                _context.next = 20;
                 break;
               }
 
-              _context.next = 9;
+              _context.prev = 7;
+              _context.next = 10;
               return getBirthday(res.data[i].id);
 
-            case 9:
+            case 10:
               birthday = _context.sent;
               res.data[i] = _objectSpread(_objectSpread({}, res.data[i]), {}, {
                 birthday: birthday ? birthday : "unknown"
               });
+              _context.next = 17;
+              break;
 
-            case 11:
+            case 14:
+              _context.prev = 14;
+              _context.t0 = _context["catch"](7);
+              res.data[i] = _objectSpread(_objectSpread({}, res.data[i]), {}, {
+                birthday: "unknown"
+              });
+
+            case 17:
               i++;
               _context.next = 6;
               break;
 
-            case 14:
+            case 20:
               dispatch(searchedStar(res.data));
-              _context.next = 20;
+              _context.next = 26;
               break;
 
-            case 17:
-              _context.prev = 17;
-              _context.t0 = _context["catch"](0);
-              throw _context.t0;
+            case 23:
+              _context.prev = 23;
+              _context.t1 = _context["catch"](0);
+              throw _context.t1;
 
-            case 20:
+            case 26:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 17]]);
+      }, _callee, null, [[0, 23], [7, 14]]);
     }));
 
     return function (_x) {
       return _ref.apply(this, arguments);
     };
   }();
-}; // Call to api and then dispatch
+}; // Single star call to api and then dispatch
 
-var getStar = function getStar(starId) {}; // Function to get birthday
+var getStar = function getStar(starId) {
+  return /*#__PURE__*/function () {
+    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(dispatch) {
+      var res;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.prev = 0;
+              _context2.next = 3;
+              return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/person", {
+                params: {
+                  starId: starId
+                }
+              });
+
+            case 3:
+              res = _context2.sent;
+              dispatch(gotStar(res.data));
+              _context2.next = 10;
+              break;
+
+            case 7:
+              _context2.prev = 7;
+              _context2.t0 = _context2["catch"](0);
+              throw _context2.t0;
+
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2, null, [[0, 7]]);
+    }));
+
+    return function (_x2) {
+      return _ref2.apply(this, arguments);
+    };
+  }();
+}; // Dispatch function to clear singleStar
+
+var clearStar = function clearStar() {
+  return function (dispatch) {
+    dispatch(clearedStar());
+  };
+}; // Helper function to get birthday
 
 var getBirthday = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(starId) {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(starId) {
     var res;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
-            _context2.prev = 0;
-            _context2.next = 3;
+            _context3.prev = 0;
+            _context3.next = 3;
             return axios__WEBPACK_IMPORTED_MODULE_0___default.a.get("/api/person/birthday", {
               params: {
                 starId: starId
@@ -1497,29 +1889,31 @@ var getBirthday = /*#__PURE__*/function () {
             });
 
           case 3:
-            res = _context2.sent;
-            return _context2.abrupt("return", res.data);
+            res = _context3.sent;
+            return _context3.abrupt("return", res.data);
 
           case 7:
-            _context2.prev = 7;
-            _context2.t0 = _context2["catch"](0);
-            throw _context2.t0;
+            _context3.prev = 7;
+            _context3.t0 = _context3["catch"](0);
+            throw _context3.t0;
 
           case 10:
           case "end":
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, null, [[0, 7]]);
+    }, _callee3, null, [[0, 7]]);
   }));
 
-  return function getBirthday(_x2) {
-    return _ref2.apply(this, arguments);
+  return function getBirthday(_x3) {
+    return _ref3.apply(this, arguments);
   };
 }(); // Default state
 
+
 var defaultState = {
-  searchResults: []
+  searchResults: [],
+  singleStar: null
 }; // Reducer contains all information from star API call
 
 /* harmony default export */ __webpack_exports__["default"] = (function () {
@@ -1533,7 +1927,14 @@ var defaultState = {
       });
 
     case GET_STAR:
-      return action.star;
+      return _objectSpread(_objectSpread({}, state), {}, {
+        singleStar: action.star
+      });
+
+    case CLEAR_STAR:
+      return _objectSpread(_objectSpread({}, state), {}, {
+        singleStar: null
+      });
 
     default:
       return state;
