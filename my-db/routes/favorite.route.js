@@ -13,8 +13,14 @@ module.exports = function (app) {
     app.get(
         "/api/favorite/user",
         [authJwt.verifyToken],
-        controller.userBoard
+        controller.favorites
     );
+    app.post(
+        "/api/favorite/user",
+        [authJwt.verifyToken],
+        controller.add
+    );
+    
     app.get(
         "/api/favorite/mod",
         [authJwt.verifyToken, authJwt.isModerator],

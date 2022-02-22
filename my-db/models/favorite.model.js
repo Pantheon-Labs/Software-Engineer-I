@@ -1,9 +1,12 @@
 module.exports = (sequelize, Sequelize) => {
-    const Favorite = sequelize.define("users", {
-        username: {
+    const Favorite = sequelize.define("favorite", {
+        id: {
             type: Sequelize.STRING
         },
-        favorite: {
+        user_id: {
+            type: Sequelize.STRING
+        },
+        favorite_id: {
             type: Sequelize.STRING
         }
     });
