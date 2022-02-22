@@ -1,6 +1,6 @@
 require('dotenv').config()
-const request = require('request')
 
+const request = require('request')
 
 function returnAPIKey(client_id, client_secret) {
 

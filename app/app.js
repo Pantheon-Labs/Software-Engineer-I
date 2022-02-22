@@ -3,7 +3,6 @@ const path = require('path')
 
 const PORT = 8888
 
-
 var app = express();
 
 app.use("/js", express.static(path.join(__dirname, "static/js/")));
