@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-
+require("dotenv").config();
 const db = require("./models");
 
 const Role = db.role;
@@ -47,6 +47,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 require('./routes/auth.route.js')(app);
 require('./routes/user.route.js')(app);
 require('./routes/favorite.route.js')(app);
+
 
 app.get("/", (req, res) => {
     res.json({ message: "Welcome to the RickNMorty api login demo" });

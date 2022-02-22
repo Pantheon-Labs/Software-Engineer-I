@@ -9,19 +9,19 @@ module.exports = function (app) {
         );
         next();
     });
-    app.get("/api/test/all", controller.allAccess);
+    app.get("/api/favorite/all", controller.allAccess);
     app.get(
-        "/api/test/user",
+        "/api/favorite/user",
         [authJwt.verifyToken],
         controller.userBoard
     );
     app.get(
-        "/api/test/mod",
+        "/api/favorite/mod",
         [authJwt.verifyToken, authJwt.isModerator],
         controller.moderatorBoard
     );
     app.get(
-        "/api/test/admin",
+        "/api/favorite/admin",
         [authJwt.verifyToken, authJwt.isAdmin],
         controller.adminBoard
     );
