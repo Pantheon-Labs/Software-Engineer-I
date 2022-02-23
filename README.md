@@ -1,3 +1,11 @@
+# Spotify Artist Search
+
+An application that hosts a local server that authenticates with Spotify and requests information using bearer token.
+
+User enters query in search bar, which the client then requests to your local server. The local server then takes the query and transforms it into an API Request to Spotify.
+
+The goal was to practice authenticating with an API and keeping client secrets and authentication tokens away from the client.
+
 ## Installation (For Collaborators)
 
 1. First, set up your Github account and install git
@@ -20,9 +28,9 @@
 
 ## Setup your dev environment
 
-1. Create Application & Obtain client ID/secret from Spotify developer portal:
+1. Create an Application & obtain client ID/secret from Spotify developer portal:
 
-   > Requires Valid Spotify Account:
+   > _Requires Valid Spotify Account:_
 
    https://developer.spotify.com/documentation/general/guides/authorization/app-settings/
 
@@ -47,21 +55,20 @@
    npm start
    ```
 
-5. Run Developer Mode
+   > Run Developer Mode
 
    ```
    npm run dev
    ```
 
-6. Run Test Suites:
-
+5. Open you browser:
    ```
-   npm run test
+   http://localhost:{PORT}/
    ```
+   > PORT = 8888 by default
 
-   WIP:
+Future Features:
 
-- Add name & description of app
-- draft Pull Request to show features of code, my reasoning, what i wanted to feature + wishlist if had more time
-- add tests w/ jest
-- add logic for refresh token after 1 hr
+- Testing
+- Organizing routers/controllers into a separte module to clean up server.js
+- Authentication Bearer Token expires after 1 hour. Implement logic to check if token is expired and request new.
