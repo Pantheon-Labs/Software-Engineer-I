@@ -2,47 +2,66 @@
 
 1. First, set up your Github account and install git
 
-1. Clone https://github.com/dmartinezgamboa/Software-Engineer-I
+2. Clone https://github.com/dmartinezgamboa/Software-Engineer-I
+
+   > Make sure to clone the repository.
 
    ```
-   $ git clone git@github.com:dmartinezgamboa/Software-Engineer-I
+   git clone git@github.com:dmartinezgamboa/Software-Engineer-I
    ```
 
-   > Make sure to clone the roastme repository.
+3. Fork and set up your remote
 
-1. Fork roastme-bot and set up your remote
-   ```
-   $ git remote add <your_name> git@github.com:<your_username>/Software-Engineer-I
-   ```
    > Replace `<your_name>` with your first name and `<your_username>` with your GitHub username.
+
+   ```
+   git remote add <your_name> git@github.com:<your_username>/Software-Engineer-I
+   ```
 
 ## Setup your dev environment
 
-### 1. Install node dependencies:
+1. Create Application & Obtain client ID/secret from Spotify developer portal:
 
-- Run `npm install` from root directory
+   > Requires Valid Spotify Account:
 
-### 2. Create .env config file in root folder
+   https://developer.spotify.com/documentation/general/guides/authorization/app-settings/
 
-- Use the following format:
-  ```
-  CLIENT_ID={client_id}
-  CLIENT_SECRET={client_secret}
-  ```
+2. Create .env config file in root folder
 
-### 3. Run Application:
+   > _Use the following format:_
 
-- Run `npm start` from root directory
+   ```
+   CLIENT_ID={client_id}
+   CLIENT_SECRET={client_secret}
+   ```
 
-### 4. Run Test Suites:
+3. Install node dependencies:
 
-- Run `npm run dev` from root directory
+   ```
+   npm install
+   ```
 
-WIP:
+4. Run Application:
 
-- make all functions arrow func
-- refactor var to let/const
-- create router for get method
-- add morgan middleware, use tiny configuration
+   ```
+   npm start
+   ```
+
+5. Run Developer Mode
+
+   ```
+   npm run dev
+   ```
+
+6. Run Test Suites:
+
+   ```
+   npm run test
+   ```
+
+   WIP:
+
+- Add name & description of app
+- draft Pull Request to show features of code, my reasoning, what i wanted to feature + wishlist if had more time
 - add tests w/ jest
 - add logic for refresh token after 1 hr

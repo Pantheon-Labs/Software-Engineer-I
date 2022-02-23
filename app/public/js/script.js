@@ -6,6 +6,6 @@ button.addEventListener("click", async () => {
   if (searchText) {
     const res = await fetch("/artist?search=" + encodeURIComponent(searchText));
     const json = await res.json();
-    console.log(JSON.stringify(json, 4));
+    console.log(json);
   }
 });

@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const axios = require("axios");
 const qs = require("qs");
 
@@ -20,12 +18,8 @@ async function returnBearer(clientId, clientSecret) {
   return response.data.access_token;
 }
 
-async function searchArtist(token, query) {
-  function concatURL(query) {
-    return "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
-  }
-
-  let url = concatURL(query);
+async function getArtist(token, query) {
+  let url = "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
   let config = {
     headers: {
       Accept: "application/json",
@@ -33,11 +27,12 @@ async function searchArtist(token, query) {
       Authorization: "Bearer " + token,
     },
   };
+
   const response = await axios.get(url, config);
   return response.data;
 }
 
 module.exports = {
   returnBearer,
-  searchArtist,
+  getArtist,
 };
