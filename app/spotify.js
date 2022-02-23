@@ -2,13 +2,13 @@ require("dotenv").config();
 
 const request = require("request");
 
-function returnBearer(client_id, client_secret) {
+function returnBearer(clientId, clientSecret) {
   var authOptions = {
     url: "https://accounts.spotify.com/api/token",
     headers: {
       Authorization:
         "Basic " +
-        new Buffer.from(client_id + ":" + client_secret).toString("base64"),
+        new Buffer.from(clientId + ":" + clientSecret).toString("base64"),
     },
     form: {
       grant_type: "client_credentials",
@@ -27,8 +27,11 @@ function returnBearer(client_id, client_secret) {
 }
 
 function search(token, query) {
+  function concatURL(query) {
+    return "https://api.spotify.com/v1/search?q=" + query + "&type=artist";
+  }
   var options = {
-    url: "https://api.spotify.com/v1/search?q=" + query,
+    url: concatURL(query),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -39,7 +42,6 @@ function search(token, query) {
   return new Promise(function (resolve) {
     request.get(options, (err, res, body) => {
       if (!err) {
-        console.log(body);
         resolve(body);
       }
     });

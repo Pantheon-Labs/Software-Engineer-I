@@ -9,18 +9,20 @@ async function run() {
   var client_id = process.env.CLIENT_ID;
   var client_secret = process.env.CLIENT_SECRET;
   var bearer = await spotify.returnBearer(client_id, client_secret);
-  console.log(bearer);
-
-  var searchResults = await spotify.search(bearer, "miles%20davis&type=artist");
-  console.log(searchResults);
 
   // server
   const PORT = 8888;
   const app = express();
 
   app.use(express.static(path.join(__dirname, "public")));
+
   app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "./public/html/index.html"));
+  });
+  app.get("/get", async (req, res) => {
+    var result = await spotify.search(bearer, req.query.search);
+    console.log(result);
+    res.json({ status: "ok", result }).end();
   });
 
   app.listen(PORT, () => {
