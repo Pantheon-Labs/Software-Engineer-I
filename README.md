@@ -41,10 +41,8 @@
 WIP:
 
 - make all functions arrow func
-- replace request library with axios
-- change "/get" route with "/artist"
 - refactor var to let/const
 - create router for get method
 - add morgan middleware, use tiny configuration
 - add tests w/ jest
-- fix app entry point on package-log npm run
+- add logic for refresh token after 1 hr

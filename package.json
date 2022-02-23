@@ -21,12 +21,14 @@
     "axios": "^0.26.0",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
+    "morgan": "^1.10.0",
     "path": "^0.12.7",
-    "request": "^2.88.2"
+    "qs": "^6.10.3"
   },
   "devDependencies": {
     "eslint": "^8.9.0",
     "eslint-config-prettier": "^8.4.0",
+    "jest": "^27.5.1",
     "prettier": "2.5.1"
   }
 }

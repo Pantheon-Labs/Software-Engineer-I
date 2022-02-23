@@ -2,7 +2,10 @@ const button = document.getElementById("search-button");
 const search = document.getElementById("search");
 
 button.addEventListener("click", async () => {
-  const res = await fetch("/get?search=" + encodeURIComponent(search.value));
-  const json = await res.json();
-  console.log(JSON.stringify(json, 4));
+  let searchText = search.value;
+  if (searchText) {
+    const res = await fetch("/artist?search=" + encodeURIComponent(searchText));
+    const json = await res.json();
+    console.log(JSON.stringify(json, 4));
+  }
 });
