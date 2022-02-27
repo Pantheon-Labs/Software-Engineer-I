@@ -1,19 +1,15 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
-import Header from '../../components/Header'
 require('dotenv').config()
-import Anime from '../../types/Anime'
-
 
 type Data = {
     name: string
 }
 
-var anime = []
+var genres = {}
 
-async function getAnime(genre: string|null = null): Promise<Array<any>> {
-    const query = genre ? `?genres=${genre}` : ''
-    const response = await fetch(`https://api.aniapi.com/v1/anime${query}`, {
+async function geetGenres(): Promise<Array<any>> {
+    const response = await fetch(`https://api.aniapi.com/v1/resources/1.0/0`, {
         method: 'GET',
         headers: {
             'Authorization': `${process.env.BEARER_TOKEN}`,
@@ -24,10 +20,7 @@ async function getAnime(genre: string|null = null): Promise<Array<any>> {
 
     const myJson = await response.json()
 
-
-    const animeList = myJson.data.documents.slice(0,9)
-
-    return animeList
+    return myJson
 }
 
 export default async function handler(
@@ -35,20 +28,15 @@ export default async function handler(
     res: NextApiResponse<any | Data>
 ) {
     if (req.method == "GET") {
+
         try {
-            if (req.headers.genre) {
-                const genre = req.headers.genre.toString()
-                anime = await getAnime(genre)
-            }
-            else{
-                anime = await getAnime()
-            }
-            console.log(anime.length)
+            genres = await geetGenres()
+            console.log(genres)
         }
         catch (error) {
-            anime = []
+            genres = {}
         }
-        res.send({ anime: JSON.stringify(anime) })
+        res.send({ genres: JSON.stringify(genres) })
         return
     }
     res.status(200).json({ name: 'John Doe' })
