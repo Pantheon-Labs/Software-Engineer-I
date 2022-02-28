@@ -11,9 +11,12 @@ type Data = {
 
 var anime = []
 
-async function getAnime(genre: string|null = null): Promise<Array<any>> {
-    const query = genre ? `?genres=${genre}` : ''
-    const response = await fetch(`https://api.aniapi.com/v1/anime${query}`, {
+async function getAnime(genre: string|null = null, title: string|null = null, page: string|null = null): Promise<Array<any>> {
+    let query = genre ? `genres=${genre}&` : ''
+    query += title ? `title=${title}&` : ''
+    query += page ? `page=${page}` : ''
+    console.log(`REQUEST: https://api.aniapi.com/v1/anime?${query}`)
+    const response = await fetch(`https://api.aniapi.com/v1/anime?${query}`, {
         method: 'GET',
         headers: {
             'Authorization': `${process.env.BEARER_TOKEN}`,
@@ -24,8 +27,7 @@ async function getAnime(genre: string|null = null): Promise<Array<any>> {
 
     const myJson = await response.json()
 
-
-    const animeList = myJson.data.documents.slice(0,9)
+    const animeList = myJson.data.documents
 
     return animeList
 }
@@ -36,12 +38,21 @@ export default async function handler(
 ) {
     if (req.method == "GET") {
         try {
+            let page = "1"
+            if (req.headers.page) {
+                page = req.headers.page.toString()
+                console.log(`PAGE NUMBER: ${page}`)
+            } 
             if (req.headers.genre) {
                 const genre = req.headers.genre.toString()
-                anime = await getAnime(genre)
+                anime = await getAnime(genre, null, page)
+            }
+            else if (req.headers.title) {
+                const title = req.headers.title.toString()
+                anime = await getAnime(null, title, page)
             }
             else{
-                anime = await getAnime()
+                anime = await getAnime(null, null, page)
             }
             console.log(anime.length)
         }

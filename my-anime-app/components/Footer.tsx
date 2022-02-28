@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { Box, Flex, Center } from '@chakra-ui/layout'
 import TitleBar from './TitleBar'
 import Menu from './Menu'
-import { HStack, Link } from '@chakra-ui/react'
+import { Button, HStack, Link } from '@chakra-ui/react'
+import { Dispatch, SetStateAction } from 'react'
 
 const stackStyle = {
     "backgroundColor": "#1A202C",
@@ -16,23 +17,26 @@ const boxStyle = {
     "color": "white"
 } as const
 
+interface FooterProps {
+    page: number,
+    setPage: Dispatch<SetStateAction<number>>
+}
 
-export default function Footer() {
+export default function Footer({page, setPage}: FooterProps) {
   return (
     <HStack minHeight={"10vw"} minWidth={"100vw"} spacing={"4"} style={stackStyle}>
         <Box style={boxStyle}>
             <Center>
-            <Link href={`/`}>
+            <Button onClick={() => {if (page > 1) {setPage(page-1)}}}>
                 {"prev"}
-            </Link>
+            </Button>
             </Center>
-            
         </Box>
         <Box style={boxStyle}>
             <Center>
-            <Link href={`/`}>
+            <Button onClick={() => setPage(page+1)}>
                 {"next"}
-            </Link>
+            </Button>
             </Center>
         </Box>
     </HStack>

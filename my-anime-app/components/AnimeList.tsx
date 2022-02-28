@@ -30,6 +30,7 @@ interface AnimeListProps {
 const AnimeList = ({ animeJson }: AnimeListProps) => {
     let key = 0
     let animeList: Array<Anime> = JSON.parse(animeJson)
+    debugger
     return (
         <Box style={outerStyle}>
             <Center>
