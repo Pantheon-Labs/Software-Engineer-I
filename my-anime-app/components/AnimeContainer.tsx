@@ -35,9 +35,9 @@ interface AnimeContainerProps {
 const AnimeContainer = ({ anime, key }: AnimeContainerProps) => {
     let path = `${anime.titles.en}`
     let regex = / /ig
-    path = path?.replaceAll(regex, '-')
+    path = path?.replace(regex, '-')
     regex = /[^A-Za-z0-9\-]/ig;
-    path = path?.replaceAll(regex, '') + '-' + anime.id
+    path = path?.replace(regex, '') + '-' + anime.id
 
     return (
         <Link href={`/anime/${path}`} width={{ base: "370px", sm: "370px", md: "370px", lg: "370px", xl: "370px" }} style={containerStyle} onClick={() => { window.localStorage.setItem('anime', JSON.stringify(anime)) }} key={key}>
