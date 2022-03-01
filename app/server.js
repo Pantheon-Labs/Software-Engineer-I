@@ -11,9 +11,6 @@ async function run() {
   let secret = process.env.CLIENT_SECRET;
   let bearer = await spotify.returnBearer(id, secret);
 
-  console.log(id);
-  console.log(secret);
-
   // server
   const PORT = 8888;
   const app = express();
@@ -26,7 +23,6 @@ async function run() {
   });
   app.get("/artist", async (req, res) => {
     let data = await spotify.getArtist(bearer, req.query.search);
-    console.log(data);
     res.status(200).send(data);
   });
 

@@ -14,7 +14,6 @@ async function returnBearer(clientId, clientSecret) {
   };
 
   const response = await axios.post(url, data, config);
-  console.log(response.data.access_token);
   return response.data.access_token;
 }
 
