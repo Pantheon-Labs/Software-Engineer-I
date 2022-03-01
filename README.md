@@ -10,12 +10,12 @@ The goal was to practice authenticating with an API and keeping client secrets a
 
 1. First, set up your Github account and install git
 
-2. Clone https://github.com/dmartinezgamboa/Software-Engineer-I
+2. Clone https://github.com/dmartinezgamboa/spotify-api-artist-search
 
    > Make sure to clone the repository.
 
    ```
-   git clone git@github.com:dmartinezgamboa/Software-Engineer-I
+   git clone git@github.com:dmartinezgamboa/spotify-api-artist-search
    ```
 
 3. Fork and set up your remote
@@ -23,7 +23,7 @@ The goal was to practice authenticating with an API and keeping client secrets a
    > Replace `<your_name>` with your first name and `<your_username>` with your GitHub username.
 
    ```
-   git remote add <your_name> git@github.com:<your_username>/Software-Engineer-I
+   git remote add <your_name> git@github.com:<your_username>/spotify-api-artist-search
    ```
 
 ## Setup your dev environment
