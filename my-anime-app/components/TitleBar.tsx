@@ -1,7 +1,8 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import { Box, Stack, VStack, HStack, Flex, Grid } from '@chakra-ui/layout'
-import { Center, Input, Text, Spacer } from "@chakra-ui/react"
+import { Center, Input, Text, Spacer, Button } from "@chakra-ui/react"
+import { Dispatch, SetStateAction, useState } from 'react'
 
 const titleBarStyle = {
     "color": "white",
@@ -21,11 +22,22 @@ const searchBarStyle = {
     width: "40vw"
 } as const
 
-export default function TitleBar() {
+interface TitleBarProps {
+    setSearchValue: Dispatch<SetStateAction<string>> | null
+}
+
+export default function TitleBar({setSearchValue = null}: TitleBarProps) {
     return (
         <Stack direction={["column", "row"]} spacing="10vw" style={gridStyle} >
-            <Box style={titleBarStyle}><Text>Anime</Text></Box>
-            <Box> <Input style={searchBarStyle} placeholder="Search" /> </Box>
+            <Box style={titleBarStyle}>
+                <Text>
+                    Anime
+                </Text>
+            </Box>
+            <Box>
+                <Input style={searchBarStyle} onChange={(e) => setSearchValue ? setSearchValue(e.target.value) : console.log()} placeholder="Search" />
+                <Button>Search</Button>
+            </Box>
         </Stack>
     )
 }

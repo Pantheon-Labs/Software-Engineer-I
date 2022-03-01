@@ -34,6 +34,9 @@ const AnimGenre = () => {
     let { genre } = router.query
     genre = genre ? genre : ''
     const [animeJson, setAnime] = useState<any>(null)
+    const [page, setPage] = useState<number>(1)
+    const [searchValue, setSearchValue] = useState<string>("")
+    const headerProps = { setSearchValue, page, setPage }
     useEffect(() => {
         const getAnime = async () => {
             const response = await fetch('/api/get-anime-list', { method: 'GET', headers: { genre: `${genre}` } })
@@ -47,11 +50,11 @@ const AnimGenre = () => {
     const anime = JSON.parse(animeJson)?.data
     return (
         <div>
-            <Header />
+            <Header {...headerProps}/>
             <Center>
                 <AnimeList animeJson={animeJson}></AnimeList>
             </Center>
-            <Footer />
+            <Footer {...headerProps}/>
         </div>
     )
 

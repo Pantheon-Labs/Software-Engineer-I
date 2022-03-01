@@ -46,7 +46,7 @@ const AnimeContainer = ({ anime, key }: AnimeContainerProps) => {
                     <Image src={anime.cover_image} alt={anime.titles.en} />
                 </Box>
                 <Box>
-                    {anime.titles.en}
+                    {anime.titles.en ? anime.titles.en : anime.titles.jp}
                 </Box>
             </VStack>
         </Link>

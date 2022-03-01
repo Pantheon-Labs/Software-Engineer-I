@@ -1,7 +1,4 @@
-import { Box, Center, Flex, Link, Image, Grid, GridItem } from '@chakra-ui/react'
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Header from './Header'
+import { Box, Center, Grid, GridItem } from '@chakra-ui/react'
 import Anime from '../types/Anime'
 import AnimeContainer from './AnimeContainer'
 
@@ -34,7 +31,7 @@ const AnimeList = ({ animeJson }: AnimeListProps) => {
     return (
         <Box style={outerStyle}>
             <Center>
-                <Grid templateColumns='repeat(3, 1fr)' gap={6} style={flexStyle}>
+                <Grid templateColumns='repeat(4, 1fr)' gap={6} style={flexStyle}>
                     {animeList?.map(
                         anime => {
                             return (

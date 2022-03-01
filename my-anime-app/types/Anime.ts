@@ -22,6 +22,7 @@ export default interface Anime {
     "cover_color": string,
     "banner_image": string,
     "genres": Array<string>,
+    "sagas": Array<any>,
     "score": number,
     "id": number
 }

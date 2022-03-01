@@ -46,11 +46,11 @@ const AnimTitle = () => {
     const anime = JSON.parse(animeJson)?.data
     return (
         <div>
-            <Header />
+            <Header {...{setSearchValue: ()=>{}, page:null, setPage:null}}/>
             <Center>
                 <AnimeDisplay anime={anime} />
             </Center>
-            <Footer />
+            <Footer {...{page:null, setPage:null}}/>
         </div>
     )
 

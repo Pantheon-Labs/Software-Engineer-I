@@ -1,5 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { title } from 'process'
 import Header from '../../components/Header'
 require('dotenv').config()
 import Anime from '../../types/Anime'
@@ -38,22 +39,10 @@ export default async function handler(
 ) {
     if (req.method == "GET") {
         try {
-            let page = "1"
-            if (req.headers.page) {
-                page = req.headers.page.toString()
-                console.log(`PAGE NUMBER: ${page}`)
-            } 
-            if (req.headers.genre) {
-                const genre = req.headers.genre.toString()
-                anime = await getAnime(genre, null, page)
-            }
-            else if (req.headers.title) {
-                const title = req.headers.title.toString()
-                anime = await getAnime(null, title, page)
-            }
-            else{
-                anime = await getAnime(null, null, page)
-            }
+            const page = req.headers.page ? req.headers.page.toString() : "1"
+            const genre =  req.headers.genre ? req.headers.genre.toString() : null
+            const title = req.headers.title ? req.headers.title.toString() : null
+            anime = await getAnime(genre, title, page)
             console.log(anime.length)
         }
         catch (error) {
