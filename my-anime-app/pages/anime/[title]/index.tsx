@@ -33,6 +33,8 @@ const AnimTitle = () => {
     const { title } = router.query
     const id = title ? title.slice(title?.lastIndexOf('-') + 1) : ''
     const [animeJson, setAnime] = useState<any>(null)
+    const [searchValue, setSearchValue] = useState<string>("")
+    const headerProps = {setSearchValue, page:null, setPage:null, nextPage:false}
     useEffect(() => {
         const getAnime = async () => {
             const response = await fetch('/api/get-anime', { method: 'GET', headers: { id: id.toString() } })
@@ -46,7 +48,7 @@ const AnimTitle = () => {
     const anime = JSON.parse(animeJson)?.data
     return (
         <div>
-            <Header {...{setSearchValue: ()=>{}, page:null, setPage:null}}/>
+            <Header {...headerProps}/>
             <Center>
                 <AnimeDisplay anime={anime} />
             </Center>

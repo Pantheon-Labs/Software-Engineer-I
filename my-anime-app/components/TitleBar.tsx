@@ -17,9 +17,18 @@ const gridStyle = {
 } as const
 
 const searchBarStyle = {
-    margin: "1em 1em",
-    "backgroundColor": "white",
-    width: "40vw"
+    padding: ".5em",
+    margin: "1em",
+    width: "40vw",
+    size: "md"
+} as const
+
+const buttonStyle = {
+    padding: ".5em",
+    backgroundColor: "#62B3ED",
+    borderRadius: "0.375rem",
+    color: "white",
+    border: "0px"
 } as const
 
 interface TitleBarProps {
@@ -28,7 +37,7 @@ interface TitleBarProps {
 
 export default function TitleBar({setSearchValue = null}: TitleBarProps) {
     return (
-        <Stack direction={["column", "row"]} spacing="10vw" style={gridStyle} >
+        <HStack spacing="10vw" style={gridStyle} >
             <Box style={titleBarStyle}>
                 <Text>
                     Anime
@@ -36,9 +45,9 @@ export default function TitleBar({setSearchValue = null}: TitleBarProps) {
             </Box>
             <Box>
                 <Input style={searchBarStyle} onChange={(e) => setSearchValue ? setSearchValue(e.target.value) : console.log()} placeholder="Search" />
-                <Button>Search</Button>
+                <Button style={buttonStyle}>Search</Button>
             </Box>
-        </Stack>
+        </HStack>
     )
 }
 

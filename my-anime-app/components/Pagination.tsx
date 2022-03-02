@@ -15,10 +15,11 @@ const boxStyle = {
 
 interface PaginationProps {
     page: number | null,
-    setPage: Dispatch<SetStateAction<number>> | null
+    setPage: Dispatch<SetStateAction<number>> | null,
+    nextPage: boolean | null
 }
 
-export default function Pagination({ page, setPage }: PaginationProps) {
+export default function Pagination({ page, setPage, nextPage = true }: PaginationProps) {
     return (
         <>
             {page != null && setPage != null ? (
@@ -40,9 +41,12 @@ export default function Pagination({ page, setPage }: PaginationProps) {
                     </Box>
                     <Box style={boxStyle}>
                         <Center>
-                            <Button onClick={() => setPage(page + 1)}>
-                                {"next"}
-                            </Button>
+                            {nextPage ?
+                                <Button onClick={() => setPage(page + 1)}>
+                                    {"next"}
+                                </Button>
+                                : <></>
+                            }
                         </Center>
                     </Box>
                 </HStack>) :

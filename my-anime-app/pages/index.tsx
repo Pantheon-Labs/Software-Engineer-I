@@ -8,7 +8,8 @@ const Home: NextPage = () => {
   const [animeJson, setAnime] = useState<any>(null)
   const [page, setPage] = useState<number>(1)
   const [searchValue, setSearchValue] = useState<string>("")
-  const headerProps = {setSearchValue, page, setPage}
+  const nextPage = animeJson ? JSON.parse(animeJson).length == 100 : false
+  const headerProps = {setSearchValue, page, setPage, nextPage}
   useEffect(() => {
     const getAnime = async () => {
       const response = await fetch('/api/get-anime-list', { method: 'GET', headers: {page: page.toString(), title: searchValue} })
