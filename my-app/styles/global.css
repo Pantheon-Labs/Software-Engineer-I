@@ -1,0 +1,89 @@
+#body {
+	color: "#000";
+	overflow-y: "scroll";
+}
+
+.logo {
+	max-width: 20em;
+}
+
+.mainContent {
+	display: flex;
+	background-color: cornsilk;
+}
+.buttonGroupContainer {
+	display: contents;
+}
+
+.cardHighlight {
+	background-color: #000;
+}
+
+.info {
+	max-width: 20em;
+}
+
+.cardList {
+	cursor: pointer;
+	display: flex;
+	overflow: scroll;
+	overflow-y: scroll;
+	margin-top: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid white;
+	max-height: 100vh;
+	max-width: 32em;
+	background-color: cyan;
+	min-width: 20em;
+}
+
+.cardList::-webkit-scrollbar {
+	width: 5px;
+}
+
+.cardList::-webkit-scrollbar-track {
+	background: #ddd;
+}
+
+.cardList::-webkit-scrollbar-thumb {
+	background: #666;
+}
+
+.card {
+	min-width: 5em;
+}
+
+.cardDetails {
+	width: 20em;
+}
+
+@-webkit-keyframes swinging {
+	0% {
+		-webkit-transform: rotate(10deg);
+	}
+	50% {
+		-webkit-transform: rotate(-5deg);
+	}
+	100% {
+		-webkit-transform: rotate(10deg);
+	}
+}
+
+@keyframes swinging {
+	0% {
+		transform: rotate(10deg);
+	}
+	50% {
+		transform: rotate(-5deg);
+	}
+	100% {
+		transform: rotate(10deg);
+	}
+}
+
+.swingimage {
+	-webkit-transform-origin: 50% 0;
+	transform-origin: 50% 0;
+	-webkit-animation: swinging 3.5s ease-in-out forwards infinite;
+	animation: swinging 3.5s ease-in-out forwards infinite;
+}
