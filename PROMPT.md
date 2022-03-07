@@ -1,3 +1,8 @@
+# We're finished hiring... for now
+Thank you for your interest; we've filled all our open roles but we'll update this repo in the future when we resume looking for candidates.
+
+<br /><br /><br /><br /><br />
+
 # Pantheon Labs - Software Engineer I
 
 Hey there 👋 We're Pantheon Labs and we're looking for someone to join our family as a `Software Engineer I`.
