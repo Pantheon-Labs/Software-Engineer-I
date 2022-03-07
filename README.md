@@ -1,11 +1,11 @@
-<img src="https://media2.giphy.com/media/Nx0rz3jtxtEre/giphy.gif?cid=ecf05e47k1el00v2wbzxdaemqy93cxosmaf6bp2r9trzlc03&rid=giphy.gif&ct=g"/>
+# `Anime Display`
+This project is a humble project that I made because I am a huge anime fan.<br>
+This project uses the AniApi to get its anime and display it in order of their rating.<br>
+Users are able to search their favorite anime and search by genre.<br>
+I made this using NextJS and Chakra.<br>
 
-If you're looking for a job, head on over to [PROMPT.md](./PROMPT.md).
-
-
-</br></br></br></br>
-
-<!-- Delete this line and everything above it -->
-
-# `Your App Name Here`
-Add some pretty documentation here that tells us how to start your app so we can see the awesome thing you built!
+## `If I had more time`
+If I had more time I would build out more pages.<br>
+For example I would have a movies page, music page, etc.<br>
+I woul also have made filters.<br> 
+The biggest asdition I would make would be to give users a place where they could watch their chosen anime for free
