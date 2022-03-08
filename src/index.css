@@ -1,0 +1,129 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif; 
+}
+
+.App {
+  text-align: center;
+  background: rgb(252, 252, 252);
+}
+
+.welcome {
+  font-size: 80px;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.fronttext {
+  text-align: center;
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.pizzarat {
+  padding: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+.supportbutton {
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+.text {
+  text-align: left;
+  font-size: 20px;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.title{
+  font-size: 50px;
+  background: rgb(19, 18, 18);
+  color: rgb(66, 193, 231);
+  padding: 30px;
+}
+
+.tabs{
+  font-family:'Courier New', Courier, monospace;
+  background: #aca479;
+  padding: 20px;
+}
+
+.newstabs {
+  font-family:"Times New Roman", Courier, monospace;
+  padding: 10px;
+  background: rgb(240, 250, 250);
+}
+
+.newsdiv {
+  background-image: url("https://i.pinimg.com/originals/8e/a1/19/8ea1198d59d3321f0a429edbfd913b51.jpg");
+  background-repeat: repeat;
+}
+
+.eventsdiv {
+  background-image: url("https://theknickerbocker.com/wp-content/uploads/2018/04/Central-Park-Conservatory-Gardens-Secret-Park-NYC.jpg");
+  background-repeat: repeat;
+}
+
+.boxdiv {
+  display: flex;
+  justify-content: center;
+}
+.box{
+  border: 5px solid #060a11dc;
+  border-radius: 150px;
+  background-image: url("https://d31sxl6qgne2yj.cloudfront.net/wordpress/wp-content/uploads/20190930143120/Generic-Light-WoodGrain-22.jpg");
+  margin-bottom: 50px; 
+  font-size: 25px;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: bold;
+  padding: 80px;
+  width: 80%;
+}
+
+.articletitle {
+  font-size: 30px;
+  color: rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+.image {
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+}
+.links{
+  display: inline-block;
+  margin: 0 25px;
+  padding: 5px;
+  font-size:30px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+nav ul li a{
+  color: rgb(0, 0, 0);
+}
+
+a:hover{
+  background: rgb(148, 201, 214);
+}
+
+a:active {
+  color: rgb(223, 9, 9);
+}
+
+
+
+
